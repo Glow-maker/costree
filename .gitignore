@@ -1,0 +1,26 @@
+# Local agent runtime/state
+.agent-handoff/
+
+# Local secrets and environment-specific config
+.env
+.env.*
+!.env.example
+application-local.yml
+application-*.local.yml
+note/80-deployment/00-环境账号与敏感信息.md
+
+# Runtime logs and caches
+*.log
+__pycache__/
+*.py[cod]
+node_modules/
+dist/
+build/
+.cache/
+.vite/
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
