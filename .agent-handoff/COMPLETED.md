@@ -18,3 +18,12 @@
 - TASK-012: 沉淀长期文档维护与工作区活力机制
   完成时间：2026-06-12 01:51:08 +0800
   备注：本轮同步更新 README、PROJECT_STATE、PLAN、AGENTS 和变更日志；只改 Markdown 文档。
+- TASK-013: 修复前端 Vite 启动阻塞并同步项目状态文档
+  完成时间：2026-06-12 16:33:22 +0800
+  备注：验证通过：pnpm run ts:check:cost、触达文件 ESLint、后端成本模块 compile、前后端 git diff --check。
+- TASK-001: 真实登录态复核成本库前台页面
+  完成时间：2026-06-12 16:33:22 +0800
+  备注：已使用本地真实网关链路复核 /cost/pending-allocation、/cost/warning、/cost/catalog；前端 dev server 使用 VITE_BASE_URL=http://127.0.0.1:38080，未启用 VITE_COST_MOCK_LOGIN。
+- TASK-014: 补充成本库模块化开发边界约束
+  完成时间：2026-06-12 19:07:05 +0800
+  备注：本轮只改 Markdown 文档和交接状态，不改前端、后端或数据库。

@@ -27,7 +27,7 @@
 
 ### 文档中心
 
-- 已建立 `H:\light\project\costree\note` 文档中心。
+- 已建立 `D:\light\costree\note` 文档中心。
 - 已按长期维护方式建立目录：
   - `00-overview`
   - `10-research`
@@ -83,7 +83,7 @@
 
 后端仓库：
 
-`H:\light\project\sqlbot_with_bcback\baback`
+`D:\light\bcback`
 
 已完成：
 
@@ -123,7 +123,7 @@
 
 前端仓库：
 
-`H:\light\project\sqlbot_with_bcback\costree-frontend`
+`D:\light\academy8-operation-control-center-frontend`
 
 已完成页面/入口：
 
@@ -153,6 +153,8 @@
 - `src/main.ts` 已恢复应用初始化失败日志输出，方便定位运行期真实错误。
 - 项目详情、目录树、成本树详情、单位详情已接入工作令账面明细聚合：有 `ledgerBookCostAmount` 时优先使用，无明细时保留 `bookCostAmount` 兜底。
 - 预警中心已接入工作令实时超支计算，支持筛选、进入成本树、重新推送、标记已处理。
+- 本轮清理了一批非成本页面里误引入的 `dist-prod/assets/...`、`element-plus/es/locale`、`element-plus/es/utils` 等无效依赖，修复 Vite 启动时报 unresolved import 导致成本库页面无法加载的问题。
+- 本轮修正 `src/main.ts` 初始化失败日志调用，移除不存在的 `Logger.error` 调用，保留 `console.error` 输出真实运行错误。
 
 最近前端 commit：
 
@@ -183,17 +185,27 @@ mvn -pl yudao-module-cost/yudao-module-cost-biz -am -DskipTests compile
 - 外网 MySQL `costree_mvp` 直连验证等价 SQL：待分配汇总 4 个单位、预警实时超支计数 15、总体展示 4 个领域。
 - `git diff --check` 通过，仅提示 Windows 换行转换警告。
 
+2026-06-12 本轮运行链路和页面复核：
+
+- 后端 `mvn -pl yudao-module-cost/yudao-module-cost-biz -am -DskipTests compile` 通过。
+- 前端 `pnpm run ts:check:cost` 通过。
+- 前端本轮触达文件 ESLint 通过，结果为 0 errors、10 warnings；警告来自既有 `vue/first-attribute-linebreak` 和 `src/main.ts` ignore pattern。
+- 前端和后端 `git diff --check` 通过。
+- 本地前端以 `VITE_BASE_URL=http://127.0.0.1:38080`、不启用 `VITE_COST_MOCK_LOGIN` 启动，访问 `http://localhost:5173/`。
+- `/cost/pending-allocation` 已复核：页面显示 4 条待分配工作令、4 个涉及单位、目标成本 2,700.00、账面成本 3,000.00、超阈值预警 2；单位抽屉可打开并展示 `上海神添实业有限公司` 的 `WO-SP-001-03` 明细。
+- `/cost/warning` 已复核：页面显示预警总数 15、超阈值 6、待推送/失败 8、已处理 0，预警列表和操作入口可见。
+- `/cost/catalog` 已复核：页面显示 4 个领域/系列/型号树、当前范围 8 个项目、26 条工作令、本页目标成本 12,100.00、本页预警 3 条；列表/卡片切换可用。
+
 局部类型检查入口：
 
-- 前端配置：`H:\light\project\sqlbot_with_bcback\costree-frontend\tsconfig.cost.json`
+- 前端配置：`D:\light\academy8-operation-control-center-frontend\tsconfig.cost.json`
 - 脚本：`pnpm run ts:check:cost`
 
 ## 3. 未完成事项
 
 ### 前端页面
 
-- `/cost/catalog` 最新视觉改动尚缺已登录态浏览器截图复核。
-- `/cost/pending-allocation` 需要重启前后端后做已登录态浏览器复核。
+- `/cost/analysis` 统计分析第一版尚未迁移。
 - `/cost/index` 总体展示页仍有业务口径待确认，例如“结余率”“数据数量”的准确含义。
 - `/cost/collect` 数据采集前台页仍是轻流程版本，后续需要按真实角色、权限、审批流程继续收敛。
 - 项目基本情况表、工作令基础信息表后续还要按项目办/研制单位页面拆分和权限边界继续优化。
@@ -217,7 +229,7 @@ mvn -pl yudao-module-cost/yudao-module-cost-biz -am -DskipTests compile
 
 ## 4. 当前阻塞
 
-- Codex 浏览器验证 `/cost/catalog` 时如果没有可复用已登录态，会被登录守卫重定向到 `/login`；需要人工登录后再做截图复核。
+- `/cost/pending-allocation`、`/cost/warning`、`/cost/catalog` 本地页面复核已完成，当前不再阻塞 `/cost/analysis` 第一版迁移。
 - 业务方字段仍有关键口径未确认：
   - `je` 金额单位是元、万元还是其他。
   - 借贷方向和冲销金额是否按正负数直接汇总。
@@ -225,10 +237,11 @@ mvn -pl yudao-module-cost/yudao-module-cost-biz -am -DskipTests compile
   - “预分预控金额”是否等同目标成本。
   - “院本级支出”的判断规则。
 - 内网真实 MySQL、Redis、Nacos、网关、菜单权限配置仍待内网环境确认。
-- 当前本地 Nacos 服务发现链路已复核：`38108` 健康检查返回 `UP`，经 `38080` 调成本库接口返回 `401 账号未登录`，说明网关已能发现 `cost-server`，剩余是正常登录态问题。
+- 当前本地 Nacos 服务发现链路已复核：`38108` 健康检查返回 `UP`，经 `38080` 未带登录态直接调成本库接口返回 `401 账号未登录`，说明网关已能发现 `cost-server`；通过前端已登录页面访问成本库页面可正常渲染数据。
 - 当前仓库状态注意：
-  - 前端仓库 `H:\light\project\sqlbot_with_bcback\costree-frontend` 当前工作区干净，最新提交 `a9b94d1`。
-  - 后端仓库 `H:\light\project\sqlbot_with_bcback\baback` 当前工作区干净，最新提交 `3ab3ccb8`。
+  - 前端仓库 `D:\light\academy8-operation-control-center-frontend` 当前有本轮 Vite 启动修复变更，尚未提交。
+  - 后端仓库 `D:\light\bcback` 当前有 `application-local.yml` 本地配置变更，表现为 `COST_NACOS_DISCOVERY_ENABLED` 默认启用；该变更用于当前本地 Nacos 链路，提交前需确认是否纳入版本。
+  - 文档仓库 `D:\light\costree` 当前有本轮状态文档和 `.agent-handoff` 更新，尚未提交。
 
 ## 5. 关键设计决策
 
@@ -250,16 +263,15 @@ mvn -pl yudao-module-cost/yudao-module-cost-biz -am -DskipTests compile
 - 前端 `login-user` 模拟头只允许在 `VITE_COST_MOCK_LOGIN=true` 的独立 `cost-server` 调试模式下启用；嵌入业务中台开发和权限验收必须使用真实登录态。
 - Nacos 在成本库链路中作为服务注册/发现入口，网关通过服务名 `cost-server` 查找后端实例。
 - Redis 只作为缓存和中台基础设施，不保存成本库正式业务主数据。
+- 成本库按模块化边界开发：默认只修改成本库/成本树相关文件；必须触碰其他模块时先通知用户，并在文档中写清修改原因、影响范围、是否临时和回归方式。
 
 ## 6. 下一步最小任务
 
-建议下一步最小任务先把本地运行链路复核完成，再进入统计分析第一版：
+建议下一步最小任务进入统计分析第一版；如要先收口当前基线，先决定是否提交本轮前端修复、文档更新和后端本地配置变更：
 
 0. 每轮开发前先按 `00-overview/05-长期项目文档与工程经验沉淀模式.md` 做 5 分钟恢复：读 `.agent-handoff/CURRENT.md`、`README.md`、`PROJECT_STATE.md`、`PLAN.md` 和本轮相关专题文档。
 1. 自主学习和接手开发时，先阅读 `00-overview/03-成本树代码阅读地图与自学路线.md`，再按 `/cost/catalog` 这条链路练习从页面追到接口、后端和数据库。
-2. 重启 `cost-server` 和前端 dev server，使用 `VITE_BASE_URL='http://127.0.0.1:38080'`、不启用 `VITE_COST_MOCK_LOGIN`，确认成本库页面走真实业务中台登录态。
-3. 登录业务中台后打开 `/cost/pending-allocation`，复核待分配池指标、4 条测试样本、主表分页和单位抽屉穿透。
-4. 打开 `/cost/warning`，复核 SQL 分页后的预警数量、筛选、重新推送和标记已处理。
-5. 打开 `/cost/catalog`，复核目录树、列表/卡片切换、工作令后端分页和滚动体验。
-6. 若页面仍停留加载态，优先看浏览器 Console 的 `应用初始化失败` 日志和 Network 中 `/admin-api/...` 的状态码。
-7. 链路稳定后，迁移原型 `DataAnalysis.tsx` 为 `/cost/analysis`，先做统计概览和 Excel 导出入口。
+2. 开始迁移原型 `DataAnalysis.tsx` 为 `/cost/analysis`，先做统计概览和 Excel 导出入口，不做 Word 报告。
+3. 优先复用现有项目、工作令、账面明细聚合接口；如接口字段不够，先更新 `40-api/02-接口字段契约.md` 再改后端。
+4. 页面开发完成后运行 `pnpm run ts:check:cost`、成本库相关 ESLint、后端 `mvn -pl yudao-module-cost/yudao-module-cost-biz -am -DskipTests compile`。
+5. 在 `http://localhost:5173/cost/analysis` 做浏览器复核，并同步更新 `PROJECT_STATE.md`、`PLAN.md`、`90-logs/02-变更日志.md` 和 `.agent-handoff`。

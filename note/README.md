@@ -8,7 +8,7 @@
 - 目标：让成本库数据可进入、可维护、可查询、可控权限，并逐步迁移总体展示、目录树、项目详情、成本树详情、数据采集前台页和统计分析页
 - 技术取舍：React/Figma 原型只作为页面与交互参考，最终按数据中台 Vue3 + Java/Spring Boot/Yudao 规范重写
 - 测试策略：先用外网 MySQL 构造测试数据跑通，再迁移到内网真实数据环境
-- 当前跟进：成本库本地代理默认跟随业务中台真实登录态；`VITE_COST_MOCK_LOGIN=true` 只允许用于独立 `cost-server` 调试
+- 当前跟进：成本库本地代理默认跟随业务中台真实登录态；本轮已用 `VITE_BASE_URL=http://127.0.0.1:38080` 复核 `/cost/pending-allocation`、`/cost/warning`、`/cost/catalog`
 - 最新页面：新增 `/cost/pending-allocation` 待分配池，用于展示产品简称未填或填写 `待分配` 的工作令及单位穿透
 - 学习协作：后续按“边写代码边解释链路”的方式推进，见 `00-overview/02-全栈边做边学与运行链路说明.md`
 - 自主开发：已建立成本树代码阅读地图，见 `00-overview/03-成本树代码阅读地图与自学路线.md`
@@ -30,9 +30,9 @@
 
 | 类型 | 路径 | 说明 |
 |---|---|---|
-| 成本库前端开发仓库 | `H:\light\project\sqlbot_with_bcback\costree-frontend` | 单独拉出的 Vue3 中台前端，用于开发后合并 |
-| 数据中台后端 | `H:\light\project\sqlbot_with_bcback\baback` | Yudao Java/Spring Boot 后端 |
-| React/Figma 原型 | `H:\light\project\costree` | 只作为页面、字段和交互参考 |
+| 成本库前端开发仓库 | `D:\light\academy8-operation-control-center-frontend` | Vue3 中台前端，当前分支 `feature/costree` |
+| 数据中台后端 | `D:\light\bcback` | Yudao Java/Spring Boot 后端，当前分支 `costree`，跟踪 `origin/feature/costree` |
+| 文档和 React/Figma 原型 | `D:\light\costree` | `note` 和 `.agent-handoff` 所在位置；原型只作为页面、字段和交互参考 |
 
 ## 目录结构
 
@@ -76,7 +76,7 @@
 ## 已有输入
 
 - `成本库嵌入数据中台的可行性评估与项目蓝图.md`：前期可行性分析和蓝图，暂保留在根目录作为历史调研输入。
-- 该历史蓝图里提到的原中台前端路径已被新的开发路径取代，后续以前端开发仓库 `H:\light\project\sqlbot_with_bcback\costree-frontend` 为准。
+- 该历史蓝图里提到的原中台前端路径已被新的开发路径取代，后续以前端开发仓库 `D:\light\academy8-operation-control-center-frontend` 为准。
 
 ## 维护规则
 

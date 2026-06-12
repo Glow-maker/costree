@@ -8,7 +8,7 @@
 
 第一阶段 MVP 继续围绕“数据可进入、可维护、可查询、可控权限”推进。当前重点从页面迁移转入三条线并行收口：
 
-- 用真实业务中台登录态验证成本库页面和权限链路。
+- 已完成一轮本地真实网关链路页面复核，下一步进入 `/cost/analysis` 统计分析第一版迁移。
 - 补齐全栈学习和运行链路说明，让后续每次改代码都能解释“为什么这样改”。
 - 维护成本树代码阅读地图，让后续自主开发时能按页面、接口、后端分层和数据表逐块理解。
 - 把 `note` 文档中心和 `.agent-handoff` 作为长期项目操作系统使用，形成开工恢复、需求规格化、开发同步、收尾沉淀和周巡检机制。
@@ -27,9 +27,9 @@
 | P2 | 全栈边做边学说明 | 固定 Nacos、Redis、网关、`cost-server` 运行链路和讲解模板 | 已确认当前报错来自网关找不到 `cost-server` 实例 | `00-overview/02-全栈边做边学与运行链路说明.md`、根级治理文件 | 能解释 Nacos/Redis 作用；有排障顺序；后续改代码有固定讲解模板 | 已完成 |
 | P2-1 | 成本树代码阅读地图 | 让接手者按前端页面、API、后端分层和数据表逐块看懂项目 | 当前前后端新增内容和表结构已核对 | `00-overview/03-成本树代码阅读地图与自学路线.md`、`README.md`、`PROJECT_STATE.md` | 能从 `/cost/catalog` 追到页面、API、Controller、Service、Mapper 和 MySQL 表；后续新增功能有固定修改清单 | 已完成，后续持续维护 |
 | P3 | `cost-server` Nacos 注册链路复核 | 解决网关 `Unable to find instance for cost-server` | `application-jt.yml` 已调整；已重启 `CostServerApplication` | `application-jt.yml`、后端实施记录、部署说明 | `38108` 健康检查 `UP`；经 `38080` 调用成本接口不再报找不到实例 | 已验证 |
-| P4 | `/cost/catalog` 已登录态复核 | 用真实登录态确认目录树、列表/卡片切换、工作令分页和代理链路 | 本地前端重启；`VITE_BASE_URL='http://127.0.0.1:38080'`；浏览器完成中台登录；网关可发现 `cost-server` | `src/views/cost/catalog/index.vue`，必要时更新 `50-frontend` | 请求不再打到独立直连端口；页面能按真实用户访问；截图确认交互正常 | 待办 |
-| P4-1 | 待分配池页面 | 展示产品简称未填或填写 `待分配` 的工作令，并支持单位穿透账面支出 | 工作令表已有 `product_short_name`；账面明细聚合接口可复用 | 后端工作令接口、`/cost/pending-allocation`、测试数据、接口和前端文档 | `NULL`、空字符串、`待分配` 三类样本可查；主表和抽屉均后端分页；类型检查、ESLint、后端编译通过 | 已完成，待重启浏览器复核 |
-| P4-2 | 后端分页与聚合风险治理 | 消除待分配池、预警中心、总体展示和导出接口的全量加载隐患 | 账面明细表和现有工作令接口已具备 | 后端 Mapper/Service/Controller、接口文档、状态文档 | 待分配池明细数据库分页；预警中心 SQL 分页；总体展示 SQL 聚合；同步导出超过 5000 行拦截；编译、类型检查、ESLint 和外网 SQL 验证通过 | 已完成，待登录态接口复核 |
+| P4 | `/cost/catalog` 已登录态复核 | 用真实登录态确认目录树、列表/卡片切换、工作令分页和代理链路 | 本地前端重启；`VITE_BASE_URL='http://127.0.0.1:38080'`；浏览器完成中台登录；网关可发现 `cost-server` | `src/views/cost/catalog/index.vue`，必要时更新 `50-frontend` | 请求不再打到独立直连端口；页面能按真实用户访问；截图确认交互正常 | 已完成，本地浏览器已复核 |
+| P4-1 | 待分配池页面 | 展示产品简称未填或填写 `待分配` 的工作令，并支持单位穿透账面支出 | 工作令表已有 `product_short_name`；账面明细聚合接口可复用 | 后端工作令接口、`/cost/pending-allocation`、测试数据、接口和前端文档 | `NULL`、空字符串、`待分配` 三类样本可查；主表和抽屉均后端分页；类型检查、ESLint、后端编译通过 | 已完成，本地浏览器已复核 |
+| P4-2 | 后端分页与聚合风险治理 | 消除待分配池、预警中心、总体展示和导出接口的全量加载隐患 | 账面明细表和现有工作令接口已具备 | 后端 Mapper/Service/Controller、接口文档、状态文档 | 待分配池明细数据库分页；预警中心 SQL 分页；总体展示 SQL 聚合；同步导出超过 5000 行拦截；编译、类型检查、ESLint 和外网 SQL 验证通过 | 已完成，本地页面链路已复核 |
 | P5 | 统计分析第一版 `/cost/analysis` | 迁移原型 `DataAnalysis.tsx` 的核心统计页面 | 现有账面明细聚合和项目/工作令数据可复用 | `src/views/cost/analysis/...`、`src/api/cost/...`、路由/入口、前端文档 | 页面可展示统计概览和明细入口；预留 Excel 导出入口；无假数据误导 | 待办 |
 | P6 | 账面明细正式导入/同步流程 | 让 `cost_work_order_ledger_detail` 有稳定数据进入方式 | 金额单位、借贷方向、冲销规则【需确认】 | 后端导入/同步接口、`30-data`、`40-api`、`60-backend` | 可导入或同步凭证明细；聚合金额可追溯到明细 | 待办 |
 | P7 | 源数据同步规则设计 | 明确源主业项目树和工作令映射如何进入业务表 | 源系统主键、增量字段、映射变更口径【需确认】 | `30-data` 源数据设计、`60-backend` 同步设计 | 有明确转换规则；不直接覆盖业务表；异常和重复数据有记录口径 | 待办 |
@@ -40,12 +40,11 @@
 
 ## 下一步最小任务
 
-1. 重启后端 `cost-server` 和前端 dev server，使用嵌入中台模式访问成本库：`.env.local` 保留 `VITE_BASE_URL='http://127.0.0.1:38080'`，不要配置 `VITE_COST_MOCK_LOGIN=true`。
-2. 登录业务中台后打开 `/cost/pending-allocation`，确认能看到 4 条测试待分配工作令、单位汇总和抽屉穿透。
-3. 打开 `/cost/warning`，确认 SQL 分页后的预警列表、筛选、重新推送和标记已处理正常。
-4. 打开 `/cost/catalog`，截图复核目录树、列表/卡片切换、工作令后端分页和滚动体验。
-5. 如果页面仍停留加载态，先看浏览器 Console 的 `应用初始化失败` 日志和 Network 中 `/admin-api/...` 的状态码。
-6. 进入 `/cost/analysis` 第一版迁移：先做统计概览和 Excel 导出入口，不做 Word 报告。
+1. 进入 `/cost/analysis` 第一版迁移：先做统计概览和 Excel 导出入口，不做 Word 报告。
+2. 复用现有账面明细聚合、项目、工作令接口；如果需要新增统计口径，先写清接口字段契约和验收标准。
+3. 页面完成后执行 `pnpm run ts:check:cost`、成本库相关 ESLint 和后端 `mvn -pl yudao-module-cost/yudao-module-cost-biz -am -DskipTests compile`。
+4. 用当前本地链路访问 `http://localhost:5173/cost/analysis` 做浏览器复核；前端继续使用 `VITE_BASE_URL=http://127.0.0.1:38080`，不要配置 `VITE_COST_MOCK_LOGIN=true`。
+5. 收尾时同步 `PROJECT_STATE.md`、`PLAN.md`、`90-logs/02-变更日志.md` 和 `.agent-handoff`。
 
 ## 暂不纳入下一步
 

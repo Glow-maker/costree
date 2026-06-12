@@ -80,3 +80,58 @@
 ### 风险与备注
 - 文档机制只有持续执行才有价值；后续如果开发后不更新 PROJECT_STATE、PLAN、RISKS、DECISIONS 和工程经验手册，文档会再次失效。
 - 本轮未运行前后端构建，因为只修改 Markdown 文档。
+
+## 一次会话
+- 开始时间：2026-06-12 15:30:00 +0800
+- 结束时间：2026-06-12 16:35:00 +0800
+- 本次焦点：接管成本库项目并完成本地页面复核
+
+### 本次进展
+- 读取 agent-handoff 和 note 入口文档，确认当前目标、待办、阻塞、工程约束和本机前后端仓库位置。
+- 确认 cost-server、gateway、Nacos 和前端 dev server 本地链路，前端使用 VITE_BASE_URL=http://127.0.0.1:38080 且不启用 VITE_COST_MOCK_LOGIN。
+- 清理一批无效自动导入并修正 src/main.ts 初始化异常日志调用，解除 Vite 启动 blocker。
+- 通过浏览器复核 /cost/pending-allocation、/cost/warning、/cost/catalog，页面均可渲染当前测试数据和关键交互。
+- 运行前端类型检查、触达文件 ESLint、后端成本模块编译和 diff 检查，并同步更新项目状态、计划、变更日志和新对话接管指南。
+
+### 涉及文件
+- D:\light\academy8-operation-control-center-frontend\src\main.ts
+- D:\light\academy8-operation-control-center-frontend\src\views\... 多处非成本页面无效自动导入清理
+- D:\light\bcback\yudao-module-cost\yudao-module-cost-biz\src\main\resources\application-local.yml
+- D:\light\costree\note\README.md
+- D:\light\costree\note\AGENTS.md
+- D:\light\costree\note\PROJECT_STATE.md
+- D:\light\costree\note\PLAN.md
+- D:\light\costree\note\90-logs\02-变更日志.md
+- D:\light\costree\note\00-overview\06-新对话接管成本库项目启动指南.md
+
+### 下次恢复点
+- 继续成本库项目时，先运行 python D:\light\costree\.agent-handoff\runtime\agent-handoff\scripts\handoff.py resume D:\light\costree；然后按 TASK-002 进入 /cost/analysis 第一版迁移。当前本地前端可访问 http://localhost:5173/，前端继续使用 VITE_BASE_URL=http://127.0.0.1:38080 且不启用 VITE_COST_MOCK_LOGIN。
+
+### 风险与备注
+- 后端 application-local.yml 当前有本地配置变更，提交前需要确认是否属于应纳入版本的 Nacos discovery 默认值调整。
+- 前端触达文件 ESLint 仍有 10 个既有格式警告，但退出码为 0，不阻塞当前成本库页面复核。
+- 内网真实部署、菜单权限和业务金额口径仍待确认。
+
+## 一次会话
+- 开始时间：2026-06-12 16:45:00 +0800
+- 结束时间：2026-06-12 16:55:00 +0800
+- 本次焦点：补充成本库模块化开发边界约束
+
+### 本次进展
+- 根据用户要求确认模块化开发约束：默认只管成本库/成本树相关内容。
+- 更新 AGENTS.md，明确前端和后端默认可修改范围，以及触碰其他模块时的通知和文档要求。
+- 更新 00-overview/04-工程经验与开发约束手册.md，新增 FE-007、BE-007 模块边界经验和每次变更检查项。
+- 更新 DECISIONS.md、PROJECT_STATE.md 和 90-logs/02-变更日志.md，记录该规则为长期决策。
+
+### 涉及文件
+- D:\light\costree\note\AGENTS.md
+- D:\light\costree\note\00-overview\04-工程经验与开发约束手册.md
+- D:\light\costree\note\DECISIONS.md
+- D:\light\costree\note\PROJECT_STATE.md
+- D:\light\costree\note\90-logs\02-变更日志.md
+
+### 下次恢复点
+- 继续成本库项目时，先运行 python D:\light\costree\.agent-handoff\runtime\agent-handoff\scripts\handoff.py resume D:\light\costree；开发 TASK-002 /cost/analysis 时默认只修改成本库/成本树相关文件，如需触碰其他模块先通知用户并写入文档。
+
+### 风险与备注
+- 本规则执行时要区分成本库必要集成变更和其他模块顺手重构；必要集成变更可做，但必须先通知和留痕。

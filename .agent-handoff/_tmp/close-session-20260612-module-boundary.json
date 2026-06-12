@@ -1,0 +1,57 @@
+{
+  "session": {
+    "started_at": "2026-06-12T16:45:00+08:00",
+    "ended_at": "2026-06-12T16:55:00+08:00",
+    "focus": "补充成本库模块化开发边界约束"
+  },
+  "current_status": {
+    "phase": "第一阶段 MVP 实现、原型迁移和权限链路收口进行中",
+    "goal": "在已有业务中台中嵌入成本库/成本树业务模块，让成本库数据可进入、可维护、可查询、可控权限，并用 note 文档中心和 .agent-handoff 形成可持续接管、开发、收尾和经验沉淀机制。",
+    "summary": "本轮根据用户要求补充模块化开发边界：后续默认只修改成本库/成本树相关文件；如因全局构建、依赖、登录态、网关或集成问题必须触碰其他模块，必须先通知用户说明原因、影响范围和替代方案，并在文档中记录触碰文件、触碰原因、是否临时和回归方式。已同步 AGENTS、工程经验手册、PROJECT_STATE、DECISIONS 和变更日志。",
+    "next_step": "继续项目时先运行 agent-handoff resume，再阅读 note/PROJECT_STATE.md 和 note/PLAN.md。下一步最小任务仍是迁移原型 DataAnalysis.tsx 为 /cost/analysis 第一版；开发时必须遵守模块边界，默认只改成本库/成本树相关文件。",
+    "blockers": [
+      "业务口径仍待确认：金额单位、借贷方向和冲销规则、历史工作令映射追溯、预分预控金额、院本级支出。",
+      "内网真实 MySQL、Redis、Nacos、网关、菜单权限、组织和数据权限映射仍待内网环境确认。",
+      "真实内网库不得执行 seed-mvp.sql；测试数据只用于外网测试库。",
+      "当前前端、后端和文档仓库均有本轮未提交变更；后端 application-local.yml 的本地 Nacos discovery 配置提交前需确认是否纳入版本。"
+    ]
+  },
+  "tasks_to_add": [],
+  "tasks_to_update": [],
+  "tasks_to_complete": [],
+  "tasks_to_add_and_complete": [
+    {
+      "title": "补充成本库模块化开发边界约束",
+      "details": "把“默认只修改成本库/成本树相关文件，修改其他模块必须先通知并文档留痕”的规则写入 AGENTS、工程经验手册、PROJECT_STATE、DECISIONS 和变更日志。",
+      "priority": "P0",
+      "notes": "本轮只改 Markdown 文档和交接状态，不改前端、后端或数据库。"
+    }
+  ],
+  "decisions_to_add": [
+    {
+      "summary": "成本库默认只按模块边界开发，修改其他模块必须先通知并文档留痕。",
+      "rationale": "成本库嵌入既有业务中台，随意修改非成本模块会增加回归风险和责任边界不清。后续如确需触碰其他模块，必须说明原因、影响范围、是否临时和回归方式。"
+    }
+  ],
+  "session_log": {
+    "progress": [
+      "根据用户要求确认模块化开发约束：默认只管成本库/成本树相关内容。",
+      "更新 AGENTS.md，明确前端和后端默认可修改范围，以及触碰其他模块时的通知和文档要求。",
+      "更新 00-overview/04-工程经验与开发约束手册.md，新增 FE-007、BE-007 模块边界经验和每次变更检查项。",
+      "更新 DECISIONS.md、PROJECT_STATE.md 和 90-logs/02-变更日志.md，记录该规则为长期决策。"
+    ],
+    "files_touched": [
+      "D:\\light\\costree\\note\\AGENTS.md",
+      "D:\\light\\costree\\note\\00-overview\\04-工程经验与开发约束手册.md",
+      "D:\\light\\costree\\note\\DECISIONS.md",
+      "D:\\light\\costree\\note\\PROJECT_STATE.md",
+      "D:\\light\\costree\\note\\90-logs\\02-变更日志.md"
+    ],
+    "risks": [
+      "本规则执行时要区分成本库必要集成变更和其他模块顺手重构；必要集成变更可做，但必须先通知和留痕。"
+    ]
+  },
+  "resume_hint": {
+    "text": "继续成本库项目时，先运行 python D:\\light\\costree\\.agent-handoff\\runtime\\agent-handoff\\scripts\\handoff.py resume D:\\light\\costree；开发 TASK-002 /cost/analysis 时默认只修改成本库/成本树相关文件，如需触碰其他模块先通知用户并写入文档。"
+  }
+}

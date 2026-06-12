@@ -1,20 +1,11 @@
 active:
-- task_id: TASK-001
-  title: 真实登录态复核成本库前台页面
-  details: 重启 cost-server 和前端 dev server，使用业务中台真实登录态访问 /cost/pending-allocation、/cost/warning、/cost/catalog，复核接口目标、权限链路、页面数据、分页和滚动体验。
-  priority: P0
-  status: pending
-  created_at: '2026-06-12T00:15:17+08:00'
-  updated_at: '2026-06-12T00:15:17+08:00'
-  completed_at: ''
-  notes: ''
 - task_id: TASK-002
   title: 迁移统计分析第一版 /cost/analysis
-  details: 基于现有账面明细聚合、项目和工作令数据迁移原型统计分析核心页面，先做统计概览和 Excel 导出入口，不做 Word 报告。
-  priority: P1
-  status: pending
+  details: 基于现有账面明细聚合、项目和工作令数据迁移原型统计分析核心页面，先做统计概览和 Excel 导出入口，不做 Word 报告；必要接口变更先同步接口字段契约。
+  priority: P5
+  status: in_progress
   created_at: '2026-06-12T00:15:17+08:00'
-  updated_at: '2026-06-12T00:15:17+08:00'
+  updated_at: '2026-06-12T16:33:22+08:00'
   completed_at: ''
   notes: ''
 - task_id: TASK-003
@@ -112,3 +103,33 @@ completed:
   updated_at: '2026-06-12T01:51:08+08:00'
   completed_at: '2026-06-12T01:51:08+08:00'
   notes: 本轮同步更新 README、PROJECT_STATE、PLAN、AGENTS 和变更日志；只改 Markdown 文档。
+- task_id: TASK-013
+  title: 修复前端 Vite 启动阻塞并同步项目状态文档
+  details: 清理非成本页面中的无效 dist-prod 和 element-plus 深路径自动导入，修正 src/main.ts 中不存在的 Logger.error
+    调用，并把本轮实际仓库路径、页面复核结果和下一步任务同步到 note 文档中心。
+  priority: P0
+  status: completed
+  created_at: '2026-06-12T16:33:22+08:00'
+  updated_at: '2026-06-12T16:33:22+08:00'
+  completed_at: '2026-06-12T16:33:22+08:00'
+  notes: 验证通过：pnpm run ts:check:cost、触达文件 ESLint、后端成本模块 compile、前后端 git diff --check。
+- task_id: TASK-001
+  title: 真实登录态复核成本库前台页面
+  details: 重启 cost-server 和前端 dev server，使用业务中台真实登录态访问 /cost/pending-allocation、/cost/warning、/cost/catalog，复核接口目标、权限链路、页面数据、分页和滚动体验。
+  priority: P0
+  status: completed
+  created_at: '2026-06-12T00:15:17+08:00'
+  updated_at: '2026-06-12T16:33:22+08:00'
+  completed_at: '2026-06-12T16:33:22+08:00'
+  notes: 已使用本地真实网关链路复核 /cost/pending-allocation、/cost/warning、/cost/catalog；前端 dev
+    server 使用 VITE_BASE_URL=http://127.0.0.1:38080，未启用 VITE_COST_MOCK_LOGIN。
+- task_id: TASK-014
+  title: 补充成本库模块化开发边界约束
+  details: 把“默认只修改成本库/成本树相关文件，修改其他模块必须先通知并文档留痕”的规则写入 AGENTS、工程经验手册、PROJECT_STATE、DECISIONS
+    和变更日志。
+  priority: P0
+  status: completed
+  created_at: '2026-06-12T19:07:05+08:00'
+  updated_at: '2026-06-12T19:07:05+08:00'
+  completed_at: '2026-06-12T19:07:05+08:00'
+  notes: 本轮只改 Markdown 文档和交接状态，不改前端、后端或数据库。

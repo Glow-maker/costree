@@ -8,16 +8,17 @@
 
 | 类型 | 路径 | 规则 |
 |---|---|---|
-| 文档中心 | `H:\light\project\costree\note` | 长期维护项目事实，新增文档必须归位 |
-| 前端仓库 | `H:\light\project\sqlbot_with_bcback\costree-frontend` | 成本库 Vue3 页面和 API 的主要开发位置 |
-| 后端仓库 | `H:\light\project\sqlbot_with_bcback\baback` | 数据中台后端和 `yudao-module-cost` 开发位置 |
-| React/Figma 原型 | `H:\light\project\costree` | 只作为页面、字段和交互参考，不直接作为最终中台代码 |
+| 文档中心 | `D:\light\costree\note` | 长期维护项目事实，新增文档必须归位 |
+| 前端仓库 | `D:\light\academy8-operation-control-center-frontend` | 成本库 Vue3 页面和 API 的主要开发位置；当前分支 `feature/costree` |
+| 后端仓库 | `D:\light\bcback` | 数据中台后端和 `yudao-module-cost` 开发位置；当前分支 `costree` |
+| React/Figma 原型 | `D:\light\costree` | 只作为页面、字段和交互参考，不直接作为最终中台代码 |
 
 ## 2. 工作原则
 
 - 先读现有文档和代码，再新增实现或文档。
 - 长期任务开工前，先按 `00-overview/05-长期项目文档与工程经验沉淀模式.md` 做上下文恢复，读取 `.agent-handoff`、`README.md`、`PROJECT_STATE.md`、`PLAN.md` 和本轮相关专题文档。
 - 新增需求、接口、页面、聚合、导出或权限逻辑前，先查 `00-overview/04-工程经验与开发约束手册.md`，确认是否已有可复用模式或禁止反模式。
+- 成本库按模块化边界开发：默认只修改成本库/成本树相关文件；确需修改其他模块时，必须先通知用户说明原因、影响范围和替代方案，并在本轮文档中记录为什么必须修改。
 - 优先复用数据中台已有登录、租户、权限、菜单、组织、消息、导入导出能力。
 - 不创建平行体系：已有目录、页面、接口、数据表或文档能承载的，不另起一套。
 - 修改要可追溯到当前目标，不做顺手重构。
@@ -43,6 +44,9 @@
 
 - 不提交或主动修改本地运行日志，例如 `costree-frontend-dev.log`。
 - 不把后端本地配置 `application-local.yml` 中的个人运行改动当作业务提交，除非用户明确要求。
+- 前端默认只改 `src/views/cost/**`、`src/api/cost/**`、成本库路由/菜单入口和成本库复用组件；修改其他业务模块文件前必须先说明原因并记录到变更日志或专题文档。
+- 后端默认只改 `yudao-module-cost/**`、`cost-server`、网关中成本库路由和必要配置；修改其他模块前必须先说明原因并记录到变更日志或专题文档。
+- 如果因为全局构建、Vite 启动、依赖错误、登录态或网关集成必须触碰非成本模块，改动应最小化，并在文档中写明：触碰文件、触碰原因、是否临时、是否需要后续回归。
 - 不在真实内网库执行 `seed-mvp.sql`。
 - 不在内网正式环境开启 `COST_LOCAL_TEST_MOCK_PLATFORM=true`。
 - SQL 结构变更必须同步更新数据模型、建表说明、部署说明。
@@ -55,7 +59,7 @@
 前端成本库相关修改后，优先执行：
 
 ```powershell
-cd H:\light\project\sqlbot_with_bcback\costree-frontend
+cd D:\light\academy8-operation-control-center-frontend
 pnpm run ts:check:cost
 pnpm exec eslint "src/api/cost/**/*.ts" "src/views/cost/**/*.vue" "src/router/modules/remaining.ts" "src/views/HomeIndex/index.vue" --ext .ts,.vue
 ```
@@ -63,7 +67,7 @@ pnpm exec eslint "src/api/cost/**/*.ts" "src/views/cost/**/*.vue" "src/router/mo
 后端成本库相关修改后，优先执行：
 
 ```powershell
-cd H:\light\project\sqlbot_with_bcback\baback
+cd D:\light\bcback
 mvn -pl yudao-module-cost/yudao-module-cost-biz -am -DskipTests compile
 ```
 
