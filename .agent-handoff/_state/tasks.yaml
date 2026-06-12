@@ -1,0 +1,114 @@
+active:
+- task_id: TASK-001
+  title: 真实登录态复核成本库前台页面
+  details: 重启 cost-server 和前端 dev server，使用业务中台真实登录态访问 /cost/pending-allocation、/cost/warning、/cost/catalog，复核接口目标、权限链路、页面数据、分页和滚动体验。
+  priority: P0
+  status: pending
+  created_at: '2026-06-12T00:15:17+08:00'
+  updated_at: '2026-06-12T00:15:17+08:00'
+  completed_at: ''
+  notes: ''
+- task_id: TASK-002
+  title: 迁移统计分析第一版 /cost/analysis
+  details: 基于现有账面明细聚合、项目和工作令数据迁移原型统计分析核心页面，先做统计概览和 Excel 导出入口，不做 Word 报告。
+  priority: P1
+  status: pending
+  created_at: '2026-06-12T00:15:17+08:00'
+  updated_at: '2026-06-12T00:15:17+08:00'
+  completed_at: ''
+  notes: ''
+- task_id: TASK-003
+  title: 设计并实现账面明细正式导入或同步流程
+  details: 围绕 cost_work_order_ledger_detail 明确金额单位、借贷方向、冲销规则和源主键后，实现稳定导入/同步路径，保证聚合金额可追溯到凭证明细。
+  priority: P1
+  status: pending
+  created_at: '2026-06-12T00:15:17+08:00'
+  updated_at: '2026-06-12T00:15:17+08:00'
+  completed_at: ''
+  notes: ''
+- task_id: TASK-004
+  title: 设计源主业项目树和工作令映射同步规则
+  details: 明确 cost_source_project_tree 到 cost_model_node/cost_project、cost_work_order_project_ref
+    到 cost_work_order 的转换规则、增量字段、异常和重复处理。
+  priority: P2
+  status: pending
+  created_at: '2026-06-12T00:15:17+08:00'
+  updated_at: '2026-06-12T00:15:17+08:00'
+  completed_at: ''
+  notes: ''
+- task_id: TASK-005
+  title: 深化数据采集前台页和角色权限
+  details: 继续拆分项目办、型号两总、研制单位等角色可见页面和可操作按钮，完善草稿、提交、通过、退回轻流程，后续再评估是否接正式 BPM。
+  priority: P2
+  status: pending
+  created_at: '2026-06-12T00:15:17+08:00'
+  updated_at: '2026-06-12T00:15:17+08:00'
+  completed_at: ''
+  notes: ''
+- task_id: TASK-006
+  title: 准备内网部署和菜单权限接入
+  details: 确认内网 MySQL、Redis、Nacos、网关、菜单、按钮权限、租户、组织和数据权限配置；真实库只执行 schema/迁移，不执行 seed-mvp.sql。
+  priority: P2
+  status: pending
+  created_at: '2026-06-12T00:15:17+08:00'
+  updated_at: '2026-06-12T00:15:17+08:00'
+  completed_at: ''
+  notes: ''
+completed:
+- task_id: TASK-007
+  title: 建立成本库长期维护文档中心
+  details: 已在 H:\light\project\costree\note 建立 README、PROJECT_STATE、PLAN、DECISIONS、RISKS、AGENTS，以及
+    00-overview 至 90-logs 的长期维护目录结构。
+  priority: P0
+  status: completed
+  created_at: '2026-06-12T00:15:17+08:00'
+  updated_at: '2026-06-12T00:15:17+08:00'
+  completed_at: '2026-06-12T00:15:17+08:00'
+  notes: 后续所有业务、数据、接口、前端、后端、测试、部署和变更记录按目录职责归位。
+- task_id: TASK-008
+  title: 沉淀工程经验与开发约束手册
+  details: 已新增 00-overview/04-工程经验与开发约束手册.md，记录 selectPage 分页、账面成本聚合、导出上限、真实登录态代理、自定义
+    SQL 风险、新需求模板和反模式清单。
+  priority: P0
+  status: completed
+  created_at: '2026-06-12T00:15:17+08:00'
+  updated_at: '2026-06-12T00:15:17+08:00'
+  completed_at: '2026-06-12T00:15:17+08:00'
+  notes: 新增需求、接口、页面、聚合、导出或权限逻辑前先查该手册。
+- task_id: TASK-009
+  title: 沉淀长期项目文档与工程经验维护模式
+  details: 已新增 00-overview/05-长期项目文档与工程经验沉淀模式.md，说明如何在后续项目复刻文档中心、状态台账、经验手册和变更追溯机制。
+  priority: P1
+  status: completed
+  created_at: '2026-06-12T00:15:17+08:00'
+  updated_at: '2026-06-12T00:15:17+08:00'
+  completed_at: '2026-06-12T00:15:17+08:00'
+  notes: 适用于周期超过一周、涉及多轮需求、多人或 AI 协作的后续项目。
+- task_id: TASK-010
+  title: 初始化 agent-handoff 项目交接
+  details: 已在 H:\light\project\costree\.agent-handoff 初始化交接目录，并通过 validate 校验。
+  priority: P0
+  status: completed
+  created_at: '2026-06-12T00:15:17+08:00'
+  updated_at: '2026-06-12T00:15:17+08:00'
+  completed_at: '2026-06-12T00:15:17+08:00'
+  notes: 本次更新将 note 文档中心的当前项目状态写入 agent-handoff 生成文件。
+- task_id: TASK-011
+  title: 更新 agent-handoff 交接状态并收尾
+  details: 通过 resume 读取当前交接状态，追加本轮收尾记录，保留现有 TASK-001 至 TASK-006 作为正式后续待办，并通过 close-session
+    重新生成交接 Markdown。
+  priority: P0
+  status: completed
+  created_at: '2026-06-12T00:17:39+08:00'
+  updated_at: '2026-06-12T00:17:39+08:00'
+  completed_at: '2026-06-12T00:17:39+08:00'
+  notes: 收尾后已执行 validate；后续继续项目时先运行 resume。
+- task_id: TASK-012
+  title: 沉淀长期文档维护与工作区活力机制
+  details: 把文档作为项目操作系统的运行方式写入长期项目文档，明确 .agent-handoff、README、PROJECT_STATE、PLAN、RISKS、DECISIONS、工程经验手册和变更日志的职责，以及每轮开发的开工、开发、收尾、周巡检节奏。
+  priority: P0
+  status: completed
+  created_at: '2026-06-12T01:51:08+08:00'
+  updated_at: '2026-06-12T01:51:08+08:00'
+  completed_at: '2026-06-12T01:51:08+08:00'
+  notes: 本轮同步更新 README、PROJECT_STATE、PLAN、AGENTS 和变更日志；只改 Markdown 文档。
