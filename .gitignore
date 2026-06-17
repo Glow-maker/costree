@@ -21,3 +21,5 @@ build/
 Thumbs.db
 .idea/
 .vscode/
+cost-server-offline-package/
+cost-server-offline-package.zip

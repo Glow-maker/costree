@@ -1,18 +1,22 @@
 version: 1
 project: costree
 created_at: 2026-06-12 00:04:41 +0800
-updated_at: 2026-06-12 16:55:00 +0800
+updated_at: 2026-06-18 02:20:00 +0800
 last_resumed_at: 2026-06-12 19:07:24 +0800
-current_phase: 第一阶段 MVP 实现、原型迁移和权限链路收口进行中
+current_phase: 第一阶段 MVP 实现、真实数据对齐和内网部署准备收口中
 current_goal: 在已有业务中台中嵌入成本库/成本树业务模块，让成本库数据可进入、可维护、可查询、可控权限，并用 note 文档中心和 .agent-handoff
   形成可持续接管、开发、收尾和经验沉淀机制。
-next_step: 继续项目时先运行 agent-handoff resume，再阅读 note/PROJECT_STATE.md 和 note/PLAN.md。下一步最小任务仍是迁移原型
-  DataAnalysis.tsx 为 /cost/analysis 第一版；开发时必须遵守模块边界，默认只改成本库/成本树相关文件。
+next_step: 继续项目时先运行 agent-handoff resume，再优先在内网或本机演练 PostgreSQL 部署：执行 sql/postgresql/costree-cost.sql
+  建表，测试环境可选执行 costree-cost-seed.sql；用外部 config/application-jt.yml 配置 Nacos、PostgreSQL、Redis
+  并启动 cost-server，确认 Nacos 出现 cost-server、网关 /admin-api/cost/** 可访问。随后用真实业务中台登录态复核
+  /cost/catalog、/cost/tree-detail、/cost/tree-unit-detail、/cost/collect 的数据和权限，再继续
+  /cost/analysis 第一版迁移。
 blockers:
+- 浏览器页面复核需要真实业务中台登录态；未登录时会被重定向到 /login。
+- 真实内网 Nacos、PostgreSQL/MySQL、Redis、网关、菜单权限、租户、组织和数据权限映射仍待现场确认。
 - 业务口径仍待确认：金额单位、借贷方向和冲销规则、历史工作令映射追溯、预分预控金额、院本级支出。
-- 内网真实 MySQL、Redis、Nacos、网关、菜单权限、组织和数据权限映射仍待内网环境确认。
-- 真实内网库不得执行 seed-mvp.sql；测试数据只用于外网测试库。
-- 当前前端、后端和文档仓库均有本轮未提交变更；后端 application-local.yml 的本地 Nacos discovery 配置提交前需确认是否纳入版本。
+- 真实内网库不得执行测试 seed；costree-cost-seed.sql 只用于首轮验证环境。
+- 离线包保留在 H:\light\project\costree 本地目录，不进入 Git；如需长期分发，应使用制品库、网盘或部署介质。
 key_files:
 - .agent-handoff/START-HERE.md
 - .agent-handoff/CURRENT.md

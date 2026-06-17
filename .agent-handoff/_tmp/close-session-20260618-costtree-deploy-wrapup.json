@@ -1,0 +1,94 @@
+{
+  "session": {
+    "started_at": "2026-06-17T22:58:49+08:00",
+    "ended_at": "2026-06-18T02:20:00+08:00",
+    "focus": "成本树预警、工作令组成穿透、PostgreSQL 适配、部署脚本和离线包收尾"
+  },
+  "current_status": {
+    "phase": "第一阶段 MVP 实现、真实数据对齐和内网部署准备收口中",
+    "goal": "在已有业务中台中嵌入成本库/成本树业务模块，让成本库数据可进入、可维护、可查询、可控权限，并用 note 文档中心和 .agent-handoff 形成可持续接管、开发、收尾和经验沉淀机制。",
+    "summary": "本轮完成成本树与单位工作令页的账面/目标预警展示、默认卡片视图、工作令账面组成穿透弹窗、填报页左侧滚动和周期年月调整；后端完成工作令账面组成接口、cost_work_order 源字段补充、MySQL/PostgreSQL 成本库 DDL 与 seed、PostgreSQL JDBC 驱动和手写 SQL 兼容调整。已生成 H:\\light\\project\\costree\\cost-server-offline-package 与 zip 离线包，并在 .gitignore 忽略，避免把大二进制提交进 root 仓库。前端提交 0b657d1 已推送到 codeup/feature/costree2，后端提交 976e511c 已推送到 codeup/feature/costree。",
+    "next_step": "继续项目时先运行 agent-handoff resume，再优先在内网或本机演练 PostgreSQL 部署：执行 sql/postgresql/costree-cost.sql 建表，测试环境可选执行 costree-cost-seed.sql；用外部 config/application-jt.yml 配置 Nacos、PostgreSQL、Redis 并启动 cost-server，确认 Nacos 出现 cost-server、网关 /admin-api/cost/** 可访问。随后用真实业务中台登录态复核 /cost/catalog、/cost/tree-detail、/cost/tree-unit-detail、/cost/collect 的数据和权限，再继续 /cost/analysis 第一版迁移。",
+    "blockers": [
+      "浏览器页面复核需要真实业务中台登录态；未登录时会被重定向到 /login。",
+      "真实内网 Nacos、PostgreSQL/MySQL、Redis、网关、菜单权限、租户、组织和数据权限映射仍待现场确认。",
+      "业务口径仍待确认：金额单位、借贷方向和冲销规则、历史工作令映射追溯、预分预控金额、院本级支出。",
+      "真实内网库不得执行测试 seed；costree-cost-seed.sql 只用于首轮验证环境。",
+      "离线包保留在 H:\\light\\project\\costree 本地目录，不进入 Git；如需长期分发，应使用制品库、网盘或部署介质。"
+    ]
+  },
+  "tasks_to_add": [],
+  "tasks_to_update": [],
+  "tasks_to_complete": [],
+  "tasks_to_add_and_complete": [
+    {
+      "title": "完成成本树和单位工作令页账面预警展示",
+      "details": "在 /cost/tree-detail 和 /cost/tree-unit-detail 使用同一套账面/目标口径展示 80% 黄色预警、超目标红色预警，覆盖卡片、列表行、顶部汇总、账面金额、执行率和进度展示。",
+      "priority": "P0",
+      "notes": "前端提交 0b657d1 已推送到 codeup/feature/costree2。"
+    },
+    {
+      "title": "完成工作令账面组成穿透",
+      "details": "新增工作令账面明细 Top8 科目组成接口和前端弹窗，从工作令卡片或列表入口查阅账面明细组成饼图和明细列表。",
+      "priority": "P0",
+      "notes": "后端提交 976e511c 已推送到 codeup/feature/costree；前端提交 0b657d1 已推送。"
+    },
+    {
+      "title": "完成成本库 PostgreSQL 适配和建表种子脚本",
+      "details": "新增 MySQL/PostgreSQL 成本模块 DDL 与 seed 脚本，补充 PostgreSQL JDBC 驱动，调整成本模块手写 SQL 的 deleted 条件和别名以兼容 PostgreSQL。",
+      "priority": "P0",
+      "notes": "已通过后端 mvn -pl yudao-module-cost/yudao-module-cost-biz -am -DskipTests compile。"
+    },
+    {
+      "title": "生成成本服务内网离线部署包",
+      "details": "在 H:\\light\\project\\costree 生成 cost-server-offline-package 与 cost-server-offline-package.zip，包含最新 cost-server jar、外部配置模板、Linux/Windows 启停脚本、PostgreSQL 初始化脚本和部署说明。",
+      "priority": "P1",
+      "notes": "离线包按决策不提交到 Git，已通过 .gitignore 忽略。"
+    },
+    {
+      "title": "提交并推送成本库前后端本轮变更",
+      "details": "后端 feature/costree 推送提交 976e511c；前端 costree 推送到 codeup/feature/costree2 提交 0b657d1。",
+      "priority": "P0",
+      "notes": "前端类型检查 pnpm run ts:check:cost 通过；后端编译通过。"
+    }
+  ],
+  "decisions_to_add": [
+    {
+      "summary": "成本服务离线包不提交到 root Git 仓库，只保留本地目录和 zip 作为部署介质。",
+      "rationale": "离线包包含 120MB+ 的可执行 jar/zip，大二进制不适合进入源码仓库；root 仓库继续只承载项目文档、交接状态和忽略规则。"
+    },
+    {
+      "summary": "PostgreSQL seed 只用于测试验证环境，真实内网库只执行 DDL 后导入真实数据。",
+      "rationale": "测试 seed 用于复现外网样例和页面路径，正式环境执行会污染真实数据；真实数据导入需按内网租户、组织和数据权限写入。"
+    }
+  ],
+  "session_log": {
+    "progress": [
+      "完成 /cost/tree-detail 账面预警展示，卡片、顶部汇总、详情面板和进度状态按 80%/超目标口径统一。",
+      "完成 /cost/tree-unit-detail 账面预警、默认树状卡片、工作令账面组成穿透弹窗；/cost/catalog 默认卡片视图。",
+      "修复 /cost/collect 左侧内容超屏不可滚动问题，并将周期字段恢复为年月口径。",
+      "对齐内网单位字典、主业项目树、工作令映射、账面明细表字段，补充 cost_work_order 源字段。",
+      "新增工作令账面组成后端接口，账面明细按科目 Top8 聚合，前端展示环形图和明细列表。",
+      "新增 sql/mysql 与 sql/postgresql 成本模块建表和测试 seed 脚本；PostgreSQL 脚本已做 JDBC dry-run 验证。",
+      "补充 PostgreSQL JDBC 依赖，并调整成本模块手写 SQL 兼容 PostgreSQL。",
+      "生成 cost-server-offline-package 与 zip 离线包，包含 jar、外部配置、启动脚本、建表脚本和说明。",
+      "前端提交 0b657d1 已推送到 codeup/feature/costree2；后端提交 976e511c 已推送到 codeup/feature/costree。"
+    ],
+    "files_touched": [
+      "H:\\light\\project\\sqlbot_with_bcback\\costree-frontend\\src\\views\\cost\\treeUnitDetail\\index.vue",
+      "H:\\light\\project\\sqlbot_with_bcback\\costree-frontend\\src\\views\\cost\\treeDetail\\index.vue",
+      "H:\\light\\project\\sqlbot_with_bcback\\baback\\yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost",
+      "H:\\light\\project\\sqlbot_with_bcback\\baback\\sql\\postgresql\\costree-cost.sql",
+      "H:\\light\\project\\costree\\cost-server-offline-package",
+      "H:\\light\\project\\costree\\.gitignore"
+    ],
+    "risks": [
+      "真实内网环境需要重新确认 Nacos 命名空间、网关路由、菜单权限、租户 ID 和数据权限，否则页面可能能启动但查不到数据或被权限拦截。",
+      "PostgreSQL 脚本已验证建表和 seed 可执行，但真实数据导入仍需按内网源表字段、租户、单位、工作令编号规则做映射校验。",
+      "离线包为本机产物，不进入 Git；后续如需多人复用，应建立制品分发方式。"
+    ]
+  },
+  "resume_hint": {
+    "text": "继续项目时，先运行 python H:\\light\\project\\costree\\.agent-handoff\\runtime\\agent-handoff\\scripts\\handoff.py resume H:\\light\\project\\costree；然后优先验证内网 cost-server 部署链路：建表、配置外部 application-jt.yml、启动服务、确认 Nacos cost-server、经网关访问 /admin-api/cost/**，再用真实登录态复核成本树和单位工作令页面。"
+  }
+}

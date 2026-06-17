@@ -2,6 +2,26 @@
 
 ---
 
+## 2026-06-18
+
+### 成本树预警、工作令组成穿透、PostgreSQL 适配、部署脚本和离线包收尾
+- 完成 /cost/tree-detail 账面预警展示，卡片、顶部汇总、详情面板和进度状态按 80%/超目标口径统一。
+- 完成 /cost/tree-unit-detail 账面预警、默认树状卡片、工作令账面组成穿透弹窗；/cost/catalog 默认卡片视图。
+- 修复 /cost/collect 左侧内容超屏不可滚动问题，并将周期字段恢复为年月口径。
+- 对齐内网单位字典、主业项目树、工作令映射、账面明细表字段，补充 cost_work_order 源字段。
+- 新增工作令账面组成后端接口，账面明细按科目 Top8 聚合，前端展示环形图和明细列表。
+- 新增 sql/mysql 与 sql/postgresql 成本模块建表和测试 seed 脚本；PostgreSQL 脚本已做 JDBC dry-run 验证。
+- 补充 PostgreSQL JDBC 依赖，并调整成本模块手写 SQL 兼容 PostgreSQL。
+- 生成 cost-server-offline-package 与 zip 离线包，包含 jar、外部配置、启动脚本、建表脚本和说明。
+- 前端提交 0b657d1 已推送到 codeup/feature/costree2；后端提交 976e511c 已推送到 codeup/feature/costree。
+
+#### 风险与备注
+- 真实内网环境需要重新确认 Nacos 命名空间、网关路由、菜单权限、租户 ID 和数据权限，否则页面可能能启动但查不到数据或被权限拦截。
+- PostgreSQL 脚本已验证建表和 seed 可执行，但真实数据导入仍需按内网源表字段、租户、单位、工作令编号规则做映射校验。
+- 离线包为本机产物，不进入 Git；后续如需多人复用，应建立制品分发方式。
+
+---
+
 ## 2026-06-12
 
 ### 初始化 agent-handoff 项目交接，并从 note 文档中心灌入当前成本库项目状态

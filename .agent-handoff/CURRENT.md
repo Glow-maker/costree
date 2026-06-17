@@ -1,20 +1,21 @@
 # 当前状态
 
-- 最近更新时间：2026-06-12 16:55:00 +0800
-- 当前阶段：第一阶段 MVP 实现、原型迁移和权限链路收口进行中
+- 最近更新时间：2026-06-18 02:20:00 +0800
+- 当前阶段：第一阶段 MVP 实现、真实数据对齐和内网部署准备收口中
 - 当前目标：在已有业务中台中嵌入成本库/成本树业务模块，让成本库数据可进入、可维护、可查询、可控权限，并用 note 文档中心和 .agent-handoff 形成可持续接管、开发、收尾和经验沉淀机制。
-- 当前摘要：本轮根据用户要求补充模块化开发边界：后续默认只修改成本库/成本树相关文件；如因全局构建、依赖、登录态、网关或集成问题必须触碰其他模块，必须先通知用户说明原因、影响范围和替代方案，并在文档中记录触碰文件、触碰原因、是否临时和回归方式。已同步 AGENTS、工程经验手册、PROJECT_STATE、DECISIONS 和变更日志。
+- 当前摘要：本轮完成成本树与单位工作令页的账面/目标预警展示、默认卡片视图、工作令账面组成穿透弹窗、填报页左侧滚动和周期年月调整；后端完成工作令账面组成接口、cost_work_order 源字段补充、MySQL/PostgreSQL 成本库 DDL 与 seed、PostgreSQL JDBC 驱动和手写 SQL 兼容调整。已生成 H:\light\project\costree\cost-server-offline-package 与 zip 离线包，并在 .gitignore 忽略，避免把大二进制提交进 root 仓库。前端提交 0b657d1 已推送到 codeup/feature/costree2，后端提交 976e511c 已推送到 codeup/feature/costree。
 
 ## 已完成进展
-- TASK-013: 修复前端 Vite 启动阻塞并同步项目状态文档
-- TASK-001: 真实登录态复核成本库前台页面
-- TASK-014: 补充成本库模块化开发边界约束
+- TASK-017: 完成成本库 PostgreSQL 适配和建表种子脚本
+- TASK-018: 生成成本服务内网离线部署包
+- TASK-019: 提交并推送成本库前后端本轮变更
 
 ## 下一步建议
-- 继续项目时先运行 agent-handoff resume，再阅读 note/PROJECT_STATE.md 和 note/PLAN.md。下一步最小任务仍是迁移原型 DataAnalysis.tsx 为 /cost/analysis 第一版；开发时必须遵守模块边界，默认只改成本库/成本树相关文件。
+- 继续项目时先运行 agent-handoff resume，再优先在内网或本机演练 PostgreSQL 部署：执行 sql/postgresql/costree-cost.sql 建表，测试环境可选执行 costree-cost-seed.sql；用外部 config/application-jt.yml 配置 Nacos、PostgreSQL、Redis 并启动 cost-server，确认 Nacos 出现 cost-server、网关 /admin-api/cost/** 可访问。随后用真实业务中台登录态复核 /cost/catalog、/cost/tree-detail、/cost/tree-unit-detail、/cost/collect 的数据和权限，再继续 /cost/analysis 第一版迁移。
 
 ## 当前阻塞
+- 浏览器页面复核需要真实业务中台登录态；未登录时会被重定向到 /login。
+- 真实内网 Nacos、PostgreSQL/MySQL、Redis、网关、菜单权限、租户、组织和数据权限映射仍待现场确认。
 - 业务口径仍待确认：金额单位、借贷方向和冲销规则、历史工作令映射追溯、预分预控金额、院本级支出。
-- 内网真实 MySQL、Redis、Nacos、网关、菜单权限、组织和数据权限映射仍待内网环境确认。
-- 真实内网库不得执行 seed-mvp.sql；测试数据只用于外网测试库。
-- 当前前端、后端和文档仓库均有本轮未提交变更；后端 application-local.yml 的本地 Nacos discovery 配置提交前需确认是否纳入版本。
+- 真实内网库不得执行测试 seed；costree-cost-seed.sql 只用于首轮验证环境。
+- 离线包保留在 H:\light\project\costree 本地目录，不进入 Git；如需长期分发，应使用制品库、网盘或部署介质。

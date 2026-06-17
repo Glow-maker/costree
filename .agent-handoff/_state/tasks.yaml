@@ -133,3 +133,51 @@ completed:
   updated_at: '2026-06-12T19:07:05+08:00'
   completed_at: '2026-06-12T19:07:05+08:00'
   notes: 本轮只改 Markdown 文档和交接状态，不改前端、后端或数据库。
+- task_id: TASK-015
+  title: 完成成本树和单位工作令页账面预警展示
+  details: 在 /cost/tree-detail 和 /cost/tree-unit-detail 使用同一套账面/目标口径展示 80% 黄色预警、超目标红色预警，覆盖卡片、列表行、顶部汇总、账面金额、执行率和进度展示。
+  priority: P0
+  status: completed
+  created_at: '2026-06-18T02:23:27+08:00'
+  updated_at: '2026-06-18T02:23:27+08:00'
+  completed_at: '2026-06-18T02:23:27+08:00'
+  notes: 前端提交 0b657d1 已推送到 codeup/feature/costree2。
+- task_id: TASK-016
+  title: 完成工作令账面组成穿透
+  details: 新增工作令账面明细 Top8 科目组成接口和前端弹窗，从工作令卡片或列表入口查阅账面明细组成饼图和明细列表。
+  priority: P0
+  status: completed
+  created_at: '2026-06-18T02:23:27+08:00'
+  updated_at: '2026-06-18T02:23:27+08:00'
+  completed_at: '2026-06-18T02:23:27+08:00'
+  notes: 后端提交 976e511c 已推送到 codeup/feature/costree；前端提交 0b657d1 已推送。
+- task_id: TASK-017
+  title: 完成成本库 PostgreSQL 适配和建表种子脚本
+  details: 新增 MySQL/PostgreSQL 成本模块 DDL 与 seed 脚本，补充 PostgreSQL JDBC 驱动，调整成本模块手写 SQL
+    的 deleted 条件和别名以兼容 PostgreSQL。
+  priority: P0
+  status: completed
+  created_at: '2026-06-18T02:23:27+08:00'
+  updated_at: '2026-06-18T02:23:27+08:00'
+  completed_at: '2026-06-18T02:23:27+08:00'
+  notes: 已通过后端 mvn -pl yudao-module-cost/yudao-module-cost-biz -am -DskipTests compile。
+- task_id: TASK-018
+  title: 生成成本服务内网离线部署包
+  details: 在 H:\light\project\costree 生成 cost-server-offline-package 与 cost-server-offline-package.zip，包含最新
+    cost-server jar、外部配置模板、Linux/Windows 启停脚本、PostgreSQL 初始化脚本和部署说明。
+  priority: P1
+  status: completed
+  created_at: '2026-06-18T02:23:27+08:00'
+  updated_at: '2026-06-18T02:23:27+08:00'
+  completed_at: '2026-06-18T02:23:27+08:00'
+  notes: 离线包按决策不提交到 Git，已通过 .gitignore 忽略。
+- task_id: TASK-019
+  title: 提交并推送成本库前后端本轮变更
+  details: 后端 feature/costree 推送提交 976e511c；前端 costree 推送到 codeup/feature/costree2
+    提交 0b657d1。
+  priority: P0
+  status: completed
+  created_at: '2026-06-18T02:23:27+08:00'
+  updated_at: '2026-06-18T02:23:27+08:00'
+  completed_at: '2026-06-18T02:23:27+08:00'
+  notes: 前端类型检查 pnpm run ts:check:cost 通过；后端编译通过。
