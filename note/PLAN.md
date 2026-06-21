@@ -1,6 +1,6 @@
 # PLAN - 成本库下一阶段执行清单
 
-更新时间：2026-06-12
+更新时间：2026-06-21
 
 用途：把下一阶段任务排成可执行、可验收、可追踪的清单。本文只管任务顺序和验收，不替代 `PROJECT_STATE.md`、PRD、接口文档和变更日志。
 
@@ -8,7 +8,7 @@
 
 第一阶段 MVP 继续围绕“数据可进入、可维护、可查询、可控权限”推进。当前重点从页面迁移转入三条线并行收口：
 
-- 已完成一轮本地真实网关链路页面复核，下一步进入 `/cost/analysis` 统计分析第一版迁移。
+- 已完成一轮本地真实网关链路页面复核；当前优先完成内网部署和真实数据接入验证，确认后再进入 `/cost/analysis` 统计分析第一版迁移。
 - 补齐全栈学习和运行链路说明，让后续每次改代码都能解释“为什么这样改”。
 - 维护成本树代码阅读地图，让后续自主开发时能按页面、接口、后端分层和数据表逐块理解。
 - 把 `note` 文档中心和 `.agent-handoff` 作为长期项目操作系统使用，形成开工恢复、需求规格化、开发同步、收尾沉淀和周巡检机制。
@@ -23,6 +23,7 @@
 |---|---|---|---|---|---|---|
 | P0 | 根级项目治理文件维护 | 保持 README、状态、计划、风险、决策可接手 | 已建立文档中心 | `README.md`、`PROJECT_STATE.md`、`PLAN.md`、`RISKS.md`、`DECISIONS.md`、`90-logs/02-变更日志.md` | 当前目标、提交号、下一步任务和风险状态一致 | 持续维护 |
 | P0-1 | 长期活文档机制沉淀 | 把文档作为项目操作系统使用，避免长期开发只靠聊天记录续接 | 已有文档中心、工程经验手册和 `.agent-handoff` | `00-overview/05-长期项目文档与工程经验沉淀模式.md`、`README.md`、`PROJECT_STATE.md`、`PLAN.md`、`90-logs/02-变更日志.md` | 文档明确开工恢复、需求规格化、开发同步、收尾沉淀、周巡检和可复用 prompt | 已完成，后续持续维护 |
+| P0-2 | 文档路径可迁移口径 | 避免接管指南和部署说明写死本机盘符，便于内网和陵台计算机使用 | 已建立文档中心和交接入口 | `README.md`、`AGENTS.md`、`00-overview/00-文档结构与维护规范.md`、`00-overview/06-新对话接管成本库项目启动指南.md`、`.agent-handoff` | 活跃文档使用 `<costree-root>`、`<frontend-root>`、`<backend-root>` 或相对路径；当前操作指南不依赖 `H:\`、`D:\` 等本机路径 | 已完成，后续持续维护 |
 | P1 | 成本库代理登录态修正 | 默认跟随业务中台真实登录态，避免 mock 用户覆盖角色和数据权限 | 中台端口已调整到 `38080`；已识别 `login-user` 优先级 | 前端 `vite.config.ts`、前端接入记录、部署说明、风险台账 | `VITE_COST_MOCK_LOGIN` 未开启时不注入 `login-user`；局部类型检查和 ESLint 通过；前端提交 `f4fb85f` | 已完成 |
 | P2 | 全栈边做边学说明 | 固定 Nacos、Redis、网关、`cost-server` 运行链路和讲解模板 | 已确认当前报错来自网关找不到 `cost-server` 实例 | `00-overview/02-全栈边做边学与运行链路说明.md`、根级治理文件 | 能解释 Nacos/Redis 作用；有排障顺序；后续改代码有固定讲解模板 | 已完成 |
 | P2-1 | 成本树代码阅读地图 | 让接手者按前端页面、API、后端分层和数据表逐块看懂项目 | 当前前后端新增内容和表结构已核对 | `00-overview/03-成本树代码阅读地图与自学路线.md`、`README.md`、`PROJECT_STATE.md` | 能从 `/cost/catalog` 追到页面、API、Controller、Service、Mapper 和 MySQL 表；后续新增功能有固定修改清单 | 已完成，后续持续维护 |
@@ -32,19 +33,25 @@
 | P4-2 | 后端分页与聚合风险治理 | 消除待分配池、预警中心、总体展示和导出接口的全量加载隐患 | 账面明细表和现有工作令接口已具备 | 后端 Mapper/Service/Controller、接口文档、状态文档 | 待分配池明细数据库分页；预警中心 SQL 分页；总体展示 SQL 聚合；同步导出超过 5000 行拦截；编译、类型检查、ESLint 和外网 SQL 验证通过 | 已完成，本地页面链路已复核 |
 | P5 | 统计分析第一版 `/cost/analysis` | 迁移原型 `DataAnalysis.tsx` 的核心统计页面 | 现有账面明细聚合和项目/工作令数据可复用 | `src/views/cost/analysis/...`、`src/api/cost/...`、路由/入口、前端文档 | 页面可展示统计概览和明细入口；预留 Excel 导出入口；无假数据误导 | 待办 |
 | P6 | 账面明细正式导入/同步流程 | 让 `cost_work_order_ledger_detail` 有稳定数据进入方式 | 金额单位、借贷方向、冲销规则【需确认】 | 后端导入/同步接口、`30-data`、`40-api`、`60-backend` | 可导入或同步凭证明细；聚合金额可追溯到明细 | 待办 |
-| P7 | 源数据同步规则设计 | 明确源主业项目树和工作令映射如何进入业务表 | 源系统主键、增量字段、映射变更口径【需确认】 | `30-data` 源数据设计、`60-backend` 同步设计 | 有明确转换规则；不直接覆盖业务表；异常和重复数据有记录口径 | 待办 |
+| P7 | 源数据导入和解析规则落地 | 明确源主业项目树、工作令映射和账面明细如何进入业务表 | 源系统主键、增量字段、映射变更口径【需确认】；已新增 `30-data/05-内网源表与成本库业务表关系实施方案.md`、`30-data/09-成本库内网数据对接总设计方案.md`，并开始整理 `ads_lc_lshsxm2022`、`dwd_bd_bfcustomitem_gzl`、`dws_bu_pz_pzmx_gzl` 原表 | `30-data` 源数据设计、部署 DDL、源数据导入接口、解析任务、未解析数据查询 | 源表不直接覆盖业务表；可生成/更新 `cost_model_node`、`cost_project`、`cost_work_order`；账面明细可回填 `project_id/work_order_id/resolved_stage_code`；异常可追溯 | 进行中 |
 | P8 | 数据采集前台页深化 | 项目办、研制单位能够按角色填报并走确认状态 | 当前 `/cost/collect` 轻流程页面已存在；角色权限边界【需确认】 | `/cost/collect`、项目基本情况和工作令接口、`20-requirements` | 项目办和研制单位入口分清；草稿、提交、通过、退回状态可追踪 | 待办 |
 | P9 | 权限和菜单接入 | 成本库正式进入中台菜单、角色、按钮和数据权限体系 | 内网菜单父级、角色、组织、租户、权限点由技术同事确认 | 中台菜单配置、后端权限点、前端权限控制、`80-deployment` | 管理员可管理；项目办/研制单位/查看用户只能访问授权页面和数据 | 待办 |
-| P10 | 内网部署准备 | 把外网测试闭环迁到内网真实环境 | 内网 MySQL、Redis、Nacos、网关、system-server、infra-server 可用 | `80-deployment/01-外网到内网迁移说明.md`、内网配置、建表 SQL | `cost-server` 注册成功；网关路由可访问；`mock-platform=false`；真实库不执行 `seed-mvp.sql` | 待办 |
+| P10 | 内网部署准备 | 把外网测试闭环迁到内网真实环境 | 内网 MySQL/PostgreSQL、Redis、Nacos、网关、system-server、infra-server 可用 | `80-deployment/01-外网到内网迁移说明.md`、离线包、外部配置、MySQL/PostgreSQL 建表 SQL | `cost-server` 注册成功；网关路由可访问；`mock-platform=false`；真实库不执行测试 seed | 进行中 |
 | P11 | 测试验收闭环 | 形成每次变更的最小验证集 | 前后端和数据库任务完成后执行 | `70-testing` 测试文档、命令输出、页面截图或接口样例 | 前端局部类型检查、ESLint、后端编译、接口、页面、部署检查均有记录 | 待办 |
 
 ## 下一步最小任务
 
-1. 进入 `/cost/analysis` 第一版迁移：先做统计概览和 Excel 导出入口，不做 Word 报告。
-2. 复用现有账面明细聚合、项目、工作令接口；如果需要新增统计口径，先写清接口字段契约和验收标准。
-3. 页面完成后执行 `pnpm run ts:check:cost`、成本库相关 ESLint 和后端 `mvn -pl yudao-module-cost/yudao-module-cost-biz -am -DskipTests compile`。
-4. 用当前本地链路访问 `http://localhost:5173/cost/analysis` 做浏览器复核；前端继续使用 `VITE_BASE_URL=http://127.0.0.1:38080`，不要配置 `VITE_COST_MOCK_LOGIN=true`。
-5. 收尾时同步 `PROJECT_STATE.md`、`PLAN.md`、`90-logs/02-变更日志.md` 和 `.agent-handoff`。
+1. 先按 `30-data/09-成本库内网数据对接总设计方案.md` 对齐整体设计：内网原表、标准源表、`cost_model_node`、`cost_project`、`cost_work_order`、账面明细和页面聚合的关系。
+2. 按 `30-data/06-内网原表-主业项目树-ads_lc_lshsxm2022.md` 补齐主业项目树完整 DDL 和样例数据，确认父节点、层级、领域、类别和停用字段。
+3. 按 `30-data/07-内网原表-工作令关联主业项目字典-dwd_bd_bfcustomitem_gzl.md` 补齐工作令映射完整 DDL 和样例数据，确认年度来源、工作令唯一键、停用字段、增量字段和 `zyxmid` 到主业项目树的关联。
+4. 按 `30-data/08-内网原表-项目工作令账面成本明细-dws_bu_pz_pzmx_gzl.md` 补齐账面明细完整 DDL 和样例数据，确认金额单位、借贷方向、明细唯一键、工作令关联键和增量字段。
+5. 再按 `30-data/05-内网源表与成本库业务表关系实施方案.md` 决定：补齐 `cost_source_project_tree`、`cost_work_order_project_ref`、`cost_source_dws_bu_pz_pzmx_gzl` 到部署 DDL，还是使用内网原表/视图作为源表。
+6. 完成内网部署验证：执行对应 MySQL/PostgreSQL 建表脚本，测试环境可选执行 seed，正式真实库不执行测试 seed。
+7. 首轮导入顺序按“单位字典 -> 主业项目树 -> 解析项目树 -> 工作令映射 -> 解析工作令 -> 项目/工作令填报数据 -> 账面明细 -> 解析账面明细”执行，并产出未解析清单。
+8. 配置外部 `application-jt.yml`，启动 `cost-server`，确认 Nacos 注册、网关路由和真实登录态访问成本库接口正常。
+9. 复核 `/cost/catalog`、`/cost/tree-detail`、`/cost/tree-unit-detail`、`/cost/collect` 的真实数据展示、预警颜色和工作令组成穿透。
+10. 内网链路确认后进入 `/cost/analysis` 第一版迁移：先做统计概览和 Excel 导出入口，不做 Word 报告。
+11. 收尾时同步 `PROJECT_STATE.md`、`PLAN.md`、`90-logs/02-变更日志.md` 和 `.agent-handoff`。
 
 ## 暂不纳入下一步
 

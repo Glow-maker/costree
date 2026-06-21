@@ -1,21 +1,20 @@
 # 当前状态
 
-- 最近更新时间：2026-06-18 02:20:00 +0800
+- 最近更新时间：2026-06-22 00:03:25 +0800
 - 当前阶段：第一阶段 MVP 实现、真实数据对齐和内网部署准备收口中
 - 当前目标：在已有业务中台中嵌入成本库/成本树业务模块，让成本库数据可进入、可维护、可查询、可控权限，并用 note 文档中心和 .agent-handoff 形成可持续接管、开发、收尾和经验沉淀机制。
-- 当前摘要：本轮完成成本树与单位工作令页的账面/目标预警展示、默认卡片视图、工作令账面组成穿透弹窗、填报页左侧滚动和周期年月调整；后端完成工作令账面组成接口、cost_work_order 源字段补充、MySQL/PostgreSQL 成本库 DDL 与 seed、PostgreSQL JDBC 驱动和手写 SQL 兼容调整。已生成 H:\light\project\costree\cost-server-offline-package 与 zip 离线包，并在 .gitignore 忽略，避免把大二进制提交进 root 仓库。前端提交 0b657d1 已推送到 codeup/feature/costree2，后端提交 976e511c 已推送到 codeup/feature/costree。
+- 当前摘要：本轮围绕内网真实数据接入补齐了数据对接说明：整理主业项目树、工作令关联主业项目字典、项目工作令账面成本明细三张内网原表的字段含义；说明它们与 cost_model_node、cost_project、cost_work_order、cost_work_order_ledger_detail 的关系；把 cost_model_node 解释为成本库自己的左侧展示树，把 cost_project 解释为项目锚点，把 cost_work_order 解释为需要补目标成本、阶段、分系统等业务字段的工作令表，把 cost_work_order_ledger_detail 解释为账面凭证明细和科目组成来源。已按更简洁的语言沉淀到 note 数据文档，并梳理两个型号试点的前三步：导入主业项目树生成左侧树和项目卡片，导入工作令映射生成项目下工作令，导入账面明细计算账面成本和 Top8 科目组成。
 
 ## 已完成进展
-- TASK-017: 完成成本库 PostgreSQL 适配和建表种子脚本
-- TASK-018: 生成成本服务内网离线部署包
-- TASK-019: 提交并推送成本库前后端本轮变更
+- TASK-021: 整理内网三张源表与成本库业务表映射方案
+- TASK-022: 补充成本库内网数据对接文档
+- TASK-023: 梳理两个型号试点导入步骤
 
 ## 下一步建议
-- 继续项目时先运行 agent-handoff resume，再优先在内网或本机演练 PostgreSQL 部署：执行 sql/postgresql/costree-cost.sql 建表，测试环境可选执行 costree-cost-seed.sql；用外部 config/application-jt.yml 配置 Nacos、PostgreSQL、Redis 并启动 cost-server，确认 Nacos 出现 cost-server、网关 /admin-api/cost/** 可访问。随后用真实业务中台登录态复核 /cost/catalog、/cost/tree-detail、/cost/tree-unit-detail、/cost/collect 的数据和权限，再继续 /cost/analysis 第一版迁移。
+- 继续两个型号试点的第 4 步：手工或脚本补齐 cost_work_order 的 product_target_cost、stage_codes、max_stage_code、subsystem_name、product_short_name、quantity 等展示和预警字段；随后在 /cost/catalog、/cost/tree-detail、/cost/tree-unit-detail 核验项目卡片、成本树、账面成本、预警颜色和组成穿透。正式导入前还要确认金额单位、借贷方向、冲销规则、主业项目树哪一级生成型号项目，以及工作令编号是否需要按年度和单位联合唯一。
 
 ## 当前阻塞
-- 浏览器页面复核需要真实业务中台登录态；未登录时会被重定向到 /login。
+- 金额口径仍待财务确认：dws_bu_pz_pzmx_gzl.je 是元还是万元，以及 jzfx 借贷方向是否影响正负。
+- 主业项目树解析口径仍待确认：哪个父节点字段最权威，哪一级作为成本库 MODEL，领域和系列如何生成。
+- 工作令唯一口径仍待确认：work_order_no 是否跨年度或跨单位重复，必要时需按 source_work_order_id 或 work_order_no + fiscal_year + accounting_unit_code 匹配。
 - 真实内网 Nacos、PostgreSQL/MySQL、Redis、网关、菜单权限、租户、组织和数据权限映射仍待现场确认。
-- 业务口径仍待确认：金额单位、借贷方向和冲销规则、历史工作令映射追溯、预分预控金额、院本级支出。
-- 真实内网库不得执行测试 seed；costree-cost-seed.sql 只用于首轮验证环境。
-- 离线包保留在 H:\light\project\costree 本地目录，不进入 Git；如需长期分发，应使用制品库、网盘或部署介质。

@@ -2,6 +2,22 @@
 
 ---
 
+## 2026-06-22
+
+### 成本库内网数据源表映射和两个型号试点步骤收口
+- 整理主业项目树原表 ads_lc_lshsxm2022 的字段和它到 cost_model_node、cost_project 的映射思路。
+- 整理工作令关联主业项目字典 dwd_bd_bfcustomitem_gzl 的字段和它到 cost_work_order 的映射思路。
+- 整理项目工作令账面成本明细 dws_bu_pz_pzmx_gzl 的字段和它到 cost_work_order_ledger_detail 的映射思路。
+- 解释 /cost/catalog 左侧树来自 cost_model_node，右侧项目卡片来自 cost_project，工作令数量来自 cost_work_order，账面成本来自账面明细聚合。
+- 将原本偏专业的总设计方案调整为更容易交接理解的语言，并补充两个型号试点的操作顺序。
+
+#### 风险与备注
+- 当前映射方案来自内网截图和现有 DDL/代码理解，正式上线前仍需拿到内网真实 DDL 和样本数据复核。
+- 如果 source_work_order_id 或 project_code 在真实库中不能稳定匹配，需要补映射表或改导入规则。
+- 如果账面明细达到百万级以上，应优先靠数据库索引和 SQL 聚合，不要在 Java 内存中全量汇总。
+
+---
+
 ## 2026-06-18
 
 ### 成本树预警、工作令组成穿透、PostgreSQL 适配、部署脚本和离线包收尾
@@ -19,6 +35,17 @@
 - 真实内网环境需要重新确认 Nacos 命名空间、网关路由、菜单权限、租户 ID 和数据权限，否则页面可能能启动但查不到数据或被权限拦截。
 - PostgreSQL 脚本已验证建表和 seed 可执行，但真实数据导入仍需按内网源表字段、租户、单位、工作令编号规则做映射校验。
 - 离线包为本机产物，不进入 Git；后续如需多人复用，应建立制品分发方式。
+
+### 成本库文档路径可迁移口径收口
+- 统一 note 活跃 Markdown 中的本机绝对路径为占位符或相对路径。
+- 更新 README.md 和 AGENTS.md，明确 <costree-root>、<frontend-root>、<backend-root> 以及推荐相对布局。
+- 更新 00-overview/00-文档结构与维护规范.md，新增路径书写规则。
+- 更新 00-overview/06-新对话接管成本库项目启动指南.md，将启动 prompt 和常用命令改成项目根目录下的相对路径。
+- 更新 PROJECT_STATE.md、PLAN.md、DECISIONS.md 和 90-logs/02-变更日志.md，记录路径可迁移口径和当前前后端已推送基线。
+
+#### 风险与备注
+- 历史 .agent-handoff 会话日志和归档记录可能仍包含当时真实执行路径；这些属于历史记录，不作为当前操作指南使用。
+- 如果内网仓库不采用推荐相对布局，需要先把 <frontend-root> 和 <backend-root> 替换为实际仓库根目录。
 
 ---
 

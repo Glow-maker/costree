@@ -1,6 +1,6 @@
 # PROJECT_STATE - 成本库当前项目状态
 
-更新时间：2026-06-12
+更新时间：2026-06-21
 
 用途：给后续接手者或下一轮 Codex 会话快速恢复上下文。本文只记录当前状态，不替代详细 PRD、接口文档、数据模型和变更日志。
 
@@ -27,7 +27,7 @@
 
 ### 文档中心
 
-- 已建立 `D:\light\costree\note` 文档中心。
+- 已建立 `<costree-root>/note` 文档中心。
 - 已按长期维护方式建立目录：
   - `00-overview`
   - `10-research`
@@ -43,6 +43,12 @@
 - 新增 `00-overview/02-全栈边做边学与运行链路说明.md`，集中解释 Nacos、Redis、网关、`cost-server` 和成本库请求链路。
 - 新增 `00-overview/03-成本树代码阅读地图与自学路线.md`，按前端路由、页面、API、后端 Controller/Service/Mapper/DO、数据库表和请求链路梳理自主开发阅读顺序。
 - 更新 `00-overview/05-长期项目文档与工程经验沉淀模式.md`，补充“文档作为项目操作系统”的长期维护机制，明确开工恢复、需求规格化、开发同步、收尾沉淀和周巡检节奏。
+- 2026-06-18 已将活跃文档中的本机盘符路径统一为 `<costree-root>`、`<frontend-root>`、`<backend-root>` 或相对路径，便于内网和陵台计算机接手。
+- 2026-06-21 新增 `30-data/05-内网源表与成本库业务表关系实施方案.md`，明确内网主业项目树、工作令映射、账面明细、单位字典和成本库业务表之间的关系。
+- 2026-06-21 新增 `30-data/06-内网原表-主业项目树-ads_lc_lshsxm2022.md`，开始按内网真实原表整理主业项目树字段和映射待确认项。
+- 2026-06-21 新增 `30-data/07-内网原表-工作令关联主业项目字典-dwd_bd_bfcustomitem_gzl.md`，开始按内网真实原表整理工作令关联主业项目字典字段和映射待确认项。
+- 2026-06-21 新增 `30-data/08-内网原表-项目工作令账面成本明细-dws_bu_pz_pzmx_gzl.md`，开始按内网真实原表整理账面明细字段和映射待确认项。
+- 2026-06-21 新增 `30-data/09-成本库内网数据对接总设计方案.md`，面向交接和执行汇总内网源表、成本库标准源表、业务维护表、页面聚合的设计思路、对应关系、导入维护步骤和两个型号试点方案。
 
 ### 数据与测试库
 
@@ -78,12 +84,16 @@
   - `cost_import_batch = 5`
   - `cost_warning_record = 6`
 - 测试数据已覆盖 4 条待分配工作令样本：`product_short_name` 分别为 `NULL`、空字符串和 `待分配`，覆盖多个项目、单位和正常/超支场景。
+- 注意：最新后端部署脚本 `sql/mysql/costree-cost.sql`、`sql/postgresql/costree-cost.sql` 当前是 10 张表口径，未包含 `cost_source_project_tree`、`cost_work_order_project_ref`；内网导入前需按新方案决定补齐源表或使用内网原表/视图。
+- 已确认第一张内网主业项目树原表名为 `sc_8001_cw.ads_lc_lshsxm2022`，表注释为“分析层项目”；截图可读字段已进入 `30-data/06-内网原表-主业项目树-ads_lc_lshsxm2022.md`，仍需正式 DDL 和样例数据复核。
+- 已确认第二张内网工作令映射原表名为 `dwd_bd_bfcustomitem_gzl`，表注释为“明细层工作令项目”；截图可读字段已进入 `30-data/07-内网原表-工作令关联主业项目字典-dwd_bd_bfcustomitem_gzl.md`，仍需正式 DDL、schema 名称、年度来源和样例数据复核。
+- 已确认第三张内网账面明细原表名为 `sc_8001_fidw.dws_bu_pz_pzmx_gzl`，表注释为“工作令凭证明细”；截图可读字段已进入 `30-data/08-内网原表-项目工作令账面成本明细-dws_bu_pz_pzmx_gzl.md`，仍需正式 DDL、金额单位、借贷方向、关联键和样例数据复核。
 
 ### 后端
 
 后端仓库：
 
-`D:\light\bcback`
+`<backend-root>`
 
 已完成：
 
@@ -106,9 +116,13 @@
 - 总体展示 `summary` 和 `unit-detail` 已改为 SQL `GROUP BY` 聚合，返回字段保持不变。
 - 项目基本情况和工作令基础信息同步导出已增加 5000 行上限保护，超过时提示缩小筛选范围。
 - `application-jt.yml` 已调整为默认使用与网关一致的 Nacos 账号口径，并默认启用 Nacos discovery，便于 `cost-server` 注册到 Nacos 后被网关发现。
+- 已新增工作令账面组成接口，用于单位工作令页穿透查看账面科目 Top8 饼图和明细列表。
+- 已为 `cost_work_order` 补充内网源字段，并新增 MySQL/PostgreSQL 成本模块建表与测试 seed 脚本。
+- 已补充 PostgreSQL JDBC 依赖，并调整成本模块手写 SQL 兼容 PostgreSQL。
 
 最近后端 commit：
 
+- `976e511c feat(cost): add deployment ddl and ledger composition`
 - `3ab3ccb8 perf(cost): page and aggregate backend queries`
 - `254ec08b feat(cost): add pending allocation work order api`
 - `6574e231 fix(cost): enable jt nacos discovery`
@@ -123,7 +137,7 @@
 
 前端仓库：
 
-`D:\light\academy8-operation-control-center-frontend`
+`<frontend-root>`
 
 已完成页面/入口：
 
@@ -155,9 +169,14 @@
 - 预警中心已接入工作令实时超支计算，支持筛选、进入成本树、重新推送、标记已处理。
 - 本轮清理了一批非成本页面里误引入的 `dist-prod/assets/...`、`element-plus/es/locale`、`element-plus/es/utils` 等无效依赖，修复 Vite 启动时报 unresolved import 导致成本库页面无法加载的问题。
 - 本轮修正 `src/main.ts` 初始化失败日志调用，移除不存在的 `Logger.error` 调用，保留 `console.error` 输出真实运行错误。
+- 成本树详情和单位工作令页已按 `book / target >= 80%` 黄色、`book > target` 红色的账面预警口径展示卡片边框、账面金额、执行率和进度状态。
+- `/cost/catalog` 默认卡片视图，`/cost/tree-unit-detail` 默认树状卡片视图；仍保留用户手动切换后的本地偏好。
+- 单位工作令页已新增“查阅超支详情”入口，展示工作令账面组成饼图和 Top8 科目明细。
+- `/cost/collect` 已修复左侧内容超屏不可滚动问题，周期字段保持年月口径。
 
 最近前端 commit：
 
+- `0b657d1 feat(cost): add cost warnings and ledger drilldown`
 - `a9b94d1 feat(cost): add pending allocation page`
 - `8c7d21b fix(cost): log app setup failures`
 - `f4fb85f fix(cost): gate local mock login proxy`
@@ -198,8 +217,9 @@ mvn -pl yudao-module-cost/yudao-module-cost-biz -am -DskipTests compile
 
 局部类型检查入口：
 
-- 前端配置：`D:\light\academy8-operation-control-center-frontend\tsconfig.cost.json`
+- 前端配置：`<frontend-root>/tsconfig.cost.json`
 - 脚本：`pnpm run ts:check:cost`
+- 2026-06-18 前后端最新基线已分别提交并推送：前端 `0b657d1` 到 `codeup/feature/costree2`，后端 `976e511c` 到 `codeup/feature/costree`。
 
 ## 3. 未完成事项
 
@@ -216,7 +236,11 @@ mvn -pl yudao-module-cost/yudao-module-cost-biz -am -DskipTests compile
 - 账面成本已具备工作令级聚合接口和前端优先读取能力，但导入/同步 `cost_work_order_ledger_detail` 的正式流程尚未实现。
 - 总体展示、院外单位汇总仍有部分口径来自 `cost_unit_cost_detail.book_cost_amount`，后续需和账面明细表统一口径【需确认】。
 - 源主业项目树到 `cost_model_node` / `cost_project` 的转换规则未实现。
+- 内网原表 `ads_lc_lshsxm2022` 到标准源表 `cost_source_project_tree` 的字段映射尚未定稿，尤其是父节点字段、领域来源、项目类别/系列来源。
 - 工作令关联主业项目字典到 `cost_work_order` 的同步规则未实现。
+- 内网原表 `dwd_bd_bfcustomitem_gzl` 到标准源表 `cost_work_order_project_ref` 的字段映射尚未定稿，尤其是年度来源、`zyxmid` 与主业项目树的关联键、停用/完工字段取值。
+- 内网原表 `dws_bu_pz_pzmx_gzl` 到标准明细表 `cost_work_order_ledger_detail` 的字段映射尚未定稿，尤其是 `ysnm/id` 唯一键、`gzlnm/gzllb` 工作令关联键、`je` 金额单位、`jzfx` 正负规则和 `lastmodifiedtime/dwts` 增量字段。
+- 源表导入后的解析任务和未解析数据查询未实现，包括项目树解析、工作令映射解析、账面明细 `project_id/work_order_id/resolved_stage_code` 回填。
 - 预警推送目前仍是 MVP 口径，只记录推送状态；正式接中台消息推送、接收人规则、失败原因回填待完善。
 - 待分配池当前只做展示和穿透，不做认领/分配/关闭流程；如业务提出操作闭环，需要新增状态流转设计【需确认】。
 - 大批量导出当前只做同步 5000 行保护；如业务需要超过上限的导出，应新增异步导出任务和下载中心【需确认】。
@@ -237,11 +261,15 @@ mvn -pl yudao-module-cost/yudao-module-cost-biz -am -DskipTests compile
   - “预分预控金额”是否等同目标成本。
   - “院本级支出”的判断规则。
 - 内网真实 MySQL、Redis、Nacos、网关、菜单权限配置仍待内网环境确认。
+- 内网源表承接方式仍待确认：补齐成本库源表，或用内网原表/视图映射为成本库源表。
+- `ads_lc_lshsxm2022` 只从截图整理了字段注释，还缺完整 DDL、字段取值样例、父子关系样例和更新时间字段确认。
+- `dwd_bd_bfcustomitem_gzl` 只从截图整理了字段注释，还缺完整 DDL、schema 名称、年度字段来源、字段取值样例和与主业项目树的关联校验。
+- `dws_bu_pz_pzmx_gzl` 只从截图整理了字段注释，还缺完整 DDL、字段取值样例、金额单位、借贷方向、唯一键、增量字段和与工作令/主业项目树的关联校验。
 - 当前本地 Nacos 服务发现链路已复核：`38108` 健康检查返回 `UP`，经 `38080` 未带登录态直接调成本库接口返回 `401 账号未登录`，说明网关已能发现 `cost-server`；通过前端已登录页面访问成本库页面可正常渲染数据。
 - 当前仓库状态注意：
-  - 前端仓库 `D:\light\academy8-operation-control-center-frontend` 当前有本轮 Vite 启动修复变更，尚未提交。
-  - 后端仓库 `D:\light\bcback` 当前有 `application-local.yml` 本地配置变更，表现为 `COST_NACOS_DISCOVERY_ENABLED` 默认启用；该变更用于当前本地 Nacos 链路，提交前需确认是否纳入版本。
-  - 文档仓库 `D:\light\costree` 当前有本轮状态文档和 `.agent-handoff` 更新，尚未提交。
+  - 前端仓库 `<frontend-root>` 最新成本预警与组成穿透基线已提交并推送。
+  - 后端仓库 `<backend-root>` 最新部署 SQL、PostgreSQL 兼容和账面组成接口基线已提交并推送。
+  - 文档仓库 `<costree-root>` 当前正在进行路径可迁移口径更新，提交前需检查 `git status --short`。
 
 ## 5. 关键设计决策
 
@@ -253,6 +281,7 @@ mvn -pl yudao-module-cost/yudao-module-cost-biz -am -DskipTests compile
   - 前台：总体展示、目录树、项目详情、成本树详情、数据采集。
   - 后台：项目基本情况、工作令基础信息等维护页。
 - 业务方参考表按“源数据表”保存，不直接替换成本库业务表。
+- 内网源数据采用“源数据层 -> 业务维护层 -> 展示/聚合层”的三层口径：源表不直接替代页面业务表，需解析生成或更新 `cost_model_node`、`cost_project`、`cost_work_order`。
 - 当前不建每日汇总表；总体展示优先走真实实时聚合。后续如性能压力明显，再考虑快照/汇总表。
 - 成本树详情页主树层级定为“型号 -> 单位”，工作令不在主树第三层展示，而在单位详情页展示。
 - 院内/院外判断以 `cost_unit_dict.inside_institute` 为当前依据。
@@ -264,14 +293,21 @@ mvn -pl yudao-module-cost/yudao-module-cost-biz -am -DskipTests compile
 - Nacos 在成本库链路中作为服务注册/发现入口，网关通过服务名 `cost-server` 查找后端实例。
 - Redis 只作为缓存和中台基础设施，不保存成本库正式业务主数据。
 - 成本库按模块化边界开发：默认只修改成本库/成本树相关文件；必须触碰其他模块时先通知用户，并在文档中写清修改原因、影响范围、是否临时和回归方式。
+- 当前操作指南和协作文档默认使用 `<costree-root>`、`<frontend-root>`、`<backend-root>` 与相对路径，不写死本机盘符。
 
 ## 6. 下一步最小任务
 
-建议下一步最小任务进入统计分析第一版；如要先收口当前基线，先决定是否提交本轮前端修复、文档更新和后端本地配置变更：
+建议下一步最小任务优先围绕内网部署验证；如果部署链路已经确认，再进入统计分析第一版：
 
 0. 每轮开发前先按 `00-overview/05-长期项目文档与工程经验沉淀模式.md` 做 5 分钟恢复：读 `.agent-handoff/CURRENT.md`、`README.md`、`PROJECT_STATE.md`、`PLAN.md` 和本轮相关专题文档。
-1. 自主学习和接手开发时，先阅读 `00-overview/03-成本树代码阅读地图与自学路线.md`，再按 `/cost/catalog` 这条链路练习从页面追到接口、后端和数据库。
-2. 开始迁移原型 `DataAnalysis.tsx` 为 `/cost/analysis`，先做统计概览和 Excel 导出入口，不做 Word 报告。
-3. 优先复用现有项目、工作令、账面明细聚合接口；如接口字段不够，先更新 `40-api/02-接口字段契约.md` 再改后端。
-4. 页面开发完成后运行 `pnpm run ts:check:cost`、成本库相关 ESLint、后端 `mvn -pl yudao-module-cost/yudao-module-cost-biz -am -DskipTests compile`。
-5. 在 `http://localhost:5173/cost/analysis` 做浏览器复核，并同步更新 `PROJECT_STATE.md`、`PLAN.md`、`90-logs/02-变更日志.md` 和 `.agent-handoff`。
+1. 先读 `30-data/09-成本库内网数据对接总设计方案.md`，统一理解 `cost_model_node`、`cost_project`、工作令映射、账面明细和页面取数之间的关系。
+2. 再按 `30-data/05-内网源表与成本库业务表关系实施方案.md` 确认源表承接方式：补齐成本库源表，或使用内网原表/视图。
+3. 先补齐 `ads_lc_lshsxm2022` 的完整 DDL 和 20 至 50 行样例，确认 `lshsxm_xmnm`、父节点字段、`lshsxm_js`、`lshsxm_xmlx`、`disabled` 等字段含义。
+4. 补齐 `dwd_bd_bfcustomitem_gzl` 的完整 DDL 和 20 至 50 行样例，确认 `id/cusitemcode/accountorgcode/zyxmid`、年度来源、停用/完工字段和增量时间字段。
+5. 补齐 `dws_bu_pz_pzmx_gzl` 的完整 DDL 和 20 至 50 行样例，确认 `ysnm/id`、`gzlnm/gzllb/dwbh`、`xmnm/xmbh`、`je`、`jzfx`、`lastmodifiedtime/dwts` 的正式口径。
+6. 在内网或本地 PostgreSQL/MySQL 目标库执行对应建表脚本，测试环境可选执行 seed，正式真实库不执行 seed。
+7. 按“单位字典 -> 主业项目树 -> 解析项目树 -> 工作令映射 -> 解析工作令 -> 项目/工作令填报数据 -> 账面明细 -> 解析账面明细”的顺序做首轮导入验证。
+8. 使用离线包或最新 jar 配置外部 `application-jt.yml`，确认 `cost-server` 注册到 Nacos，经网关访问 `/admin-api/cost/**` 返回预期登录态或业务数据。
+9. 用真实登录态复核 `/cost/catalog`、`/cost/tree-detail`、`/cost/tree-unit-detail`、`/cost/collect` 的数据、预警颜色和工作令组成穿透。
+10. 部署链路确认后，再开始迁移原型 `DataAnalysis.tsx` 为 `/cost/analysis`，先做统计概览和 Excel 导出入口，不做 Word 报告。
+11. 页面或接口开发完成后运行 `pnpm run ts:check:cost`、成本库相关 ESLint、后端 `mvn -pl yudao-module-cost/yudao-module-cost-biz -am -DskipTests compile`，并同步更新 `PROJECT_STATE.md`、`PLAN.md`、`90-logs/02-变更日志.md` 和 `.agent-handoff`。

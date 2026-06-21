@@ -28,11 +28,13 @@
 
 ## 代码仓库位置
 
+本文档默认从 `<costree-root>` 表示当前 `costree` 文档仓库根目录。若按当前推荐布局放置仓库，前端和后端相对路径分别为 `../sqlbot_with_bcback/costree-frontend`、`../sqlbot_with_bcback/baback`；如果内网机器目录不同，只需要把 `<frontend-root>`、`<backend-root>` 替换为实际仓库根目录，不要在文档中写死本机盘符。
+
 | 类型 | 路径 | 说明 |
 |---|---|---|
-| 成本库前端开发仓库 | `D:\light\academy8-operation-control-center-frontend` | Vue3 中台前端，当前分支 `feature/costree` |
-| 数据中台后端 | `D:\light\bcback` | Yudao Java/Spring Boot 后端，当前分支 `costree`，跟踪 `origin/feature/costree` |
-| 文档和 React/Figma 原型 | `D:\light\costree` | `note` 和 `.agent-handoff` 所在位置；原型只作为页面、字段和交互参考 |
+| 成本库前端开发仓库 | `<frontend-root>`，推荐相对路径 `../sqlbot_with_bcback/costree-frontend` | Vue3 中台前端，当前分支 `costree`，跟踪 `codeup/feature/costree2` |
+| 数据中台后端 | `<backend-root>`，推荐相对路径 `../sqlbot_with_bcback/baback` | Yudao Java/Spring Boot 后端，当前分支 `feature/costree`，跟踪 `codeup/feature/costree` |
+| 文档和 React/Figma 原型 | `<costree-root>` | `note` 和 `.agent-handoff` 所在位置；原型只作为页面、字段和交互参考 |
 
 ## 目录结构
 
@@ -70,13 +72,18 @@
 - `00-overview/05-长期项目文档与工程经验沉淀模式.md`：说明如何把文档当成项目操作系统，按开工恢复、需求规格化、开发同步、收尾沉淀和周巡检保持项目活力。
 - `00-overview/06-新对话接管成本库项目启动指南.md`：给新 Codex/ChatGPT 对话使用的接管 prompt、入口文件清单和任务分流阅读说明。
 - `50-frontend/08-待分配池页面设计.md`：记录待分配池页面、接口、分页、抽屉穿透和后续确认项。
+- `30-data/05-内网源表与成本库业务表关系实施方案.md`：说明内网主业项目树、工作令映射、账面明细和成本库业务表如何关联、导入和维护。
+- `30-data/09-成本库内网数据对接总设计方案.md`：面向项目交接和执行，汇总内网源表、成本库标准源表、业务表和页面聚合的整体设计表、导入步骤和两个型号试点建议。
+- `30-data/06-内网原表-主业项目树-ads_lc_lshsxm2022.md`：整理内网原表 `ads_lc_lshsxm2022` 字段和主业项目树映射待确认项。
+- `30-data/07-内网原表-工作令关联主业项目字典-dwd_bd_bfcustomitem_gzl.md`：整理内网原表 `dwd_bd_bfcustomitem_gzl` 字段和工作令映射待确认项。
+- `30-data/08-内网原表-项目工作令账面成本明细-dws_bu_pz_pzmx_gzl.md`：整理内网原表 `dws_bu_pz_pzmx_gzl` 字段和账面明细映射待确认项。
 - `80-deployment/01-外网到内网迁移说明.md`：记录内网部署时 MySQL、Redis、Nacos、网关、菜单权限需要怎么配置。
 - `PROJECT_STATE.md`：恢复当前项目状态和下一步最小任务。
 
 ## 已有输入
 
 - `成本库嵌入数据中台的可行性评估与项目蓝图.md`：前期可行性分析和蓝图，暂保留在根目录作为历史调研输入。
-- 该历史蓝图里提到的原中台前端路径已被新的开发路径取代，后续以前端开发仓库 `D:\light\academy8-operation-control-center-frontend` 为准。
+- 该历史蓝图里提到的原中台前端路径已被新的开发路径取代，后续以前端开发仓库 `<frontend-root>` 为准。
 
 ## 维护规则
 

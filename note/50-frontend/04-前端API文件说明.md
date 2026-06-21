@@ -8,17 +8,17 @@
 
 ## 前端仓库
 
-`H:\light\project\sqlbot_with_bcback\costree-frontend`
+`<frontend-root>`
 
 ## API 文件草案
 
 | 文件 | 用途 |
 |---|---|
-| `H:\light\project\sqlbot_with_bcback\costree-frontend\src\api\cost\modelNode\index.ts` | 型号树 |
-| `H:\light\project\sqlbot_with_bcback\costree-frontend\src\api\cost\project\index.ts` | 成本项目 |
-| `H:\light\project\sqlbot_with_bcback\costree-frontend\src\api\cost\projectBasic\index.ts` | 项目基本情况，原型 `Table 2` |
-| `H:\light\project\sqlbot_with_bcback\costree-frontend\src\api\cost\workOrder\index.ts` | 工作令基础信息，原型 `Table 3` |
-| `H:\light\project\sqlbot_with_bcback\costree-frontend\src\api\cost\warning\index.ts` | 预警 |
+| `<frontend-root>/src/api/cost/modelNode/index.ts` | 型号树 |
+| `<frontend-root>/src/api/cost/project/index.ts` | 成本项目 |
+| `<frontend-root>/src/api/cost/projectBasic/index.ts` | 项目基本情况，原型 `Table 2` |
+| `<frontend-root>/src/api/cost/workOrder/index.ts` | 工作令基础信息，原型 `Table 3` |
+| `<frontend-root>/src/api/cost/warning/index.ts` | 预警 |
 
 ## 2026-05-17 已落地 API
 

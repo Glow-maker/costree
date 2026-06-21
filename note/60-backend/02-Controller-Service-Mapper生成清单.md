@@ -15,7 +15,7 @@
 
 | 项 | 路径/说明 |
 |---|---|
-| 后端仓库 | `H:\light\project\sqlbot_with_bcback\baback` |
+| 后端仓库 | `<backend-root>` |
 | 长期模块 | `yudao-module-cost`【需技术确认】 |
 | API 子模块 | `yudao-module-cost-api`【需技术确认】 |
 | Biz 子模块 | `yudao-module-cost-biz`【需技术确认】 |

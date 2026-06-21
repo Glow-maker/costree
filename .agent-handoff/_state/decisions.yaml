@@ -39,3 +39,20 @@ items:
   summary: PostgreSQL seed 只用于测试验证环境，真实内网库只执行 DDL 后导入真实数据。
   rationale: 测试 seed 用于复现外网样例和页面路径，正式环境执行会污染真实数据；真实数据导入需按内网租户、组织和数据权限写入。
   time: '2026-06-18T02:23:27+08:00'
+- decision_id: DEC-011
+  summary: 成本库当前操作指南和协作文档默认使用 <costree-root>、<frontend-root>、<backend-root> 与相对路径，不写死本机盘符。
+  rationale: '文档需要在内网、陵台计算机和不同开发机之间复用；写死 H:、D: 或个人用户目录会导致接管 prompt、部署命令和文件引用不可执行。'
+  time: '2026-06-18T02:37:52+08:00'
+- decision_id: DEC-012
+  summary: 内网三张原表不直接作为成本库页面业务表使用，先映射到成本库业务表。
+  rationale: 原表字段全是字符串且口径来自源系统，缺少成本库页面需要的目标成本、阶段、分系统、展示树节点类型等字段；直接使用会让页面逻辑和源表结构强耦合。
+  time: '2026-06-22T00:04:53+08:00'
+- decision_id: DEC-013
+  summary: cost_model_node 和 cost_project 继续分开维护。
+  rationale: cost_model_node 负责左侧领域-系列-型号展示树，cost_project 负责项目卡片、项目详情、成本树和工作令关联；这样内网项目树层级变化时不会直接破坏业务项目锚点。
+  time: '2026-06-22T00:04:53+08:00'
+- decision_id: DEC-014
+  summary: 账面成本优先由 cost_work_order_ledger_detail 聚合，目标成本和阶段等业务字段由 cost_work_order
+    维护。
+  rationale: 账面明细是凭证明细来源，但不包含目标成本、阶段、分系统等填报字段；预警需要账面成本和目标成本同时存在。
+  time: '2026-06-22T00:04:53+08:00'

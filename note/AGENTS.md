@@ -1,17 +1,19 @@
 # AGENTS - 成本库项目 Codex 工作规则
 
-更新时间：2026-06-12
+更新时间：2026-06-18
 
 用途：约束后续 Codex/AI 协作方式，减少跨会话丢上下文、误改文件、忘记验证和文档失配的问题。
 
 ## 1. 项目边界
 
+路径统一使用可迁移写法：`<costree-root>` 表示当前文档仓库根目录，`<frontend-root>` 表示前端仓库根目录，`<backend-root>` 表示后端仓库根目录。当前推荐相对布局为前端 `../sqlbot_with_bcback/costree-frontend`、后端 `../sqlbot_with_bcback/baback`，不要把 `H:\`、`D:\` 等本机盘符写入新的协作文档。
+
 | 类型 | 路径 | 规则 |
 |---|---|---|
-| 文档中心 | `D:\light\costree\note` | 长期维护项目事实，新增文档必须归位 |
-| 前端仓库 | `D:\light\academy8-operation-control-center-frontend` | 成本库 Vue3 页面和 API 的主要开发位置；当前分支 `feature/costree` |
-| 后端仓库 | `D:\light\bcback` | 数据中台后端和 `yudao-module-cost` 开发位置；当前分支 `costree` |
-| React/Figma 原型 | `D:\light\costree` | 只作为页面、字段和交互参考，不直接作为最终中台代码 |
+| 文档中心 | `<costree-root>/note` | 长期维护项目事实，新增文档必须归位 |
+| 前端仓库 | `<frontend-root>` | 成本库 Vue3 页面和 API 的主要开发位置；当前分支 `costree`，跟踪 `codeup/feature/costree2` |
+| 后端仓库 | `<backend-root>` | 数据中台后端和 `yudao-module-cost` 开发位置；当前分支 `feature/costree`，跟踪 `codeup/feature/costree` |
+| React/Figma 原型 | `<costree-root>` | 只作为页面、字段和交互参考，不直接作为最终中台代码 |
 
 ## 2. 工作原则
 
@@ -59,7 +61,7 @@
 前端成本库相关修改后，优先执行：
 
 ```powershell
-cd D:\light\academy8-operation-control-center-frontend
+cd ../sqlbot_with_bcback/costree-frontend
 pnpm run ts:check:cost
 pnpm exec eslint "src/api/cost/**/*.ts" "src/views/cost/**/*.vue" "src/router/modules/remaining.ts" "src/views/HomeIndex/index.vue" --ext .ts,.vue
 ```
@@ -67,7 +69,7 @@ pnpm exec eslint "src/api/cost/**/*.ts" "src/views/cost/**/*.vue" "src/router/mo
 后端成本库相关修改后，优先执行：
 
 ```powershell
-cd D:\light\bcback
+cd ../sqlbot_with_bcback/baback
 mvn -pl yudao-module-cost/yudao-module-cost-biz -am -DskipTests compile
 ```
 

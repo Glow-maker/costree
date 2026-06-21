@@ -4,7 +4,7 @@
 
 ## 后端仓库
 
-`H:\light\project\sqlbot_with_bcback\baback`
+`<backend-root>`
 
 ## 模块落点
 

@@ -8,7 +8,7 @@
 
 前端仓库：
 
-`H:\light\project\sqlbot_with_bcback\costree-frontend`
+`<frontend-root>`
 
 ## 已新增文件
 
@@ -63,7 +63,7 @@
 
 ## 已验证
 
-在 `H:\light\project\sqlbot_with_bcback\costree-frontend` 执行：
+在 `<frontend-root>` 执行：
 
 ```powershell
 pnpm exec eslint "src/api/cost/**/*.ts" "src/views/cost/**/*.vue" "src/router/modules/remaining.ts" --ext .ts,.vue

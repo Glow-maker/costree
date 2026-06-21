@@ -181,3 +181,41 @@ completed:
   updated_at: '2026-06-18T02:23:27+08:00'
   completed_at: '2026-06-18T02:23:27+08:00'
   notes: 前端类型检查 pnpm run ts:check:cost 通过；后端编译通过。
+- task_id: TASK-020
+  title: 统一成本库文档路径可迁移口径
+  details: 将当前活跃文档中的本机绝对路径改为 <costree-root>、<frontend-root>、<backend-root> 或相对路径；补充路径书写规则、接管
+    prompt、计划、状态、决策和变更日志。
+  priority: P0
+  status: completed
+  created_at: '2026-06-18T02:37:52+08:00'
+  updated_at: '2026-06-18T02:37:52+08:00'
+  completed_at: '2026-06-18T02:37:52+08:00'
+  notes: '历史会话日志和归档记录保留当时真实执行路径；当前操作指南和协作文档不再依赖 H:、D: 等本机盘符。'
+- task_id: TASK-021
+  title: 整理内网三张源表与成本库业务表映射方案
+  details: 梳理 ads_lc_lshsxm2022、dwd_bd_bfcustomitem_gzl、dws_bu_pz_pzmx_gzl 分别如何进入成本库左侧树、项目卡片、工作令和账面明细链路。
+  priority: P0
+  status: completed
+  created_at: '2026-06-22T00:04:53+08:00'
+  updated_at: '2026-06-22T00:04:53+08:00'
+  completed_at: '2026-06-22T00:04:53+08:00'
+  notes: 结论是内网原表不直接作为页面业务表使用；先按规则映射到成本库业务表，再由现有页面接口查询。
+- task_id: TASK-022
+  title: 补充成本库内网数据对接文档
+  details: 新增并更新 note/30-data 下的内网源表说明、业务表关系说明和总设计方案，保留字段级材料，同时补充更易读的解释口径。
+  priority: P0
+  status: completed
+  created_at: '2026-06-22T00:04:53+08:00'
+  updated_at: '2026-06-22T00:04:53+08:00'
+  completed_at: '2026-06-22T00:04:53+08:00'
+  notes: 文档重点解释 cost_model_node、cost_project、cost_work_order、cost_work_order_ledger_detail
+    的职责边界和维护方式。
+- task_id: TASK-023
+  title: 梳理两个型号试点导入步骤
+  details: 明确试点顺序：先导入主业项目树生成左侧树和项目卡片，再导入工作令映射生成工作令，再导入账面明细计算账面成本，最后补目标成本、阶段、分系统并验证页面。
+  priority: P0
+  status: completed
+  created_at: '2026-06-22T00:04:53+08:00'
+  updated_at: '2026-06-22T00:04:53+08:00'
+  completed_at: '2026-06-22T00:04:53+08:00'
+  notes: 当前已讲清前三步，下一步继续补工作令业务字段和页面核验。
