@@ -227,3 +227,43 @@
 - 当前映射方案来自内网截图和现有 DDL/代码理解，正式上线前仍需拿到内网真实 DDL 和样本数据复核。
 - 如果 source_work_order_id 或 project_code 在真实库中不能稳定匹配，需要补映射表或改导入规则。
 - 如果账面明细达到百万级以上，应优先靠数据库索引和 SQL 聚合，不要在 Java 内存中全量汇总。
+
+## 一次会话
+- 开始时间：2026-06-26 08:00:00 +0800
+- 结束时间：2026-06-26 10:25:00 +0800
+- 本次焦点：成本库树页面展示优化、数据采集字段口径调整和前后端提交推送收尾
+
+### 本次进展
+- 完成 /cost/catalog 布局优化，移除工作令明细后右侧项目区仍保持完整白色面板，修复卡片底部项目详情/成本树按钮被裁切问题。
+- 完成 /cost/tree-detail 金额展示调整：型号节点展示合同、到款、目标、账面、审定；院内单位展示目标、账面、审定；院外单位展示目标、已拨付、审定。
+- 完成 /cost/tree-detail 多单位矩阵视图：单位数较多时避免横向拖动底部滚动条，仍保留树图切换。
+- 完成 /cost/tree-unit-detail 工作令卡片简化：隐藏工作令编号、去掉阶段集合，状态位置改为审定金额，工作令层不再黄红预警。
+- 完成 /cost/collect 项目办填报字段调整：新增是否产品附件/发射车等、是否免税、对手字段展示，承研单位改为单位字典下拉。
+- 后端新增 cost_project_basic.product_attachment_type、tax_exempt 字段和 MySQL/PostgreSQL 增量 ALTER 脚本。
+- 已运行后端编译 mvn -pl yudao-module-cost/yudao-module-cost-biz -am -DskipTests compile，通过。
+- 已运行前端类型检查 pnpm run ts:check:cost，通过。
+- 后端提交 18e436c3 feat: extend project basic collection fields 已推送 codeup/feature/costree。
+- 前端提交 6d77dc4 feat: update cost collection project office form 已推送 codeup/feature/costree2。
+
+### 涉及文件
+- baback/sql/mysql/costree-cost.sql
+- baback/sql/mysql/costree-cost-20260626-add-project-basic-extra-fields.sql
+- baback/sql/postgresql/costree-cost.sql
+- baback/sql/postgresql/costree-cost-20260626-add-project-basic-extra-fields.sql
+- baback/yudao-module-cost/yudao-module-cost-biz/src/main/java/cn/iocoder/yudao/module/cost/dal/dataobject/projectbasic/CostProjectBasicDO.java
+- baback/yudao-module-cost/yudao-module-cost-biz/src/main/java/cn/iocoder/yudao/module/cost/controller/admin/projectbasic/vo/CostProjectBasicSaveReqVO.java
+- baback/yudao-module-cost/yudao-module-cost-biz/src/main/java/cn/iocoder/yudao/module/cost/controller/admin/projectbasic/vo/CostProjectBasicRespVO.java
+- baback/yudao-module-cost/yudao-module-cost-biz/src/main/java/cn/iocoder/yudao/module/cost/controller/admin/projectbasic/vo/CostProjectBasicImportExcelVO.java
+- baback/yudao-module-cost/yudao-module-cost-biz/src/main/java/cn/iocoder/yudao/module/cost/controller/admin/projectbasic/CostProjectBasicController.java
+- baback/yudao-module-cost/yudao-module-cost-biz/src/main/java/cn/iocoder/yudao/module/cost/service/projectbasic/CostProjectBasicServiceImpl.java
+- costree-frontend/src/api/cost/projectBasic/index.ts
+- costree-frontend/src/views/cost/collect/index.vue
+- costree-frontend/src/views/cost/treeDetail/index.vue
+
+### 下次恢复点
+- 继续项目时先运行 python .agent-handoff/runtime/agent-handoff/scripts/handoff.py resume .；下一步优先在目标数据库执行 20260626 新增字段 ALTER 脚本，然后启动后端和前端核验 /cost/collect、/cost/tree-detail、/cost/tree-unit-detail。
+
+### 风险与备注
+- 本轮新增字段要求数据库结构同步升级；如果只更新 jar/前端而未跑 ALTER，保存项目基本情况会报缺列。
+- 项目办填报的承研单位现在依赖 cost_unit_dict，如果内网单位字典未导入或状态不可用，下拉会为空，需要先导入单位字典。
+- 树页面账面组成已按八项支出口径改造方向推进，但正式验收仍需用真实账面明细核对二级科目编码 501101-501108 的金额合计。

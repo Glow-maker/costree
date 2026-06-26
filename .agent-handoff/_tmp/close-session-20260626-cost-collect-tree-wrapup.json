@@ -1,0 +1,100 @@
+{
+  "session": {
+    "started_at": "2026-06-26T08:00:00+08:00",
+    "ended_at": "2026-06-26T10:25:00+08:00",
+    "focus": "成本库树页面展示优化、数据采集字段口径调整和前后端提交推送收尾"
+  },
+  "current_status": {
+    "phase": "第一阶段 MVP 实现、真实数据对齐和内网部署准备收口中",
+    "goal": "在已有业务中台中嵌入成本库/成本树业务模块，让成本库数据可进入、可维护、可查询、可控权限，并用 note 文档中心和 .agent-handoff 形成可持续接管、开发、收尾和经验沉淀机制。",
+    "summary": "本轮继续围绕真实数据试点和业务部门反馈收口：前端已调整 /cost/catalog 目录页布局与卡片入口、/cost/tree-detail 树详情金额展示、阶段文案、预警口径和多单位矩阵视图，/cost/tree-unit-detail 简化工作令展示并支持阶段筛选；后端已支持同项目同单位同工作令编号跨年合并、单位目标成本按 cost_unit_cost_detail 口径展示，并补充单位审定金额、工作令合同金额等字段。最后完成 /cost/collect 项目办填报字段调整：新增是否产品附件/发射车、是否免税，承研单位改从 cost_unit_dict 下拉，对手单位/竞价字段接入展示和保存，并同步 MySQL/PostgreSQL DDL 与增量脚本。前后端代码均已提交并推送。",
+    "next_step": "内网部署或本地验证前，先在目标库执行新增字段增量 SQL：cost_unit_cost_detail.approved_amount、cost_work_order.contract_amount、cost_project_basic.product_attachment_type 与 tax_exempt。随后重启后端并手工核验 /cost/collect、/cost/catalog、/cost/tree-detail、/cost/tree-unit-detail；两个型号试点继续补齐 cost_unit_cost_detail 单位目标/合同/到款/审定、cost_work_order 工作令合同/阶段/分系统/纵向分工等字段，并用账面明细核对八项支出组成。",
+    "blockers": [
+      "内网真实库上线前必须执行本轮新增的 ALTER 脚本，否则 /cost/collect 保存 project_basic 会缺列。",
+      "金额口径仍待财务确认：dws_bu_pz_pzmx_gzl.je 是元还是万元，以及 jzfx 借贷方向、冲销规则是否影响正负。",
+      "主业项目树解析口径仍待确认：哪个父节点字段最权威，哪一级作为成本库 MODEL，领域和系列如何生成。",
+      "工作令唯一口径已明确页面侧需跨年合并同编号，但导入侧仍需确认 source_work_order_id、work_order_no、fiscal_year、accounting_unit_code 的唯一和匹配规则。",
+      "真实内网 Nacos、PostgreSQL/MySQL、Redis、网关、菜单权限、租户、组织和数据权限映射仍待现场确认。"
+    ]
+  },
+  "tasks_to_add": [],
+  "tasks_to_update": [],
+  "tasks_to_complete": [],
+  "tasks_to_add_and_complete": [
+    {
+      "title": "优化成本目录页布局和入口展示",
+      "details": "调整 /cost/catalog 去除工作令明细后的右侧项目面板高度、卡片滚动和入口按钮裁切问题，左侧树默认闭合并支持快速检索全量项目。",
+      "priority": "P1",
+      "notes": "前端提交 6d77dc4 已包含目录页相关改动。"
+    },
+    {
+      "title": "调整成本树与单位穿透页展示口径",
+      "details": "完成 /cost/tree-detail 型号和单位金额布局、合同/到款/目标/账面/审定展示、多单位矩阵视图、账面预警新口径，以及 /cost/tree-unit-detail 工作令展示简化和阶段筛选。",
+      "priority": "P0",
+      "notes": "预警只作用于型号和单位层级；工作令层不再按目标成本预警。"
+    },
+    {
+      "title": "支持跨年同编号工作令页面合并",
+      "details": "后端 cost/work-order/page 增加 mergeByWorkOrderNo 参数，树页面按项目、单位、工作令编号合并跨年度账面；目标成本和合同等代表字段不按年度重复累加。",
+      "priority": "P0",
+      "notes": "后端提交已在本轮前完成并推送，当前交接记录补充该口径。"
+    },
+    {
+      "title": "补齐 /cost/collect 项目办填报字段",
+      "details": "项目基本情况新增是否产品附件/发射车、是否免税，承研单位改从 cost_unit_dict 下拉，接入对手单位/竞价字段展示和保存；同步后端 VO、DO、导入导出模板和 MySQL/PostgreSQL DDL/ALTER。",
+      "priority": "P0",
+      "notes": "后端提交 18e436c3 推送到 codeup/feature/costree；前端提交 6d77dc4 推送到 codeup/feature/costree2。"
+    }
+  ],
+  "decisions_to_add": [
+    {
+      "summary": "项目办填报的是否产品附件/发射车字段直接存中文值，不新增独立字典表。",
+      "rationale": "当前 /cost/collect 的用户、获取方式等字典也采用前端固定下拉和中文值保存；本字段值域小且稳定，先按同一方式实现，降低实施复杂度。"
+    },
+    {
+      "summary": "承研单位使用 cost_unit_dict 作为下拉来源。",
+      "rationale": "承研单位属于单位口径数据，直接手输容易产生名称不一致；用成本库单位字典可与后续单位成本、工作令和权限口径保持一致。"
+    },
+    {
+      "summary": "多单位树详情默认采用单位矩阵视图，保留原树图作为可选视图。",
+      "rationale": "当单位超过 7 家时树图横向滚动成本高，矩阵更适合扫读和点击穿透；少单位场景仍保留树状连线展示。"
+    }
+  ],
+  "session_log": {
+    "progress": [
+      "完成 /cost/catalog 布局优化，移除工作令明细后右侧项目区仍保持完整白色面板，修复卡片底部项目详情/成本树按钮被裁切问题。",
+      "完成 /cost/tree-detail 金额展示调整：型号节点展示合同、到款、目标、账面、审定；院内单位展示目标、账面、审定；院外单位展示目标、已拨付、审定。",
+      "完成 /cost/tree-detail 多单位矩阵视图：单位数较多时避免横向拖动底部滚动条，仍保留树图切换。",
+      "完成 /cost/tree-unit-detail 工作令卡片简化：隐藏工作令编号、去掉阶段集合，状态位置改为审定金额，工作令层不再黄红预警。",
+      "完成 /cost/collect 项目办填报字段调整：新增是否产品附件/发射车等、是否免税、对手字段展示，承研单位改为单位字典下拉。",
+      "后端新增 cost_project_basic.product_attachment_type、tax_exempt 字段和 MySQL/PostgreSQL 增量 ALTER 脚本。",
+      "已运行后端编译 mvn -pl yudao-module-cost/yudao-module-cost-biz -am -DskipTests compile，通过。",
+      "已运行前端类型检查 pnpm run ts:check:cost，通过。",
+      "后端提交 18e436c3 feat: extend project basic collection fields 已推送 codeup/feature/costree。",
+      "前端提交 6d77dc4 feat: update cost collection project office form 已推送 codeup/feature/costree2。"
+    ],
+    "files_touched": [
+      "baback/sql/mysql/costree-cost.sql",
+      "baback/sql/mysql/costree-cost-20260626-add-project-basic-extra-fields.sql",
+      "baback/sql/postgresql/costree-cost.sql",
+      "baback/sql/postgresql/costree-cost-20260626-add-project-basic-extra-fields.sql",
+      "baback/yudao-module-cost/yudao-module-cost-biz/src/main/java/cn/iocoder/yudao/module/cost/dal/dataobject/projectbasic/CostProjectBasicDO.java",
+      "baback/yudao-module-cost/yudao-module-cost-biz/src/main/java/cn/iocoder/yudao/module/cost/controller/admin/projectbasic/vo/CostProjectBasicSaveReqVO.java",
+      "baback/yudao-module-cost/yudao-module-cost-biz/src/main/java/cn/iocoder/yudao/module/cost/controller/admin/projectbasic/vo/CostProjectBasicRespVO.java",
+      "baback/yudao-module-cost/yudao-module-cost-biz/src/main/java/cn/iocoder/yudao/module/cost/controller/admin/projectbasic/vo/CostProjectBasicImportExcelVO.java",
+      "baback/yudao-module-cost/yudao-module-cost-biz/src/main/java/cn/iocoder/yudao/module/cost/controller/admin/projectbasic/CostProjectBasicController.java",
+      "baback/yudao-module-cost/yudao-module-cost-biz/src/main/java/cn/iocoder/yudao/module/cost/service/projectbasic/CostProjectBasicServiceImpl.java",
+      "costree-frontend/src/api/cost/projectBasic/index.ts",
+      "costree-frontend/src/views/cost/collect/index.vue",
+      "costree-frontend/src/views/cost/treeDetail/index.vue"
+    ],
+    "risks": [
+      "本轮新增字段要求数据库结构同步升级；如果只更新 jar/前端而未跑 ALTER，保存项目基本情况会报缺列。",
+      "项目办填报的承研单位现在依赖 cost_unit_dict，如果内网单位字典未导入或状态不可用，下拉会为空，需要先导入单位字典。",
+      "树页面账面组成已按八项支出口径改造方向推进，但正式验收仍需用真实账面明细核对二级科目编码 501101-501108 的金额合计。"
+    ]
+  },
+  "resume_hint": {
+    "text": "继续项目时先运行 python .agent-handoff/runtime/agent-handoff/scripts/handoff.py resume .；下一步优先在目标数据库执行 20260626 新增字段 ALTER 脚本，然后启动后端和前端核验 /cost/collect、/cost/tree-detail、/cost/tree-unit-detail。"
+  }
+}

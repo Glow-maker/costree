@@ -2,6 +2,27 @@
 
 ---
 
+## 2026-06-26
+
+### 成本库树页面展示优化、数据采集字段口径调整和前后端提交推送收尾
+- 完成 /cost/catalog 布局优化，移除工作令明细后右侧项目区仍保持完整白色面板，修复卡片底部项目详情/成本树按钮被裁切问题。
+- 完成 /cost/tree-detail 金额展示调整：型号节点展示合同、到款、目标、账面、审定；院内单位展示目标、账面、审定；院外单位展示目标、已拨付、审定。
+- 完成 /cost/tree-detail 多单位矩阵视图：单位数较多时避免横向拖动底部滚动条，仍保留树图切换。
+- 完成 /cost/tree-unit-detail 工作令卡片简化：隐藏工作令编号、去掉阶段集合，状态位置改为审定金额，工作令层不再黄红预警。
+- 完成 /cost/collect 项目办填报字段调整：新增是否产品附件/发射车等、是否免税、对手字段展示，承研单位改为单位字典下拉。
+- 后端新增 cost_project_basic.product_attachment_type、tax_exempt 字段和 MySQL/PostgreSQL 增量 ALTER 脚本。
+- 已运行后端编译 mvn -pl yudao-module-cost/yudao-module-cost-biz -am -DskipTests compile，通过。
+- 已运行前端类型检查 pnpm run ts:check:cost，通过。
+- 后端提交 18e436c3 feat: extend project basic collection fields 已推送 codeup/feature/costree。
+- 前端提交 6d77dc4 feat: update cost collection project office form 已推送 codeup/feature/costree2。
+
+#### 风险与备注
+- 本轮新增字段要求数据库结构同步升级；如果只更新 jar/前端而未跑 ALTER，保存项目基本情况会报缺列。
+- 项目办填报的承研单位现在依赖 cost_unit_dict，如果内网单位字典未导入或状态不可用，下拉会为空，需要先导入单位字典。
+- 树页面账面组成已按八项支出口径改造方向推进，但正式验收仍需用真实账面明细核对二级科目编码 501101-501108 的金额合计。
+
+---
+
 ## 2026-06-22
 
 ### 成本库内网数据源表映射和两个型号试点步骤收口

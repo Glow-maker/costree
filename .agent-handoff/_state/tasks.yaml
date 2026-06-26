@@ -219,3 +219,41 @@ completed:
   updated_at: '2026-06-22T00:04:53+08:00'
   completed_at: '2026-06-22T00:04:53+08:00'
   notes: 当前已讲清前三步，下一步继续补工作令业务字段和页面核验。
+- task_id: TASK-024
+  title: 优化成本目录页布局和入口展示
+  details: 调整 /cost/catalog 去除工作令明细后的右侧项目面板高度、卡片滚动和入口按钮裁切问题，左侧树默认闭合并支持快速检索全量项目。
+  priority: P1
+  status: completed
+  created_at: '2026-06-26T10:24:02+08:00'
+  updated_at: '2026-06-26T10:24:02+08:00'
+  completed_at: '2026-06-26T10:24:02+08:00'
+  notes: 前端提交 6d77dc4 已包含目录页相关改动。
+- task_id: TASK-025
+  title: 调整成本树与单位穿透页展示口径
+  details: 完成 /cost/tree-detail 型号和单位金额布局、合同/到款/目标/账面/审定展示、多单位矩阵视图、账面预警新口径，以及 /cost/tree-unit-detail
+    工作令展示简化和阶段筛选。
+  priority: P0
+  status: completed
+  created_at: '2026-06-26T10:24:02+08:00'
+  updated_at: '2026-06-26T10:24:02+08:00'
+  completed_at: '2026-06-26T10:24:02+08:00'
+  notes: 预警只作用于型号和单位层级；工作令层不再按目标成本预警。
+- task_id: TASK-026
+  title: 支持跨年同编号工作令页面合并
+  details: 后端 cost/work-order/page 增加 mergeByWorkOrderNo 参数，树页面按项目、单位、工作令编号合并跨年度账面；目标成本和合同等代表字段不按年度重复累加。
+  priority: P0
+  status: completed
+  created_at: '2026-06-26T10:24:02+08:00'
+  updated_at: '2026-06-26T10:24:02+08:00'
+  completed_at: '2026-06-26T10:24:02+08:00'
+  notes: 后端提交已在本轮前完成并推送，当前交接记录补充该口径。
+- task_id: TASK-027
+  title: 补齐 /cost/collect 项目办填报字段
+  details: 项目基本情况新增是否产品附件/发射车、是否免税，承研单位改从 cost_unit_dict 下拉，接入对手单位/竞价字段展示和保存；同步后端
+    VO、DO、导入导出模板和 MySQL/PostgreSQL DDL/ALTER。
+  priority: P0
+  status: completed
+  created_at: '2026-06-26T10:24:02+08:00'
+  updated_at: '2026-06-26T10:24:02+08:00'
+  completed_at: '2026-06-26T10:24:02+08:00'
+  notes: 后端提交 18e436c3 推送到 codeup/feature/costree；前端提交 6d77dc4 推送到 codeup/feature/costree2。

@@ -1,18 +1,20 @@
 version: 1
 project: costree
 created_at: 2026-06-12 00:04:41 +0800
-updated_at: 2026-06-22 00:03:25 +0800
+updated_at: 2026-06-26 10:25:00 +0800
 last_resumed_at: 2026-06-12 19:07:24 +0800
 current_phase: 第一阶段 MVP 实现、真实数据对齐和内网部署准备收口中
 current_goal: 在已有业务中台中嵌入成本库/成本树业务模块，让成本库数据可进入、可维护、可查询、可控权限，并用 note 文档中心和 .agent-handoff
   形成可持续接管、开发、收尾和经验沉淀机制。
-next_step: 继续两个型号试点的第 4 步：手工或脚本补齐 cost_work_order 的 product_target_cost、stage_codes、max_stage_code、subsystem_name、product_short_name、quantity
-  等展示和预警字段；随后在 /cost/catalog、/cost/tree-detail、/cost/tree-unit-detail 核验项目卡片、成本树、账面成本、预警颜色和组成穿透。正式导入前还要确认金额单位、借贷方向、冲销规则、主业项目树哪一级生成型号项目，以及工作令编号是否需要按年度和单位联合唯一。
+next_step: 内网部署或本地验证前，先在目标库执行新增字段增量 SQL：cost_unit_cost_detail.approved_amount、cost_work_order.contract_amount、cost_project_basic.product_attachment_type
+  与 tax_exempt。随后重启后端并手工核验 /cost/collect、/cost/catalog、/cost/tree-detail、/cost/tree-unit-detail；两个型号试点继续补齐
+  cost_unit_cost_detail 单位目标/合同/到款/审定、cost_work_order 工作令合同/阶段/分系统/纵向分工等字段，并用账面明细核对八项支出组成。
 blockers:
-- 金额口径仍待财务确认：dws_bu_pz_pzmx_gzl.je 是元还是万元，以及 jzfx 借贷方向是否影响正负。
+- 内网真实库上线前必须执行本轮新增的 ALTER 脚本，否则 /cost/collect 保存 project_basic 会缺列。
+- 金额口径仍待财务确认：dws_bu_pz_pzmx_gzl.je 是元还是万元，以及 jzfx 借贷方向、冲销规则是否影响正负。
 - 主业项目树解析口径仍待确认：哪个父节点字段最权威，哪一级作为成本库 MODEL，领域和系列如何生成。
-- 工作令唯一口径仍待确认：work_order_no 是否跨年度或跨单位重复，必要时需按 source_work_order_id 或 work_order_no
-  + fiscal_year + accounting_unit_code 匹配。
+- 工作令唯一口径已明确页面侧需跨年合并同编号，但导入侧仍需确认 source_work_order_id、work_order_no、fiscal_year、accounting_unit_code
+  的唯一和匹配规则。
 - 真实内网 Nacos、PostgreSQL/MySQL、Redis、网关、菜单权限、租户、组织和数据权限映射仍待现场确认。
 key_files:
 - .agent-handoff/START-HERE.md

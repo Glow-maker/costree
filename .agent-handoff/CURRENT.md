@@ -1,20 +1,21 @@
 # 当前状态
 
-- 最近更新时间：2026-06-22 00:03:25 +0800
+- 最近更新时间：2026-06-26 10:25:00 +0800
 - 当前阶段：第一阶段 MVP 实现、真实数据对齐和内网部署准备收口中
 - 当前目标：在已有业务中台中嵌入成本库/成本树业务模块，让成本库数据可进入、可维护、可查询、可控权限，并用 note 文档中心和 .agent-handoff 形成可持续接管、开发、收尾和经验沉淀机制。
-- 当前摘要：本轮围绕内网真实数据接入补齐了数据对接说明：整理主业项目树、工作令关联主业项目字典、项目工作令账面成本明细三张内网原表的字段含义；说明它们与 cost_model_node、cost_project、cost_work_order、cost_work_order_ledger_detail 的关系；把 cost_model_node 解释为成本库自己的左侧展示树，把 cost_project 解释为项目锚点，把 cost_work_order 解释为需要补目标成本、阶段、分系统等业务字段的工作令表，把 cost_work_order_ledger_detail 解释为账面凭证明细和科目组成来源。已按更简洁的语言沉淀到 note 数据文档，并梳理两个型号试点的前三步：导入主业项目树生成左侧树和项目卡片，导入工作令映射生成项目下工作令，导入账面明细计算账面成本和 Top8 科目组成。
+- 当前摘要：本轮继续围绕真实数据试点和业务部门反馈收口：前端已调整 /cost/catalog 目录页布局与卡片入口、/cost/tree-detail 树详情金额展示、阶段文案、预警口径和多单位矩阵视图，/cost/tree-unit-detail 简化工作令展示并支持阶段筛选；后端已支持同项目同单位同工作令编号跨年合并、单位目标成本按 cost_unit_cost_detail 口径展示，并补充单位审定金额、工作令合同金额等字段。最后完成 /cost/collect 项目办填报字段调整：新增是否产品附件/发射车、是否免税，承研单位改从 cost_unit_dict 下拉，对手单位/竞价字段接入展示和保存，并同步 MySQL/PostgreSQL DDL 与增量脚本。前后端代码均已提交并推送。
 
 ## 已完成进展
-- TASK-021: 整理内网三张源表与成本库业务表映射方案
-- TASK-022: 补充成本库内网数据对接文档
-- TASK-023: 梳理两个型号试点导入步骤
+- TASK-025: 调整成本树与单位穿透页展示口径
+- TASK-026: 支持跨年同编号工作令页面合并
+- TASK-027: 补齐 /cost/collect 项目办填报字段
 
 ## 下一步建议
-- 继续两个型号试点的第 4 步：手工或脚本补齐 cost_work_order 的 product_target_cost、stage_codes、max_stage_code、subsystem_name、product_short_name、quantity 等展示和预警字段；随后在 /cost/catalog、/cost/tree-detail、/cost/tree-unit-detail 核验项目卡片、成本树、账面成本、预警颜色和组成穿透。正式导入前还要确认金额单位、借贷方向、冲销规则、主业项目树哪一级生成型号项目，以及工作令编号是否需要按年度和单位联合唯一。
+- 内网部署或本地验证前，先在目标库执行新增字段增量 SQL：cost_unit_cost_detail.approved_amount、cost_work_order.contract_amount、cost_project_basic.product_attachment_type 与 tax_exempt。随后重启后端并手工核验 /cost/collect、/cost/catalog、/cost/tree-detail、/cost/tree-unit-detail；两个型号试点继续补齐 cost_unit_cost_detail 单位目标/合同/到款/审定、cost_work_order 工作令合同/阶段/分系统/纵向分工等字段，并用账面明细核对八项支出组成。
 
 ## 当前阻塞
-- 金额口径仍待财务确认：dws_bu_pz_pzmx_gzl.je 是元还是万元，以及 jzfx 借贷方向是否影响正负。
+- 内网真实库上线前必须执行本轮新增的 ALTER 脚本，否则 /cost/collect 保存 project_basic 会缺列。
+- 金额口径仍待财务确认：dws_bu_pz_pzmx_gzl.je 是元还是万元，以及 jzfx 借贷方向、冲销规则是否影响正负。
 - 主业项目树解析口径仍待确认：哪个父节点字段最权威，哪一级作为成本库 MODEL，领域和系列如何生成。
-- 工作令唯一口径仍待确认：work_order_no 是否跨年度或跨单位重复，必要时需按 source_work_order_id 或 work_order_no + fiscal_year + accounting_unit_code 匹配。
+- 工作令唯一口径已明确页面侧需跨年合并同编号，但导入侧仍需确认 source_work_order_id、work_order_no、fiscal_year、accounting_unit_code 的唯一和匹配规则。
 - 真实内网 Nacos、PostgreSQL/MySQL、Redis、网关、菜单权限、租户、组织和数据权限映射仍待现场确认。
