@@ -1,19 +1,19 @@
 version: 1
 project: costree
 created_at: 2026-06-12 00:04:41 +0800
-updated_at: 2026-07-21 19:34:41 +0800
-last_resumed_at: 2026-07-21 19:29:11 +0800
+updated_at: 2026-07-22 01:12:12 +0800
+last_resumed_at: 2026-07-22 01:09:15 +0800
 current_phase: 第一阶段 MVP 实现、真实数据对齐和内网部署准备收口中
 current_goal: 在已有业务中台中嵌入成本库/成本树业务模块，让成本库数据可进入、可维护、可查询、可控权限，并用 note 文档中心和 .agent-handoff
   形成可持续接管、开发、收尾和经验沉淀机制。
-next_step: 在目标数据库先执行对应数据库的 costree-cost-20260721-add-manage-unit-group.sql，重启后端；需要演示时再执行
-  costree-unit-hierarchy-demo.sql，并访问 /cost/tree-detail?projectCode=ZY-2026-DEMO-UNIT-001。随后用真实单位字典维护
-  manage_unit_name 和 manage_unit_group，核验电子所多核算单位汇总、管理单位穿透、阶段筛选、预警和使用率排名。
+next_step: 现有数据库按顺序执行对应方言的 20260721 manage_unit_group 迁移和 20260722 logical_work_order
+  迁移，重启后端并使用有真实登录态的前端验证 /cost/project-detail、/cost/tree-unit-detail 和账面组成详情。迁移前先运行固定金额冲突检查；若有冲突，先由业务确认保留值，再继续合并旧年度工作令。
 blockers:
-- 现有数据库必须先执行 20260721 manage_unit_group 增量脚本；新建数据库使用最新完整 DDL，不要重复执行增量脚本。
-- 内网单位字典同步时必须维护 manage_unit_name 和 manage_unit_group；未维护分类的院内单位只会进入未分类院内单位。
-- 自动化浏览器当前停在登录页，管理单位分组与使用率排名仍需在有登录态的环境完成最终视觉回归。
-- 金额口径仍需用真实数据最终核对：账面只统计借方明细且 amount 为元、页面按万元展示。
+- 现有数据库必须执行 costree-cost-20260722-logical-work-order.sql；否则 income_amount 缺列且旧年度工作令唯一键仍不符合新逻辑。
+- 20260722 迁移前置检查若发现同一逻辑工作令的合同、到款、目标或审定金额冲突，会主动终止，需要先人工确认权威值。
+- 20260721 manage_unit_group 迁移尚未执行的环境必须先执行该脚本；新建数据库直接使用最新完整 DDL，不重复跑增量脚本。
+- 本机没有可用的 psql/mysql 命令，本轮未对真实数据库执行迁移；数据库迁移结果仍需现场验证。
+- 自动化浏览器缺少业务登录态，项目详情弹窗、状态权限和跨年度账面穿透仍需登录环境完成最终视觉与交互回归。
 - 真实内网 Nacos、数据库、Redis、网关、菜单权限、租户、组织和数据权限映射仍待现场确认。
 key_files:
 - .agent-handoff/START-HERE.md

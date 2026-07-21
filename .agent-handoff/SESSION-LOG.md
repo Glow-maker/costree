@@ -1,34 +1,6 @@
 # 会话记录
 
 ## 一次会话
-- 开始时间：2026-06-12 00:00:00 +0800
-- 结束时间：2026-06-12 00:20:00 +0800
-- 本次焦点：初始化 agent-handoff 项目交接，并从 note 文档中心灌入当前成本库项目状态
-
-### 本次进展
-- 安装并使用 agent-handoff 初始化 H:\light\project\costree\.agent-handoff。
-- 发现 init 只生成空白骨架后，改为使用 close-session 更新请求写入当前项目状态。
-- 从 note/PROJECT_STATE.md、README.md、PLAN.md 和工程经验文档提取当前目标、已完成事项、待办、阻塞和关键决策。
-- 准备后续 resume 时可直接看到当前项目阶段、下一步和风险。
-
-### 涉及文件
-- H:\light\project\costree\.agent-handoff\_tmp\bootstrap-current-state.json
-- H:\light\project\costree\.agent-handoff\CURRENT.md
-- H:\light\project\costree\.agent-handoff\TASKS.md
-- H:\light\project\costree\.agent-handoff\COMPLETED.md
-- H:\light\project\costree\.agent-handoff\DECISIONS.md
-- H:\light\project\costree\.agent-handoff\SESSION-LOG.md
-- H:\light\project\costree\.agent-handoff\DAILY-LOG.md
-- H:\light\project\costree\.agent-handoff\STATE.yaml
-
-### 下次恢复点
-- 继续成本库项目时，先运行 python H:\light\project\costree\.agent-handoff\runtime\agent-handoff\scripts\handoff.py resume H:\light\project\costree，再阅读 note/PROJECT_STATE.md、note/PLAN.md 和 note/00-overview/04-工程经验与开发约束手册.md。下一步优先用真实业务中台登录态复核 /cost/pending-allocation、/cost/warning、/cost/catalog。
-
-### 风险与备注
-- agent-handoff 是另一个交接体系，后续仍以 note/ 文档中心作为项目事实源，agent-handoff 用于跨会话快速恢复。
-- 本次写入内容来自 2026-06-03 左右的 note 状态文档，后续如代码继续变化，需要再次 close-session 更新。
-
-## 一次会话
 - 开始时间：2026-06-12 00:15:00 +0800
 - 结束时间：2026-06-12 00:25:00 +0800
 - 本次焦点：更新 agent-handoff 交接状态并收尾
@@ -313,3 +285,47 @@
 - manage_unit_name 为空时会按核算单位名称分别展示，无法形成期望的管理单位汇总。
 - 真实单位名称与 cost_unit_dict.accounting_unit_name 不一致时，管理单位查询和穿透可能遗漏工作令。
 - 使用率排名依赖单位目标成本；目标为 0 或空时仅显示 --，不参与有效比例排序。
+
+## 一次会话
+- 开始时间：2026-07-22 00:25:00 +0800
+- 结束时间：2026-07-22 01:12:12 +0800
+- 本次焦点：项目详情三标签维护、逻辑工作令归一和跨年度借方账面汇总收尾
+
+### 本次进展
+- 完成 /cost/project-detail 三标签页面、汇总卡片和项目上下文重构。
+- 完成项目基本情况新增、编辑、查看弹窗及 DRAFT/REJECTED 可编辑、SUBMITTED/APPROVED 只读规则。
+- 完成单位成本只读列表、查看工作令和账面组成穿透。
+- 完成工作令固定金额、业务字段维护和账面只读展示，提交时校验合同与目标大于 0。
+- 新增 cost_work_order.income_amount，更新 DO、VO、导入模型、前端类型和完整 DDL。
+- 工作令唯一口径调整为租户+项目+实际单位+工作令编号，fiscal_year 保留兼容但统一置空。
+- 新增 MySQL/PostgreSQL 20260722 迁移脚本，支持冲突检查、主记录保留、明细及预警外键重绑、重复行清理和借方账面重算。
+- 更新金额同步模板、两项目演示同步、校验脚本、seed 和单位层级演示脚本。
+- 移除 /cost/tree-unit-detail 年度展开，账面组成详情默认汇总全部年度并保留明细年度列。
+- 后端 Reactor CostMapperAnnotationSqlTest 通过：1 个测试，0 失败，BUILD SUCCESS。
+- 前端 pnpm run ts:check:cost 和定向 ESLint 通过，前后端 git diff --check 通过。
+- 后端提交 747d6e25 已推送 codeup/feature/costree。
+- 前端提交 56acad9 已推送 codeup/feature/costree2。
+- root 下 cost-intranet-data-kit/ 与 zip 作为本地交付制品加入 .gitignore，不提交源码仓库。
+
+### 涉及文件
+- costree-frontend/src/views/cost/projectDetail/index.vue
+- costree-frontend/src/views/cost/collect/index.vue
+- costree-frontend/src/views/cost/treeUnitDetail/index.vue
+- costree-frontend/src/views/cost/ledgerCompositionDetail/index.vue
+- costree-frontend/src/api/cost/workOrder/index.ts
+- baback/yudao-module-cost/yudao-module-cost-biz/src/main/java/cn/iocoder/yudao/module/cost/dal/dataobject/workorder/CostWorkOrderDO.java
+- baback/yudao-module-cost/yudao-module-cost-biz/src/main/java/cn/iocoder/yudao/module/cost/service/workorder/CostWorkOrderServiceImpl.java
+- baback/yudao-module-cost/yudao-module-cost-biz/src/main/java/cn/iocoder/yudao/module/cost/dal/mysql/workorder/CostWorkOrderMapper.java
+- baback/sql/mysql/costree-cost-20260722-logical-work-order.sql
+- baback/sql/postgresql/costree-cost-20260722-logical-work-order.sql
+- baback/sql/postgresql/costree-demo-source/02-sync-to-cost.sql
+- baback/sql/postgresql/costree-demo-source/03-verify.sql
+
+### 下次恢复点
+- 继续项目时先运行 python .agent-handoff/runtime/agent-handoff/scripts/handoff.py resume .；部署 747d6e25/56acad9 前先备份并执行 20260721、20260722 两个增量迁移，再用有登录态环境核验项目详情三标签、逻辑工作令和跨年度借方账面合计。
+
+### 风险与备注
+- 只更新前后端而不执行 20260722 数据库迁移会出现 income_amount 缺列或旧唯一约束冲突。
+- 旧年度工作令固定金额存在不一致时不能自动决定权威值，必须先处理冲突。
+- 迁移会重绑账面明细和历史预警的 work_order_id，执行前必须备份相关表。
+- 项目单位正式金额仍以 cost_unit_cost_detail 同步数据为准，工作令固定金额不得用于正式汇总。

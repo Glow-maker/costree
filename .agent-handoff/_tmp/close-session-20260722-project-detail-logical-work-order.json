@@ -1,0 +1,99 @@
+{
+  "session": {
+    "started_at": "2026-07-22T00:25:00+08:00",
+    "ended_at": "2026-07-22T01:12:12+08:00",
+    "focus": "项目详情三标签维护、逻辑工作令归一和跨年度借方账面汇总收尾"
+  },
+  "current_status": {
+    "phase": "第一阶段 MVP 实现、真实数据对齐和内网部署准备收口中",
+    "goal": "在已有业务中台中嵌入成本库/成本树业务模块，让成本库数据可进入、可维护、可查询、可控权限，并用 note 文档中心和 .agent-handoff 形成可持续接管、开发、收尾和经验沉淀机制。",
+    "summary": "本轮完成 /cost/project-detail 项目维护改造：顶部保留工作令数量、目标成本、账面成本和院内执行率，主体拆为项目基本情况、单位成本信息、工作令基础信息三个标签；项目基本情况和工作令可按状态弹窗维护，单位金额保持预分预控同步只读。工作令调整为租户+项目+实际单位+工作令编号一条逻辑记录，年度只保留在账面明细，跨年度借方明细重算为工作令账面快照；新增工作令到款金额，合同、到款、目标和审定仅用于工作令层核对，不进入首页、型号树和单位汇总。账面组成详情默认汇总全部年度，单位穿透页移除年度展开。后端提交 747d6e25 已推送 codeup/feature/costree，前端提交 56acad9 已推送 codeup/feature/costree2。",
+    "next_step": "现有数据库按顺序执行对应方言的 20260721 manage_unit_group 迁移和 20260722 logical_work_order 迁移，重启后端并使用有真实登录态的前端验证 /cost/project-detail、/cost/tree-unit-detail 和账面组成详情。迁移前先运行固定金额冲突检查；若有冲突，先由业务确认保留值，再继续合并旧年度工作令。",
+    "blockers": [
+      "现有数据库必须执行 costree-cost-20260722-logical-work-order.sql；否则 income_amount 缺列且旧年度工作令唯一键仍不符合新逻辑。",
+      "20260722 迁移前置检查若发现同一逻辑工作令的合同、到款、目标或审定金额冲突，会主动终止，需要先人工确认权威值。",
+      "20260721 manage_unit_group 迁移尚未执行的环境必须先执行该脚本；新建数据库直接使用最新完整 DDL，不重复跑增量脚本。",
+      "本机没有可用的 psql/mysql 命令，本轮未对真实数据库执行迁移；数据库迁移结果仍需现场验证。",
+      "自动化浏览器缺少业务登录态，项目详情弹窗、状态权限和跨年度账面穿透仍需登录环境完成最终视觉与交互回归。",
+      "真实内网 Nacos、数据库、Redis、网关、菜单权限、租户、组织和数据权限映射仍待现场确认。"
+    ]
+  },
+  "tasks_to_add": [],
+  "tasks_to_update": [],
+  "tasks_to_complete": [],
+  "tasks_to_add_and_complete": [
+    {
+      "title": "改造项目详情三标签维护页面",
+      "details": "项目详情页调整为项目基本情况、单位成本信息、工作令基础信息三个标签；项目和工作令支持按状态新增编辑查看，单位金额只读并提供工作令和账面组成穿透。",
+      "priority": "P0",
+      "notes": "前端提交 56acad9 已推送 codeup/feature/costree2。"
+    },
+    {
+      "title": "统一工作令为跨年度逻辑记录",
+      "details": "工作令业务唯一键调整为租户、项目、实际单位和工作令编号，年度仅保留在账面明细；跨年度借方明细统一重算工作令账面快照。",
+      "priority": "P0",
+      "notes": "后端提交 747d6e25 已推送 codeup/feature/costree，MySQL/PostgreSQL 增量迁移均已补齐。"
+    },
+    {
+      "title": "补齐工作令固定金额和账面明细穿透",
+      "details": "工作令新增到款金额，合同、到款、目标和审定可维护，账面只读；账面组成详情默认汇总全部年度并保留原始明细会计年度核对。",
+      "priority": "P1",
+      "notes": "工作令固定金额不参与首页、型号树或单位金额汇总。"
+    }
+  ],
+  "decisions_to_add": [
+    {
+      "summary": "一条工作令只保留一条跨年度逻辑记录，年度属于账面明细而不属于工作令主数据。",
+      "rationale": "同编号工作令跨年度业务身份不变，按年度拆分主数据会造成重复展示和固定金额冲突；年度账面仍可通过明细追溯。"
+    },
+    {
+      "summary": "工作令合同、到款、目标和审定仅用于工作令层核对，不参与项目和单位金额汇总。",
+      "rationale": "项目单位金额继续以预分预控同步到 cost_unit_cost_detail 的数据为权威来源，避免工作令人工填报反向污染正式汇总。"
+    },
+    {
+      "summary": "工作令账面成本是全部年度借方明细的可重建快照，禁止人工维护。",
+      "rationale": "cost_work_order_ledger_detail 是账面唯一事实源，快照仅用于查询性能和页面展示，贷方不进入成本统计。"
+    }
+  ],
+  "session_log": {
+    "progress": [
+      "完成 /cost/project-detail 三标签页面、汇总卡片和项目上下文重构。",
+      "完成项目基本情况新增、编辑、查看弹窗及 DRAFT/REJECTED 可编辑、SUBMITTED/APPROVED 只读规则。",
+      "完成单位成本只读列表、查看工作令和账面组成穿透。",
+      "完成工作令固定金额、业务字段维护和账面只读展示，提交时校验合同与目标大于 0。",
+      "新增 cost_work_order.income_amount，更新 DO、VO、导入模型、前端类型和完整 DDL。",
+      "工作令唯一口径调整为租户+项目+实际单位+工作令编号，fiscal_year 保留兼容但统一置空。",
+      "新增 MySQL/PostgreSQL 20260722 迁移脚本，支持冲突检查、主记录保留、明细及预警外键重绑、重复行清理和借方账面重算。",
+      "更新金额同步模板、两项目演示同步、校验脚本、seed 和单位层级演示脚本。",
+      "移除 /cost/tree-unit-detail 年度展开，账面组成详情默认汇总全部年度并保留明细年度列。",
+      "后端 Reactor CostMapperAnnotationSqlTest 通过：1 个测试，0 失败，BUILD SUCCESS。",
+      "前端 pnpm run ts:check:cost 和定向 ESLint 通过，前后端 git diff --check 通过。",
+      "后端提交 747d6e25 已推送 codeup/feature/costree。",
+      "前端提交 56acad9 已推送 codeup/feature/costree2。",
+      "root 下 cost-intranet-data-kit/ 与 zip 作为本地交付制品加入 .gitignore，不提交源码仓库。"
+    ],
+    "files_touched": [
+      "costree-frontend/src/views/cost/projectDetail/index.vue",
+      "costree-frontend/src/views/cost/collect/index.vue",
+      "costree-frontend/src/views/cost/treeUnitDetail/index.vue",
+      "costree-frontend/src/views/cost/ledgerCompositionDetail/index.vue",
+      "costree-frontend/src/api/cost/workOrder/index.ts",
+      "baback/yudao-module-cost/yudao-module-cost-biz/src/main/java/cn/iocoder/yudao/module/cost/dal/dataobject/workorder/CostWorkOrderDO.java",
+      "baback/yudao-module-cost/yudao-module-cost-biz/src/main/java/cn/iocoder/yudao/module/cost/service/workorder/CostWorkOrderServiceImpl.java",
+      "baback/yudao-module-cost/yudao-module-cost-biz/src/main/java/cn/iocoder/yudao/module/cost/dal/mysql/workorder/CostWorkOrderMapper.java",
+      "baback/sql/mysql/costree-cost-20260722-logical-work-order.sql",
+      "baback/sql/postgresql/costree-cost-20260722-logical-work-order.sql",
+      "baback/sql/postgresql/costree-demo-source/02-sync-to-cost.sql",
+      "baback/sql/postgresql/costree-demo-source/03-verify.sql"
+    ],
+    "risks": [
+      "只更新前后端而不执行 20260722 数据库迁移会出现 income_amount 缺列或旧唯一约束冲突。",
+      "旧年度工作令固定金额存在不一致时不能自动决定权威值，必须先处理冲突。",
+      "迁移会重绑账面明细和历史预警的 work_order_id，执行前必须备份相关表。",
+      "项目单位正式金额仍以 cost_unit_cost_detail 同步数据为准，工作令固定金额不得用于正式汇总。"
+    ]
+  },
+  "resume_hint": {
+    "text": "继续项目时先运行 python .agent-handoff/runtime/agent-handoff/scripts/handoff.py resume .；部署 747d6e25/56acad9 前先备份并执行 20260721、20260722 两个增量迁移，再用有登录态环境核验项目详情三标签、逻辑工作令和跨年度借方账面合计。"
+  }
+}

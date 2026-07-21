@@ -285,3 +285,30 @@ completed:
   updated_at: '2026-07-21T19:36:08+08:00'
   completed_at: '2026-07-21T19:36:08+08:00'
   notes: 目标未维护的单位在排名末尾显示 --，院外单位不参与账面使用率排名。
+- task_id: TASK-031
+  title: 改造项目详情三标签维护页面
+  details: 项目详情页调整为项目基本情况、单位成本信息、工作令基础信息三个标签；项目和工作令支持按状态新增编辑查看，单位金额只读并提供工作令和账面组成穿透。
+  priority: P0
+  status: completed
+  created_at: '2026-07-22T01:13:16+08:00'
+  updated_at: '2026-07-22T01:13:16+08:00'
+  completed_at: '2026-07-22T01:13:16+08:00'
+  notes: 前端提交 56acad9 已推送 codeup/feature/costree2。
+- task_id: TASK-032
+  title: 统一工作令为跨年度逻辑记录
+  details: 工作令业务唯一键调整为租户、项目、实际单位和工作令编号，年度仅保留在账面明细；跨年度借方明细统一重算工作令账面快照。
+  priority: P0
+  status: completed
+  created_at: '2026-07-22T01:13:16+08:00'
+  updated_at: '2026-07-22T01:13:16+08:00'
+  completed_at: '2026-07-22T01:13:16+08:00'
+  notes: 后端提交 747d6e25 已推送 codeup/feature/costree，MySQL/PostgreSQL 增量迁移均已补齐。
+- task_id: TASK-033
+  title: 补齐工作令固定金额和账面明细穿透
+  details: 工作令新增到款金额，合同、到款、目标和审定可维护，账面只读；账面组成详情默认汇总全部年度并保留原始明细会计年度核对。
+  priority: P1
+  status: completed
+  created_at: '2026-07-22T01:13:16+08:00'
+  updated_at: '2026-07-22T01:13:16+08:00'
+  completed_at: '2026-07-22T01:13:16+08:00'
+  notes: 工作令固定金额不参与首页、型号树或单位金额汇总。

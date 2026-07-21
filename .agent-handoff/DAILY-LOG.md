@@ -2,6 +2,32 @@
 
 ---
 
+## 2026-07-22
+
+### 项目详情三标签维护、逻辑工作令归一和跨年度借方账面汇总收尾
+- 完成 /cost/project-detail 三标签页面、汇总卡片和项目上下文重构。
+- 完成项目基本情况新增、编辑、查看弹窗及 DRAFT/REJECTED 可编辑、SUBMITTED/APPROVED 只读规则。
+- 完成单位成本只读列表、查看工作令和账面组成穿透。
+- 完成工作令固定金额、业务字段维护和账面只读展示，提交时校验合同与目标大于 0。
+- 新增 cost_work_order.income_amount，更新 DO、VO、导入模型、前端类型和完整 DDL。
+- 工作令唯一口径调整为租户+项目+实际单位+工作令编号，fiscal_year 保留兼容但统一置空。
+- 新增 MySQL/PostgreSQL 20260722 迁移脚本，支持冲突检查、主记录保留、明细及预警外键重绑、重复行清理和借方账面重算。
+- 更新金额同步模板、两项目演示同步、校验脚本、seed 和单位层级演示脚本。
+- 移除 /cost/tree-unit-detail 年度展开，账面组成详情默认汇总全部年度并保留明细年度列。
+- 后端 Reactor CostMapperAnnotationSqlTest 通过：1 个测试，0 失败，BUILD SUCCESS。
+- 前端 pnpm run ts:check:cost 和定向 ESLint 通过，前后端 git diff --check 通过。
+- 后端提交 747d6e25 已推送 codeup/feature/costree。
+- 前端提交 56acad9 已推送 codeup/feature/costree2。
+- root 下 cost-intranet-data-kit/ 与 zip 作为本地交付制品加入 .gitignore，不提交源码仓库。
+
+#### 风险与备注
+- 只更新前后端而不执行 20260722 数据库迁移会出现 income_amount 缺列或旧唯一约束冲突。
+- 旧年度工作令固定金额存在不一致时不能自动决定权威值，必须先处理冲突。
+- 迁移会重绑账面明细和历史预警的 work_order_id，执行前必须备份相关表。
+- 项目单位正式金额仍以 cost_unit_cost_detail 同步数据为准，工作令固定金额不得用于正式汇总。
+
+---
+
 ## 2026-07-21
 
 ### 成本树管理单位分组、管理单位穿透、单位使用率排名和演示数据收尾
