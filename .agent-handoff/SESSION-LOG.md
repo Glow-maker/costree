@@ -267,3 +267,49 @@
 - 本轮新增字段要求数据库结构同步升级；如果只更新 jar/前端而未跑 ALTER，保存项目基本情况会报缺列。
 - 项目办填报的承研单位现在依赖 cost_unit_dict，如果内网单位字典未导入或状态不可用，下拉会为空，需要先导入单位字典。
 - 树页面账面组成已按八项支出口径改造方向推进，但正式验收仍需用真实账面明细核对二级科目编码 501101-501108 的金额合计。
+
+## 一次会话
+- 开始时间：2026-07-21 18:30:00 +0800
+- 结束时间：2026-07-21 19:34:41 +0800
+- 本次焦点：成本树管理单位分组、管理单位穿透、单位使用率排名和演示数据收尾
+
+### 本次进展
+- 新增 cost_unit_dict.manage_unit_group，支持 OVERALL、ASSEMBLY、PROFESSIONAL、FOUNDATION、OUTER 分类。
+- 完成 /cost/tree-detail 管理单位聚合、五类分组树、响应式单位矩阵和院内管理单位数量统计。
+- 完成 /cost/tree-unit-detail 管理单位穿透，列表和详情展示实际核算单位，组成查询继续使用工作令实际 unitName。
+- 完成 /cost/work-order/page 和 /cost/overview/unit-detail 的 manageUnitName 可选查询。
+- 新增 MySQL/PostgreSQL 20260721 增量迁移脚本及 costree-unit-hierarchy-demo.sql 演示数据。
+- 将 /cost/tree-detail 右侧重复金额替换为院内管理单位使用率排名，按账面/目标降序并保留黄红预警颜色。
+- 更新 /cost/catalog 卡片文案：项目类别/批次、研制阶段、用户。
+- 前端 pnpm run ts:check:cost 和定向 ESLint 通过。
+- 后端 mvn -pl yudao-module-cost/yudao-module-cost-biz -am -DskipTests compile 通过。
+- 后端提交 e70c6eac 已推送 codeup/feature/costree。
+- 前端提交 db0b185 已推送 codeup/feature/costree2。
+- root 下 cost-intranet-data-kit/ 与 zip 保持未跟踪，本轮未加入 Git。
+
+### 涉及文件
+- baback/sql/mysql/costree-cost.sql
+- baback/sql/mysql/costree-cost-20260721-add-manage-unit-group.sql
+- baback/sql/mysql/costree-unit-hierarchy-demo.sql
+- baback/sql/postgresql/costree-cost.sql
+- baback/sql/postgresql/costree-cost-20260721-add-manage-unit-group.sql
+- baback/sql/postgresql/costree-unit-hierarchy-demo.sql
+- baback/yudao-module-cost/yudao-module-cost-biz/src/main/java/cn/iocoder/yudao/module/cost/dal/dataobject/unitdict/CostUnitDictDO.java
+- baback/yudao-module-cost/yudao-module-cost-biz/src/main/java/cn/iocoder/yudao/module/cost/dal/mysql/workorder/CostWorkOrderMapper.java
+- baback/yudao-module-cost/yudao-module-cost-biz/src/main/java/cn/iocoder/yudao/module/cost/service/overview/CostOverviewServiceImpl.java
+- costree-frontend/src/api/cost/overview/index.ts
+- costree-frontend/src/api/cost/unitDict/index.ts
+- costree-frontend/src/api/cost/workOrder/index.ts
+- costree-frontend/src/views/cost/catalog/index.vue
+- costree-frontend/src/views/cost/treeDetail/CostTreeNode.vue
+- costree-frontend/src/views/cost/treeDetail/index.vue
+- costree-frontend/src/views/cost/treeUnitDetail/index.vue
+
+### 下次恢复点
+- 继续项目时先运行 python .agent-handoff/runtime/agent-handoff/scripts/handoff.py resume .；部署最新版本前优先执行 20260721 manage_unit_group 数据库迁移，再用 ZY-2026-DEMO-UNIT-001 验证五类管理单位分组和电子所三核算单位汇总。
+
+### 风险与备注
+- 只更新 jar 而未执行数据库增量脚本会导致 manage_unit_group 缺列。
+- manage_unit_name 为空时会按核算单位名称分别展示，无法形成期望的管理单位汇总。
+- 真实单位名称与 cost_unit_dict.accounting_unit_name 不一致时，管理单位查询和穿透可能遗漏工作令。
+- 使用率排名依赖单位目标成本；目标为 0 或空时仅显示 --，不参与有效比例排序。

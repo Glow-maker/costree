@@ -1,0 +1,100 @@
+{
+  "session": {
+    "started_at": "2026-07-21T18:30:00+08:00",
+    "ended_at": "2026-07-21T19:34:41+08:00",
+    "focus": "成本树管理单位分组、管理单位穿透、单位使用率排名和演示数据收尾"
+  },
+  "current_status": {
+    "phase": "第一阶段 MVP 实现、真实数据对齐和内网部署准备收口中",
+    "goal": "在已有业务中台中嵌入成本库/成本树业务模块，让成本库数据可进入、可维护、可查询、可控权限，并用 note 文档中心和 .agent-handoff 形成可持续接管、开发、收尾和经验沉淀机制。",
+    "summary": "本轮完成成本树单位层级重构：院内核算单位按 cost_unit_dict.manage_unit_name 汇总为管理单位，并按总体所、总装所、专业所、基础所、院外单位五类展示；管理单位穿透仍保留实际核算单位，工作令和账面组成不会因管理简称错误合并。/cost/tree-detail 右侧重复金额区改为院内管理单位账面/目标使用率排名，/cost/catalog 卡片文案同步调整。MySQL/PostgreSQL DDL、增量迁移和完整演示项目脚本已补齐。后端提交 e70c6eac 已推送 codeup/feature/costree，前端提交 db0b185 已推送 codeup/feature/costree2。",
+    "next_step": "在目标数据库先执行对应数据库的 costree-cost-20260721-add-manage-unit-group.sql，重启后端；需要演示时再执行 costree-unit-hierarchy-demo.sql，并访问 /cost/tree-detail?projectCode=ZY-2026-DEMO-UNIT-001。随后用真实单位字典维护 manage_unit_name 和 manage_unit_group，核验电子所多核算单位汇总、管理单位穿透、阶段筛选、预警和使用率排名。",
+    "blockers": [
+      "现有数据库必须先执行 20260721 manage_unit_group 增量脚本；新建数据库使用最新完整 DDL，不要重复执行增量脚本。",
+      "内网单位字典同步时必须维护 manage_unit_name 和 manage_unit_group；未维护分类的院内单位只会进入未分类院内单位。",
+      "自动化浏览器当前停在登录页，管理单位分组与使用率排名仍需在有登录态的环境完成最终视觉回归。",
+      "金额口径仍需用真实数据最终核对：账面只统计借方明细且 amount 为元、页面按万元展示。",
+      "真实内网 Nacos、数据库、Redis、网关、菜单权限、租户、组织和数据权限映射仍待现场确认。"
+    ]
+  },
+  "tasks_to_add": [],
+  "tasks_to_update": [],
+  "tasks_to_complete": [],
+  "tasks_to_add_and_complete": [
+    {
+      "title": "实现成本树管理单位分组与穿透",
+      "details": "院内核算单位按 manage_unit_name 汇总，形成型号到单位分类再到管理单位的三级结构；管理单位穿透查询其下全部实际核算单位，工作令仍按实际核算单位区分。",
+      "priority": "P0",
+      "notes": "后端提交 e70c6eac，前端提交 db0b185，均已推送。"
+    },
+    {
+      "title": "补充管理单位分组迁移和演示数据",
+      "details": "为 MySQL/PostgreSQL 补充 manage_unit_group 完整 DDL、现有库增量迁移和可重复执行的 ZY-2026-DEMO-UNIT-001 演示项目脚本。",
+      "priority": "P0",
+      "notes": "演示预期为 12 个院内核算单位、10 张院内管理单位卡片和 1 张院外汇总卡片。"
+    },
+    {
+      "title": "优化成本树右侧信息和目录卡片文案",
+      "details": "将树详情右侧重复金额替换为按账面/目标降序的院内管理单位使用率排名；目录卡片更新项目类别/批次、研制阶段、用户三个标签。",
+      "priority": "P1",
+      "notes": "目标未维护的单位在排名末尾显示 --，院外单位不参与账面使用率排名。"
+    }
+  ],
+  "decisions_to_add": [
+    {
+      "summary": "院内单位展示和预警以管理单位简称为口径，实际核算单位仅在穿透层保留。",
+      "rationale": "多个核算单位可能同属电子所等管理单位，管理层展示需要合并，但账面明细和工作令查询仍必须保留实际单位以避免错误合并。"
+    },
+    {
+      "summary": "管理单位分类由 cost_unit_dict.manage_unit_group 显式维护。",
+      "rationale": "总体所、总装所、专业所、基础所的业务分类不能仅靠名称猜测；显式字典字段便于内网同步和后续维护，缺失值进入未分类。"
+    },
+    {
+      "summary": "单位使用率排名只纳入院内管理单位，使用率按账面成本除以目标成本计算。",
+      "rationale": "院外单位当前没有权威账面成本口径，纳入排名会产生无意义的 0% 或错误比较。"
+    }
+  ],
+  "session_log": {
+    "progress": [
+      "新增 cost_unit_dict.manage_unit_group，支持 OVERALL、ASSEMBLY、PROFESSIONAL、FOUNDATION、OUTER 分类。",
+      "完成 /cost/tree-detail 管理单位聚合、五类分组树、响应式单位矩阵和院内管理单位数量统计。",
+      "完成 /cost/tree-unit-detail 管理单位穿透，列表和详情展示实际核算单位，组成查询继续使用工作令实际 unitName。",
+      "完成 /cost/work-order/page 和 /cost/overview/unit-detail 的 manageUnitName 可选查询。",
+      "新增 MySQL/PostgreSQL 20260721 增量迁移脚本及 costree-unit-hierarchy-demo.sql 演示数据。",
+      "将 /cost/tree-detail 右侧重复金额替换为院内管理单位使用率排名，按账面/目标降序并保留黄红预警颜色。",
+      "更新 /cost/catalog 卡片文案：项目类别/批次、研制阶段、用户。",
+      "前端 pnpm run ts:check:cost 和定向 ESLint 通过。",
+      "后端 mvn -pl yudao-module-cost/yudao-module-cost-biz -am -DskipTests compile 通过。",
+      "后端提交 e70c6eac 已推送 codeup/feature/costree。",
+      "前端提交 db0b185 已推送 codeup/feature/costree2。",
+      "root 下 cost-intranet-data-kit/ 与 zip 保持未跟踪，本轮未加入 Git。"
+    ],
+    "files_touched": [
+      "baback/sql/mysql/costree-cost.sql",
+      "baback/sql/mysql/costree-cost-20260721-add-manage-unit-group.sql",
+      "baback/sql/mysql/costree-unit-hierarchy-demo.sql",
+      "baback/sql/postgresql/costree-cost.sql",
+      "baback/sql/postgresql/costree-cost-20260721-add-manage-unit-group.sql",
+      "baback/sql/postgresql/costree-unit-hierarchy-demo.sql",
+      "baback/yudao-module-cost/yudao-module-cost-biz/src/main/java/cn/iocoder/yudao/module/cost/dal/dataobject/unitdict/CostUnitDictDO.java",
+      "baback/yudao-module-cost/yudao-module-cost-biz/src/main/java/cn/iocoder/yudao/module/cost/dal/mysql/workorder/CostWorkOrderMapper.java",
+      "baback/yudao-module-cost/yudao-module-cost-biz/src/main/java/cn/iocoder/yudao/module/cost/service/overview/CostOverviewServiceImpl.java",
+      "costree-frontend/src/api/cost/overview/index.ts",
+      "costree-frontend/src/api/cost/unitDict/index.ts",
+      "costree-frontend/src/api/cost/workOrder/index.ts",
+      "costree-frontend/src/views/cost/catalog/index.vue",
+      "costree-frontend/src/views/cost/treeDetail/CostTreeNode.vue",
+      "costree-frontend/src/views/cost/treeDetail/index.vue",
+      "costree-frontend/src/views/cost/treeUnitDetail/index.vue"
+    ],
+    "risks": [
+      "只更新 jar 而未执行数据库增量脚本会导致 manage_unit_group 缺列。",
+      "manage_unit_name 为空时会按核算单位名称分别展示，无法形成期望的管理单位汇总。",
+      "真实单位名称与 cost_unit_dict.accounting_unit_name 不一致时，管理单位查询和穿透可能遗漏工作令。",
+      "使用率排名依赖单位目标成本；目标为 0 或空时仅显示 --，不参与有效比例排序。"
+    ]
+  },
+  "resume_hint": {
+    "text": "继续项目时先运行 python .agent-handoff/runtime/agent-handoff/scripts/handoff.py resume .；部署最新版本前优先执行 20260721 manage_unit_group 数据库迁移，再用 ZY-2026-DEMO-UNIT-001 验证五类管理单位分组和电子所三核算单位汇总。"
+  }
+}

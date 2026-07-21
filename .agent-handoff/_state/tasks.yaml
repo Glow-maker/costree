@@ -257,3 +257,31 @@ completed:
   updated_at: '2026-06-26T10:24:02+08:00'
   completed_at: '2026-06-26T10:24:02+08:00'
   notes: 后端提交 18e436c3 推送到 codeup/feature/costree；前端提交 6d77dc4 推送到 codeup/feature/costree2。
+- task_id: TASK-028
+  title: 实现成本树管理单位分组与穿透
+  details: 院内核算单位按 manage_unit_name 汇总，形成型号到单位分类再到管理单位的三级结构；管理单位穿透查询其下全部实际核算单位，工作令仍按实际核算单位区分。
+  priority: P0
+  status: completed
+  created_at: '2026-07-21T19:36:08+08:00'
+  updated_at: '2026-07-21T19:36:08+08:00'
+  completed_at: '2026-07-21T19:36:08+08:00'
+  notes: 后端提交 e70c6eac，前端提交 db0b185，均已推送。
+- task_id: TASK-029
+  title: 补充管理单位分组迁移和演示数据
+  details: 为 MySQL/PostgreSQL 补充 manage_unit_group 完整 DDL、现有库增量迁移和可重复执行的 ZY-2026-DEMO-UNIT-001
+    演示项目脚本。
+  priority: P0
+  status: completed
+  created_at: '2026-07-21T19:36:08+08:00'
+  updated_at: '2026-07-21T19:36:08+08:00'
+  completed_at: '2026-07-21T19:36:08+08:00'
+  notes: 演示预期为 12 个院内核算单位、10 张院内管理单位卡片和 1 张院外汇总卡片。
+- task_id: TASK-030
+  title: 优化成本树右侧信息和目录卡片文案
+  details: 将树详情右侧重复金额替换为按账面/目标降序的院内管理单位使用率排名；目录卡片更新项目类别/批次、研制阶段、用户三个标签。
+  priority: P1
+  status: completed
+  created_at: '2026-07-21T19:36:08+08:00'
+  updated_at: '2026-07-21T19:36:08+08:00'
+  completed_at: '2026-07-21T19:36:08+08:00'
+  notes: 目标未维护的单位在排名末尾显示 --，院外单位不参与账面使用率排名。
