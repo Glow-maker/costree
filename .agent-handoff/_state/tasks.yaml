@@ -312,3 +312,30 @@ completed:
   updated_at: '2026-07-22T01:13:16+08:00'
   completed_at: '2026-07-22T01:13:16+08:00'
   notes: 工作令固定金额不参与首页、型号树或单位金额汇总。
+- task_id: TASK-034
+  title: 完善项目详情、首页账面组成穿透和采集页字段说明
+  details: 项目详情重排项目基本情况、单位成本和工作令维护；首页领域账面组成可进入借方明细并导出；采集页项目办和研制单位字段标签支持悬停查看填写说明。
+  priority: P0
+  status: completed
+  created_at: '2026-07-22T04:17:57+08:00'
+  updated_at: '2026-07-22T04:17:57+08:00'
+  completed_at: '2026-07-22T04:17:57+08:00'
+  notes: 前端提交 f78d9c0 已推送 codeup/feature/costree2。
+- task_id: TASK-035
+  title: 统一成本树阶段集合筛选与工作令组成穿透
+  details: 两个树页面按工作令完整阶段集合匹配；单位页补充金额和工作令信息，修复组成弹窗重复打开，支持组成明细穿透、原始明细导出和返回条件恢复。
+  priority: P0
+  status: completed
+  created_at: '2026-07-22T04:17:57+08:00'
+  updated_at: '2026-07-22T04:17:57+08:00'
+  completed_at: '2026-07-22T04:17:57+08:00'
+  notes: C/Z 仅在同时选择 C、Z 时展示，卡片显示完整阶段集合。
+- task_id: TASK-036
+  title: 新增工作令八项组成汇总导出和 PostgreSQL 升级包
+  details: 新增按当前项目、管理单位、实际单位和阶段导出的工作令八项金额及占比 Excel；补齐既有 PostgreSQL 库前置检查、升级、验证和打包脚本。
+  priority: P0
+  status: completed
+  created_at: '2026-07-22T04:17:57+08:00'
+  updated_at: '2026-07-22T04:17:57+08:00'
+  completed_at: '2026-07-22T04:17:57+08:00'
+  notes: 后端提交 1f245334 已推送 codeup/feature/costree。

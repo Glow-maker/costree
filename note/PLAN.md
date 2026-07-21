@@ -36,7 +36,7 @@
 | P7 | 源数据导入和解析规则落地 | 明确源主业项目树、工作令映射和账面明细如何进入业务表 | 源系统主键、增量字段、映射变更口径【需确认】；已新增 `30-data/05-内网源表与成本库业务表关系实施方案.md`、`30-data/09-成本库内网数据对接总设计方案.md`，并开始整理 `ads_lc_lshsxm2022`、`dwd_bd_bfcustomitem_gzl`、`dws_bu_pz_pzmx_gzl` 原表 | `30-data` 源数据设计、部署 DDL、源数据导入接口、解析任务、未解析数据查询 | 源表不直接覆盖业务表；可生成/更新 `cost_model_node`、`cost_project`、`cost_work_order`；账面明细可回填 `project_id/work_order_id/resolved_stage_code`；异常可追溯 | 进行中 |
 | P8 | 数据采集前台页深化 | 项目办、研制单位能够按角色填报并走确认状态 | 当前 `/cost/collect` 轻流程页面已存在；角色权限边界【需确认】 | `/cost/collect`、项目基本情况和工作令接口、`20-requirements` | 项目办和研制单位入口分清；草稿、提交、通过、退回状态可追踪 | 待办 |
 | P9 | 权限和菜单接入 | 成本库正式进入中台菜单、角色、按钮和数据权限体系 | 内网菜单父级、角色、组织、租户、权限点由技术同事确认 | 中台菜单配置、后端权限点、前端权限控制、`80-deployment` | 管理员可管理；项目办/研制单位/查看用户只能访问授权页面和数据 | 待办 |
-| P10 | 内网部署准备 | 把外网测试闭环迁到内网真实环境 | 内网 MySQL/PostgreSQL、Redis、Nacos、网关、system-server、infra-server 可用 | `80-deployment/01-外网到内网迁移说明.md`、离线包、外部配置、MySQL/PostgreSQL 建表 SQL | `cost-server` 注册成功；网关路由可访问；`mock-platform=false`；真实库不执行测试 seed | 进行中 |
+| P10 | 内网部署准备 | 把外网测试闭环迁到内网真实环境 | 内网 PostgreSQL 14+、Redis、Nacos、网关、system-server、infra-server 可用 | `80-deployment/02-PostgreSQL内网升级与版本一致性.md`、结构版本 `20260722`、离线包和外部配置 | 旧库预检查、单事务升级和升级后验收通过；应用与数据库版本一致；真实库不执行测试 seed | 进行中 |
 | P11 | 测试验收闭环 | 形成每次变更的最小验证集 | 前后端和数据库任务完成后执行 | `70-testing` 测试文档、命令输出、页面截图或接口样例 | 前端局部类型检查、ESLint、后端编译、接口、页面、部署检查均有记录 | 待办 |
 
 ## 下一步最小任务

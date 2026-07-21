@@ -119,6 +119,7 @@
 - 已新增工作令账面组成接口，用于单位工作令页穿透查看账面科目 Top8 饼图和明细列表。
 - 已为 `cost_work_order` 补充内网源字段，并新增 MySQL/PostgreSQL 成本模块建表与测试 seed 脚本。
 - 已补充 PostgreSQL JDBC 依赖，并调整成本模块手写 SQL 兼容 PostgreSQL。
+- 2026-07-22 已建立 PostgreSQL 结构版本 `20260722` 和旧库统一迁移包：迁移前检查、单事务升级、升级后强校验、交付包 SHA-256 清单；空库继续使用最新 `costree-cost.sql`。
 
 最近后端 commit：
 
@@ -260,7 +261,7 @@ mvn -pl yudao-module-cost/yudao-module-cost-biz -am -DskipTests compile
   - 工作令映射变更后，历史凭证明细按原映射追溯还是按当前映射重算。
   - “预分预控金额”是否等同目标成本。
   - “院本级支出”的判断规则。
-- 内网真实 MySQL、Redis、Nacos、网关、菜单权限配置仍待内网环境确认。
+- 内网真实 PostgreSQL、Redis、Nacos、网关、菜单权限配置仍待内网环境确认；数据库要求 PostgreSQL 14+，上线前必须执行结构版本验收。
 - 内网源表承接方式仍待确认：补齐成本库源表，或用内网原表/视图映射为成本库源表。
 - `ads_lc_lshsxm2022` 只从截图整理了字段注释，还缺完整 DDL、字段取值样例、父子关系样例和更新时间字段确认。
 - `dwd_bd_bfcustomitem_gzl` 只从截图整理了字段注释，还缺完整 DDL、schema 名称、年度字段来源、字段取值样例和与主业项目树的关联校验。
