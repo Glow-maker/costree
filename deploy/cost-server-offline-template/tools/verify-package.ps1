@@ -25,12 +25,16 @@ foreach ($required in @(
     'database\postgresql92\03-data-integration\load-and-sync.ps1',
     'database\postgresql92\03-data-integration\10-sync-to-cost.sql',
     'database\postgresql92\03-data-integration\30-diagnose-book-zero.sql',
-    'docs\10-20260728字段与页面变更.md',
     'SHA256SUMS.txt'
 )) {
     if (-not (Test-Path -LiteralPath (Join-Path $root $required))) {
         throw "Missing package file: $required"
     }
+}
+$releaseDoc = Get-ChildItem -LiteralPath (Join-Path $root 'docs') -Filter '10-20260728*.md' -File |
+    Select-Object -First 1
+if (-not $releaseDoc) {
+    throw 'Missing package file: docs\10-20260728*.md'
 }
 $checked = 0
 foreach ($line in Get-Content -LiteralPath $manifest) {
