@@ -1,0 +1,95 @@
+{
+  "session": {
+    "started_at": "2026-07-28T18:30:00+08:00",
+    "ended_at": "2026-07-28T21:40:00+08:00",
+    "focus": "项目办单位金额维护、工作令查询、单位树层级和 20260728 内网部署包收尾"
+  },
+  "current_status": {
+    "phase": "第一阶段 MVP 实现、真实数据对齐和内网部署准备收口中",
+    "goal": "在已有业务中台中嵌入成本库/成本树业务模块，让成本库数据可进入、可维护、可查询、可控权限，并用 note 文档中心和 .agent-handoff 形成可持续接管、开发、收尾和经验沉淀机制。",
+    "summary": "本轮完成项目办按项目进入弹窗、按单位维护目标成本和审定金额；合同和到款只读取自预分预控同步。研制单位采集页调整为左侧工作令记录、右侧填报表单，选择主业项目后仅查询该项目工作令；新增只读工作令查询页。成本树新增 HEAD_OFFICE，院部直属型号且排在最左，总体所只包含八部和509所。后端新增项目办聚合查询与事务保存接口，cost_project_basic 增加 quantity、product_short_name、vertical_division。数据库版本升级为 20260728，MySQL、PostgreSQL 和 PostgreSQL 9.2/GaussDB 均补齐完整 DDL 与增量脚本。正式同步脚本只更新预分预控合同和到款，不覆盖项目办维护的目标和审定。前端提交 c6b81fe 已推送 codeup/feature/costree2，后端提交 114b6202 及前置提交 771efff4 已推送 codeup/feature/costree。",
+    "next_step": "使用根仓库 tools/build-cost-server-offline-package.ps1 从已提交前后端构建正式离线包。内网既有库必须依次执行对应数据库目录的 00-precheck.sql、10-upgrade-existing-to-20260722.sql、11-upgrade-existing-to-20260728-project-office-form.sql、20-verify.sql，再替换后端 jar 和前端资源。数据接入先同步单位、项目树、工作令字典和预分预控合同/到款，再导入借方账面明细，最后由项目办在 /cost/collect 维护单位目标和审定。",
+    "blockers": [
+      "现有数据库不能只替换 jar；未执行 20260728 增量脚本会因 cost_project_basic 缺少 quantity、product_short_name、vertical_division 导致查询失败。",
+      "本轮未连接真实 GaussDB(DWS) 8.2.1 执行升级，仅完成 PostgreSQL 9.2/GaussDB 方言静态兼容检查，现场仍需先备份并执行 precheck 和 verify。",
+      "真实内网 Nacos、Redis、网关、菜单权限、租户、组织和数据权限仍需现场确认。",
+      "后端配置已改为必须显式提供 COST_DATASOURCE_URL、COST_DATASOURCE_USERNAME、COST_DATASOURCE_PASSWORD；未配置时应用会在启动早期失败。"
+    ]
+  },
+  "tasks_to_add": [],
+  "tasks_to_update": [],
+  "tasks_to_complete": [],
+  "tasks_to_add_and_complete": [
+    {
+      "title": "完成项目办按单位维护目标和审定金额",
+      "details": "项目办按主业项目打开弹窗，合同和到款只读，目标和审定逐单位维护；项目级维护配套数、阶段、分系统、产品简称和纵向分工。",
+      "priority": "P0",
+      "notes": "保存接口在单个事务中更新项目基本情况和单位目标/审定，并重新读取合同/到款防止客户端覆盖。"
+    },
+    {
+      "title": "完成研制单位工作令筛选和独立工作令查询页",
+      "details": "采集页工作令记录在左、表单在右，项目远程搜索后只显示该项目工作令；新增 /cost/work-order-list 服务端分页只读查询。",
+      "priority": "P0",
+      "notes": "前端提交 c6b81fe 已推送 codeup/feature/costree2。"
+    },
+    {
+      "title": "完成 20260728 多方言数据库升级和内网包模板",
+      "details": "补齐 MySQL、PostgreSQL、PostgreSQL 9.2/GaussDB 完整 DDL、增量 11 脚本、验收检查、正式数据同步修正和可复现离线包模板。",
+      "priority": "P0",
+      "notes": "后端提交 114b6202 已推送 codeup/feature/costree；PG9.2/GaussDB 静态兼容检查通过。"
+    }
+  ],
+  "decisions_to_add": [
+    {
+      "summary": "预分预控同步只负责项目单位合同金额和到款金额。",
+      "rationale": "目标成本和审定金额改由项目办逐单位维护，正式同步重跑必须保留人工维护值。"
+    },
+    {
+      "summary": "项目办单位金额继续复用 cost_unit_cost_detail，不新增平行金额表。",
+      "rationale": "该表已经是项目编码加单位名称的权威单位金额粒度，复用可避免首页、成本树和采集页出现两套口径。"
+    },
+    {
+      "summary": "20260728 既有库升级必须在 20260722 升级后追加执行独立 11 脚本。",
+      "rationale": "保持既有部署顺序可追溯，同时让 PostgreSQL 9.2/GaussDB 现场升级不依赖不兼容的 IF NOT EXISTS 列语法。"
+    }
+  ],
+  "session_log": {
+    "progress": [
+      "完成 /cost/collect 项目办全宽项目列表和单位金额维护弹窗。",
+      "完成合同、到款只读以及目标、审定逐单位事务保存接口。",
+      "完成工作令记录左侧、填报表单右侧和按主业项目过滤。",
+      "新增 /cost/work-order-list 只读服务端分页查询页及门户入口。",
+      "成本树新增 HEAD_OFFICE，院部直属型号，总体所映射调整为八部和509所。",
+      "cost_project_basic 增加 quantity、product_short_name、vertical_division 并同步前后端类型。",
+      "MySQL、PostgreSQL、PostgreSQL 9.2/GaussDB 完整 DDL 和 20260728 增量脚本已补齐。",
+      "正式数据同步改为只更新预分预控合同和到款，保留目标、账面和审定。",
+      "后端 Reactor compile 和 CostMapperAnnotationSqlTest 通过，1 个测试 0 失败。",
+      "前端 pnpm run ts:check:cost 和定向 ESLint 通过。",
+      "GaussDB(DWS) 8.2.1 静态兼容检查通过，共检查 15 个 SQL 文件。",
+      "前端 c6b81fe 和后端 114b6202 已推送对应 Codeup 分支。"
+    ],
+    "files_touched": [
+      "costree-frontend/src/views/cost/collect/index.vue",
+      "costree-frontend/src/views/cost/workOrderList/index.vue",
+      "costree-frontend/src/views/cost/treeDetail/index.vue",
+      "costree-frontend/src/router/modules/remaining.ts",
+      "baback/yudao-module-cost/yudao-module-cost-biz/src/main/java/cn/iocoder/yudao/module/cost/service/projectbasic/CostProjectBasicServiceImpl.java",
+      "baback/sql/postgresql/costree-deploy/11-upgrade-existing-to-20260728-project-office-form.sql",
+      "baback/sql/postgresql92/costree-deploy/11-upgrade-existing-to-20260728-project-office-form.sql",
+      "baback/sql/postgresql/costree-integration/10-sync-to-cost.sql",
+      "baback/sql/postgresql92/costree-integration/10-sync-to-cost.sql",
+      "deploy/cost-server-offline-template",
+      "tools/build-cost-server-offline-package.ps1"
+    ],
+    "risks": [
+      "未执行 20260728 数据库升级时，新后端会因缺列无法正常查询项目基本情况。",
+      "内网单位名称和项目编码必须与预分预控、单位字典、工作令及账面明细保持一致，否则单位卡片和金额无法正确关联。",
+      "账面只统计借方明细，真实数据导入后必须按工作令、年度和八项科目抽样对账。",
+      "GaussDB(DWS) 仅完成静态兼容验证，现场执行前必须备份且不得跳过 00-precheck 和 20-verify。",
+      "使用 application-jt/local 启动时必须配置 COST_DATASOURCE_* 环境变量。"
+    ]
+  },
+  "resume_hint": {
+    "text": "继续项目时先运行 python .agent-handoff/runtime/agent-handoff/scripts/handoff.py resume .；内网部署使用前端 c6b81fe、后端 114b6202，并按离线包 docs/02-数据库建库与升级.md 依次执行 00、10、11、20。正式同步只导入合同和到款，单位目标和审定由项目办在 /cost/collect 维护。"
+  }
+}

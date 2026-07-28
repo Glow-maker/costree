@@ -2,6 +2,31 @@
 
 ---
 
+## 2026-07-28
+
+### 项目办单位金额维护、工作令查询、单位树层级和 20260728 内网部署包收尾
+- 完成 /cost/collect 项目办全宽项目列表和单位金额维护弹窗。
+- 完成合同、到款只读以及目标、审定逐单位事务保存接口。
+- 完成工作令记录左侧、填报表单右侧和按主业项目过滤。
+- 新增 /cost/work-order-list 只读服务端分页查询页及门户入口。
+- 成本树新增 HEAD_OFFICE，院部直属型号，总体所映射调整为八部和509所。
+- cost_project_basic 增加 quantity、product_short_name、vertical_division 并同步前后端类型。
+- MySQL、PostgreSQL、PostgreSQL 9.2/GaussDB 完整 DDL 和 20260728 增量脚本已补齐。
+- 正式数据同步改为只更新预分预控合同和到款，保留目标、账面和审定。
+- 后端 Reactor compile 和 CostMapperAnnotationSqlTest 通过，1 个测试 0 失败。
+- 前端 pnpm run ts:check:cost 和定向 ESLint 通过。
+- GaussDB(DWS) 8.2.1 静态兼容检查通过，共检查 15 个 SQL 文件。
+- 前端 c6b81fe 和后端 114b6202 已推送对应 Codeup 分支。
+
+#### 风险与备注
+- 未执行 20260728 数据库升级时，新后端会因缺列无法正常查询项目基本情况。
+- 内网单位名称和项目编码必须与预分预控、单位字典、工作令及账面明细保持一致，否则单位卡片和金额无法正确关联。
+- 账面只统计借方明细，真实数据导入后必须按工作令、年度和八项科目抽样对账。
+- GaussDB(DWS) 仅完成静态兼容验证，现场执行前必须备份且不得跳过 00-precheck 和 20-verify。
+- 使用 application-jt/local 启动时必须配置 COST_DATASOURCE_* 环境变量。
+
+---
+
 ## 2026-07-22
 
 ### 项目详情三标签维护、逻辑工作令归一和跨年度借方账面汇总收尾

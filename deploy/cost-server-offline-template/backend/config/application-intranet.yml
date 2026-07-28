@@ -1,0 +1,51 @@
+server:
+  port: ${COST_SERVER_PORT:38108}
+
+spring:
+  cloud:
+    nacos:
+      server-addr: ${NACOS_SERVER_ADDR}
+      username: ${NACOS_USERNAME}
+      password: ${NACOS_PASSWORD}
+      discovery:
+        enabled: ${COST_NACOS_DISCOVERY_ENABLED:true}
+        namespace: ${NACOS_NAMESPACE}
+        group: ${NACOS_GROUP:DEFAULT_GROUP}
+      config:
+        enabled: ${COST_NACOS_CONFIG_ENABLED:false}
+        namespace: ${NACOS_NAMESPACE}
+        group: ${NACOS_GROUP:DEFAULT_GROUP}
+  datasource:
+    dynamic:
+      primary: master
+      datasource:
+        master:
+          url: ${COST_DATASOURCE_URL}
+          username: ${COST_DATASOURCE_USERNAME}
+          password: ${COST_DATASOURCE_PASSWORD}
+          driver-class-name: org.postgresql.Driver
+  redis:
+    host: ${COST_REDIS_HOST}
+    port: ${COST_REDIS_PORT:6379}
+    database: ${COST_REDIS_DATABASE:2}
+    password: ${COST_REDIS_PASSWORD:}
+
+yudao:
+  security:
+    mock-enable: false
+
+cost:
+  local-test:
+    mock-platform: false
+
+logging:
+  level:
+    cn.iocoder.yudao.module.cost.dal.mysql: info
+  file:
+    name: ${COST_LOG_FILE:./logs/cost-server.log}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info

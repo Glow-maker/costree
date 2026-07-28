@@ -339,3 +339,30 @@ completed:
   updated_at: '2026-07-22T04:17:57+08:00'
   completed_at: '2026-07-22T04:17:57+08:00'
   notes: 后端提交 1f245334 已推送 codeup/feature/costree。
+- task_id: TASK-037
+  title: 完成项目办按单位维护目标和审定金额
+  details: 项目办按主业项目打开弹窗，合同和到款只读，目标和审定逐单位维护；项目级维护配套数、阶段、分系统、产品简称和纵向分工。
+  priority: P0
+  status: completed
+  created_at: '2026-07-28T21:39:16+08:00'
+  updated_at: '2026-07-28T21:39:16+08:00'
+  completed_at: '2026-07-28T21:39:16+08:00'
+  notes: 保存接口在单个事务中更新项目基本情况和单位目标/审定，并重新读取合同/到款防止客户端覆盖。
+- task_id: TASK-038
+  title: 完成研制单位工作令筛选和独立工作令查询页
+  details: 采集页工作令记录在左、表单在右，项目远程搜索后只显示该项目工作令；新增 /cost/work-order-list 服务端分页只读查询。
+  priority: P0
+  status: completed
+  created_at: '2026-07-28T21:39:16+08:00'
+  updated_at: '2026-07-28T21:39:16+08:00'
+  completed_at: '2026-07-28T21:39:16+08:00'
+  notes: 前端提交 c6b81fe 已推送 codeup/feature/costree2。
+- task_id: TASK-039
+  title: 完成 20260728 多方言数据库升级和内网包模板
+  details: 补齐 MySQL、PostgreSQL、PostgreSQL 9.2/GaussDB 完整 DDL、增量 11 脚本、验收检查、正式数据同步修正和可复现离线包模板。
+  priority: P0
+  status: completed
+  created_at: '2026-07-28T21:39:16+08:00'
+  updated_at: '2026-07-28T21:39:16+08:00'
+  completed_at: '2026-07-28T21:39:16+08:00'
+  notes: 后端提交 114b6202 已推送 codeup/feature/costree；PG9.2/GaussDB 静态兼容检查通过。

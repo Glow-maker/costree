@@ -104,3 +104,15 @@ items:
   summary: 内网数据库升级采用可校验的 PostgreSQL 三段式脚本包。
   rationale: 先检查冲突、再迁移、最后验证可避免只换 jar 导致缺列、重复业务键或金额口径错误。
   time: '2026-07-22T04:17:57+08:00'
+- decision_id: DEC-027
+  summary: 预分预控同步只负责项目单位合同金额和到款金额。
+  rationale: 目标成本和审定金额改由项目办逐单位维护，正式同步重跑必须保留人工维护值。
+  time: '2026-07-28T21:39:16+08:00'
+- decision_id: DEC-028
+  summary: 项目办单位金额继续复用 cost_unit_cost_detail，不新增平行金额表。
+  rationale: 该表已经是项目编码加单位名称的权威单位金额粒度，复用可避免首页、成本树和采集页出现两套口径。
+  time: '2026-07-28T21:39:16+08:00'
+- decision_id: DEC-029
+  summary: 20260728 既有库升级必须在 20260722 升级后追加执行独立 11 脚本。
+  rationale: 保持既有部署顺序可追溯，同时让 PostgreSQL 9.2/GaussDB 现场升级不依赖不兼容的 IF NOT EXISTS 列语法。
+  time: '2026-07-28T21:39:16+08:00'

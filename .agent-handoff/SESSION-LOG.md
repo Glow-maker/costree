@@ -1,32 +1,6 @@
 # 会话记录
 
 ## 一次会话
-- 开始时间：2026-06-12 02:00:00 +0800
-- 结束时间：2026-06-12 02:20:00 +0800
-- 本次焦点：沉淀长期文档维护与工作区活力机制
-
-### 本次进展
-- 读取 long-term-project-docs 和 agent-handoff 规则，确认本轮只做文档治理。
-- 更新 00-overview/05-长期项目文档与工程经验沉淀模式.md，补充项目操作系统、固定开发节奏、周巡检、可复用 prompt 和文档活力判断标准。
-- 同步更新 README.md、PROJECT_STATE.md、PLAN.md、AGENTS.md 和 90-logs/02-变更日志.md。
-- 读取修改后的 Markdown 文件并检查关键入口，确认均可正常读取。
-
-### 涉及文件
-- H:\light\project\costree\note\00-overview\05-长期项目文档与工程经验沉淀模式.md
-- H:\light\project\costree\note\README.md
-- H:\light\project\costree\note\PROJECT_STATE.md
-- H:\light\project\costree\note\PLAN.md
-- H:\light\project\costree\note\AGENTS.md
-- H:\light\project\costree\note\90-logs\02-变更日志.md
-
-### 下次恢复点
-- 继续成本库项目时，先运行 python H:\light\project\costree\.agent-handoff\runtime\agent-handoff\scripts\handoff.py resume H:\light\project\costree；再按 note/00-overview/05-长期项目文档与工程经验沉淀模式.md 做 5 分钟恢复。
-
-### 风险与备注
-- 文档机制只有持续执行才有价值；后续如果开发后不更新 PROJECT_STATE、PLAN、RISKS、DECISIONS 和工程经验手册，文档会再次失效。
-- 本轮未运行前后端构建，因为只修改 Markdown 文档。
-
-## 一次会话
 - 开始时间：2026-06-12 15:30:00 +0800
 - 结束时间：2026-06-12 16:35:00 +0800
 - 本次焦点：接管成本库项目并完成本地页面复核
@@ -347,3 +321,45 @@
 - 工作令八项组成导出依赖账面明细科目映射和借方口径，内网正式数据应抽样与财务源表对账。
 - 阶段筛选已统一为集合完整匹配，其他非树页面若仍用最高阶段或任一命中，需要后续按业务范围逐页确认。
 - 浏览器未取得业务登录态，最终视觉、权限及实际下载文件仍有现场回归风险。
+
+## 一次会话
+- 开始时间：2026-07-28 18:30:00 +0800
+- 结束时间：2026-07-28 21:40:00 +0800
+- 本次焦点：项目办单位金额维护、工作令查询、单位树层级和 20260728 内网部署包收尾
+
+### 本次进展
+- 完成 /cost/collect 项目办全宽项目列表和单位金额维护弹窗。
+- 完成合同、到款只读以及目标、审定逐单位事务保存接口。
+- 完成工作令记录左侧、填报表单右侧和按主业项目过滤。
+- 新增 /cost/work-order-list 只读服务端分页查询页及门户入口。
+- 成本树新增 HEAD_OFFICE，院部直属型号，总体所映射调整为八部和509所。
+- cost_project_basic 增加 quantity、product_short_name、vertical_division 并同步前后端类型。
+- MySQL、PostgreSQL、PostgreSQL 9.2/GaussDB 完整 DDL 和 20260728 增量脚本已补齐。
+- 正式数据同步改为只更新预分预控合同和到款，保留目标、账面和审定。
+- 后端 Reactor compile 和 CostMapperAnnotationSqlTest 通过，1 个测试 0 失败。
+- 前端 pnpm run ts:check:cost 和定向 ESLint 通过。
+- GaussDB(DWS) 8.2.1 静态兼容检查通过，共检查 15 个 SQL 文件。
+- 前端 c6b81fe 和后端 114b6202 已推送对应 Codeup 分支。
+
+### 涉及文件
+- costree-frontend/src/views/cost/collect/index.vue
+- costree-frontend/src/views/cost/workOrderList/index.vue
+- costree-frontend/src/views/cost/treeDetail/index.vue
+- costree-frontend/src/router/modules/remaining.ts
+- baback/yudao-module-cost/yudao-module-cost-biz/src/main/java/cn/iocoder/yudao/module/cost/service/projectbasic/CostProjectBasicServiceImpl.java
+- baback/sql/postgresql/costree-deploy/11-upgrade-existing-to-20260728-project-office-form.sql
+- baback/sql/postgresql92/costree-deploy/11-upgrade-existing-to-20260728-project-office-form.sql
+- baback/sql/postgresql/costree-integration/10-sync-to-cost.sql
+- baback/sql/postgresql92/costree-integration/10-sync-to-cost.sql
+- deploy/cost-server-offline-template
+- tools/build-cost-server-offline-package.ps1
+
+### 下次恢复点
+- 继续项目时先运行 python .agent-handoff/runtime/agent-handoff/scripts/handoff.py resume .；内网部署使用前端 c6b81fe、后端 114b6202，并按离线包 docs/02-数据库建库与升级.md 依次执行 00、10、11、20。正式同步只导入合同和到款，单位目标和审定由项目办在 /cost/collect 维护。
+
+### 风险与备注
+- 未执行 20260728 数据库升级时，新后端会因缺列无法正常查询项目基本情况。
+- 内网单位名称和项目编码必须与预分预控、单位字典、工作令及账面明细保持一致，否则单位卡片和金额无法正确关联。
+- 账面只统计借方明细，真实数据导入后必须按工作令、年度和八项科目抽样对账。
+- GaussDB(DWS) 仅完成静态兼容验证，现场执行前必须备份且不得跳过 00-precheck 和 20-verify。
+- 使用 application-jt/local 启动时必须配置 COST_DATASOURCE_* 环境变量。

@@ -1,0 +1,16 @@
+[Unit]
+Description=Costree Cost Server
+After=network.target
+
+[Service]
+Type=simple
+User=costree
+WorkingDirectory=/opt/cost-server/backend
+EnvironmentFile=/opt/cost-server/backend/config/cost-server.env
+ExecStart=/usr/bin/java $JAVA_OPTS -jar /opt/cost-server/backend/app/cost-server.jar --spring.profiles.active=jt --spring.config.additional-location=optional:file:/opt/cost-server/backend/config/application-intranet.yml
+Restart=on-failure
+RestartSec=10
+SuccessExitStatus=143
+
+[Install]
+WantedBy=multi-user.target
