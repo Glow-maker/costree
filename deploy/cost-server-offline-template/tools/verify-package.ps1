@@ -37,7 +37,7 @@ if (-not $releaseDoc) {
     throw 'Missing package file: docs\10-20260728*.md'
 }
 $checked = 0
-foreach ($line in Get-Content -LiteralPath $manifest) {
+foreach ($line in Get-Content -LiteralPath $manifest -Encoding UTF8) {
     if (-not $line.Trim()) { continue }
     if ($line -notmatch '^([0-9a-fA-F]{64}) \*(.+)$') { throw "Invalid manifest line: $line" }
     $expected = $Matches[1].ToLowerInvariant()
