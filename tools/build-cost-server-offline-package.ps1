@@ -130,6 +130,10 @@ Copy-Item -LiteralPath (Join-Path $BackendRoot 'sql\postgresql92\README.md') `
     -Destination (Join-Path $pg92Root 'README.md') -Force
 Copy-DirectoryContents (Join-Path $BackendRoot 'sql\postgresql92\costree-deploy') (Join-Path $pg92Root '02-upgrade-existing')
 Copy-DirectoryContents (Join-Path $BackendRoot 'sql\postgresql92\costree-integration') (Join-Path $pg92Root '03-data-integration')
+$pg92ResetSource = Join-Path $BackendRoot 'sql\postgresql92\costree-reset'
+if (Test-Path -LiteralPath $pg92ResetSource) {
+    Copy-DirectoryContents $pg92ResetSource (Join-Path $pg92Root '04-reset-and-reload')
+}
 
 if ($IncludeSeed) {
     $seedTarget = Join-Path $pgRoot '90-optional-test-seed'
