@@ -116,3 +116,47 @@ items:
   summary: 20260728 既有库升级必须在 20260722 升级后追加执行独立 11 脚本。
   rationale: 保持既有部署顺序可追溯，同时让 PostgreSQL 9.2/GaussDB 现场升级不依赖不兼容的 IF NOT EXISTS 列语法。
   time: '2026-07-28T21:39:16+08:00'
+- decision_id: DEC-030
+  summary: 成本权限采用中台身份权限与成本数据范围双库分治。
+  rationale: 达梦 MQB.SYSTEM_* 已承载登录用户、角色和接口权限，成本 PostgreSQL/GaussDB 更适合只保存项目与管理单位授权；cost-server
+    通过中台 API 获取身份后再叠加成本范围，避免跨库直连和把业务授权塞入部门权限。
+  time: '2026-08-17T15:01:32+08:00'
+- decision_id: DEC-031
+  summary: 外部源常规同步采用全量快照进入中间表后按业务键 UPDATE+INSERT。
+  rationale: 每批只清空 cost_sync_stage，中间层完成校验后幂等更新业务表；源快照缺失不自动删除，防止抽取不完整误删项目办和研制单位人工维护数据。
+  time: '2026-08-17T15:01:32+08:00'
+- decision_id: DEC-032
+  summary: 当前系列改动全部确认前不重复构建前端或完整离线包。
+  rationale: 前后端和数据库脚本仍在连续调整，反复生产构建和打包会浪费时间并产生多个不可识别版本；完成验证与用户确认后只生成一次正式包。
+  time: '2026-08-17T15:01:32+08:00'
+- decision_id: DEC-033
+  summary: 普通成本角色的若依通用数据范围固定为 SELF=5。
+  rationale: 成本全量、项目和管理单位范围由 CostAccessScopeService 与 cost_user_*_scope 独立控制；若把成本角色设为通用
+    ALL=1，会连带扩大用户在其他中台模块的部门数据权限。
+  time: '2026-08-17T15:51:21+08:00'
+- decision_id: DEC-034
+  summary: 项目和单位授权表采用租户内物理替换。
+  rationale: 现有唯一键不含逻辑删除状态，逻辑删除后重插相同授权会在 MySQL/PostgreSQL 冲突；授权关系不承担历史审计职责，事务内物理删除再插入是当前最小且可重复保存的方案。
+  time: '2026-08-17T15:51:21+08:00'
+- decision_id: DEC-035
+  summary: 通用保存接口只能处理草稿类状态，状态迁移由专用命令控制。
+  rationale: 客户端可写 status 会绕过提交与审批权限；创建强制 DRAFT，更新只接受空、UNFILLED、DRAFT、REJECTED，并由
+    submit/approve/reject 接口执行后续状态迁移。
+  time: '2026-08-17T15:51:21+08:00'
+- decision_id: DEC-036
+  summary: tenant_admin 作为共享业务租户内的成本授权管理员。
+  rationale: 不同场所使用同一 tenant_id，并由成本项目和管理单位范围区分；保留 tenant_admin 可确保有人维护授权，同时不需要关闭全局租户插件或把现场用户建成不同租户。
+  time: '2026-08-18T02:31:55+08:00'
+- decision_id: DEC-037
+  summary: cost_unit_user 的有效范围采用项目集合与管理单位集合的交集。
+  rationale: 研制单位用户需要显式选择项目和单位以避免新增同单位项目时自动扩权；两张既有 scope 表可表达 P×U 范围，无需新增关联表。
+  time: '2026-08-18T02:31:55+08:00'
+- decision_id: DEC-038
+  summary: 非成本角色登录业务中台时不加载成本权限档案。
+  rationale: 成本 profile 只用于成本角色默认落地与菜单裁剪；在所有账号登录时同步调用会把 cost-server 的延迟或故障传播到其他中台模块。
+  time: '2026-08-18T02:31:55+08:00'
+- decision_id: DEC-039
+  summary: snapshot-upsert 明确采用分阶段提交状态机而非跨文件原子事务。
+  rationale: 现有执行器逐文件启动 psql，无法保证跨文件 ROLLBACK；用 BUSINESS_SYNCED、RECALCULATED、SUCCESS
+    区分阶段，并只在最终验收脚本设置 SUCCESS，避免假成功。
+  time: '2026-08-18T02:31:55+08:00'

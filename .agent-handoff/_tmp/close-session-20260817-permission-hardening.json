@@ -1,0 +1,112 @@
+{
+  "session": {
+    "started_at": "2026-08-17T15:04:48+08:00",
+    "ended_at": "2026-08-17T15:52:00+08:00",
+    "focus": "恢复交接后完成成本树三级权限的静态安全审查、P1 修复、聚焦验证和部署校验加固"
+  },
+  "current_status": {
+    "phase": "第一阶段 MVP 权限收口、真实数据接入和内网部署准备中",
+    "goal": "完成成本树三级角色与项目/管理单位数据范围控制，形成适配达梦平台库和 PostgreSQL 9.2/GaussDB 成本库的可执行升级、全量快照同步和内网部署流程，并在用户确认全部改动后一次性构建正式离线包。",
+    "summary": "已读取交接并优先处理 TASK-005。三级权限前后端、平台角色 SQL 和部署脚本完成并行静态审查，已修复会员/管理员同号串用成本角色、普通保存接口绕过状态机、已提交或已审批工作令继续编辑、授权逻辑删除与唯一键冲突、授权页异步串写、成本 profile 跨账号竞态、默认角色落地和后台菜单未裁剪等高风险问题。四套平台角色脚本把若依通用 data_scope 固定为 5，避免成本角色扩大其他中台模块权限；PostgreSQL 平台检查器补验角色和映射，PG9.2/GaussDB 独立子包目录识别与两套验包清单已加固。后端聚焦测试 4 项、前端成本类型检查和定向 ESLint、DWS 源码与独立子包静态检查均通过。三个仓库仍为未提交工作区；未做真实账号登录、真实 DM/PG/GaussDB 执行、稳定服务回归或正式离线包构建。",
+    "next_step": "先使用 super_admin、cost_global_viewer、cost_project_office、cost_unit_user 四类真实账号完成默认落地、菜单、直接 URL、项目/单位范围、详情、导出、草稿/驳回可编辑和已提交/已审批只读验收，并补测 MEMBER 与 ADMIN 同号场景。随后在备份库关闭自动提交执行达梦 MQB 角色脚本和检查器，在 PostgreSQL 9.2/GaussDB 执行 12 升级与 20-verify；同时核对新 scope 索引的真实定义。再替换 snapshot-upsert 的现场源字段映射并试点对账。全部改动与验收确认后才提交推送并一次性构建正式离线包。",
+    "blockers": [
+      "三级权限代码、SQL、部署模板和交接文件仍分布在 root、backend、frontend 三个未提交工作区，后续不得 reset、checkout 或覆盖用户改动。",
+      "没有可用的四类真实测试账号和稳定运行中的完整中台链路，本轮不能证明真实菜单、默认落地、直接 URL、导出和表单越权验收通过。",
+      "尚未在真实达梦 MQB、PostgreSQL 9.2 或 GaussDB(DWS) 8.2.1 执行本轮脚本；达梦执行必须关闭自动提交并在失败时整体回滚。",
+      "PG/PG92 的新 scope 索引验收仍主要按索引名判断，旧库同名错误索引可能冒充；MySQL 平台角色映射仍缺少与 PG/DM 等价的自动检查器。",
+      "平台通用 TokenAuthenticationFilter 和权限缓存按用户类型隔离的问题未在本轮跨模块修改；成本服务已在入口强制 ADMIN，但仍应由平台安全回归补测 MEMBER/ADMIN 同号及 Gateway header 路径。",
+      "snapshot-upsert 仍需替换现场源 schema、表名和字段转换；正式离线包按既定决策暂不构建。"
+    ]
+  },
+  "tasks_to_add": [],
+  "tasks_to_update": [
+    {
+      "task_id": "TASK-005",
+      "title": "完成三级成本角色与数据范围权限验收",
+      "details": "已完成前后端和 SQL 的并行静态安全审查，修复角色类型隔离、保存状态机、授权物理替换、前端状态只读、异步串写、账号缓存、默认落地、菜单裁剪和 fail-closed 路由；后端聚焦测试 4 项、前端类型检查与定向 ESLint 通过。下一步必须使用四类真实账号验证菜单、默认落地、项目/单位范围、直接 URL、详情、导出和表单状态机，并补测 MEMBER/ADMIN 同号。",
+      "priority": "P0"
+    },
+    {
+      "task_id": "TASK-006",
+      "title": "完成双库权限初始化和最终内网部署包",
+      "details": "四套平台角色脚本已把通用 data_scope 固定为 5，PG 检查器补验角色与映射，PG92/GaussDB 独立子包布局与 root 两套验包清单已修复；DWS 源码布局 27 个 SQL、独立子包布局 20 个 SQL 静态检查通过。下一步在真实 DM/PG/GaussDB 备份环境执行并补齐索引定义和 MySQL 角色映射自动验收，全部确认后一次性构建正式包。",
+      "priority": "P0"
+    }
+  ],
+  "tasks_to_complete": [],
+  "tasks_to_add_and_complete": [
+    {
+      "title": "完成三级权限静态安全收口",
+      "details": "对成本权限后端、前端和多方言 SQL/部署链进行并行静态审查，修复已确认的高风险权限、状态机、授权幂等、异步竞态、默认落地、菜单与跨模块数据权限扩张问题，并补充聚焦自动化与脚本布局验证。",
+      "priority": "P0",
+      "notes": "静态与本地聚焦验证通过，不等于真实登录或真实数据库验收；TASK-005 和 TASK-006 继续保持进行中。"
+    }
+  ],
+  "decisions_to_add": [
+    {
+      "summary": "普通成本角色的若依通用数据范围固定为 SELF=5。",
+      "rationale": "成本全量、项目和管理单位范围由 CostAccessScopeService 与 cost_user_*_scope 独立控制；若把成本角色设为通用 ALL=1，会连带扩大用户在其他中台模块的部门数据权限。"
+    },
+    {
+      "summary": "项目和单位授权表采用租户内物理替换。",
+      "rationale": "现有唯一键不含逻辑删除状态，逻辑删除后重插相同授权会在 MySQL/PostgreSQL 冲突；授权关系不承担历史审计职责，事务内物理删除再插入是当前最小且可重复保存的方案。"
+    },
+    {
+      "summary": "通用保存接口只能处理草稿类状态，状态迁移由专用命令控制。",
+      "rationale": "客户端可写 status 会绕过提交与审批权限；创建强制 DRAFT，更新只接受空、UNFILLED、DRAFT、REJECTED，并由 submit/approve/reject 接口执行后续状态迁移。"
+    }
+  ],
+  "session_log": {
+    "progress": [
+      "按 agent-handoff 恢复 TASK-005，读取三个仓库状态并保持现有未提交改动。",
+      "完成后端、前端、SQL/部署三路并行只读审查，收敛高风险权限与部署缺口。",
+      "后端 CostAccessScopeService 强制管理后台用户类型，授权保存改为带租户条件的物理替换；项目基本情况和工作令保存接口补齐草稿状态机。",
+      "新增 CostPermissionGuardTest，连同 CostMapperAnnotationSqlTest 共 4 项测试通过，Maven Reactor 构建成功。",
+      "前端补齐工作令状态只读、授权选择请求序号、profile 跨账号缓存失效、默认角色落地、成本后台菜单裁剪和遗漏 costCapability 时默认拒绝。",
+      "扩展 tsconfig.cost.json 覆盖核心权限守卫和 store；pnpm run ts:check:cost 与七个触达文件的定向 ESLint 通过。",
+      "MySQL、PostgreSQL、PostgreSQL 9.2/GaussDB、DM 四套角色脚本统一 data_scope=5，并更新 DM 与 PG 平台检查口径。",
+      "修复 PostgreSQL 9.2/GaussDB 独立数据库子包 new-database/upgrade-existing/data-integration 布局识别；源码布局与模拟独立子包布局的 DWS 静态检查通过。",
+      "root PowerShell/Shell 验包器补齐平台检查文件、权限清单、manual 和 snapshot-upsert 必需文件；相关 PowerShell/Bash 语法解析通过。",
+      "更新权限双库操作文档和变更日志，明确通用 data_scope 边界、达梦关闭自动提交及 PowerShell 7 要求。",
+      "遵循既定边界，本轮未提交、未推送、未构建正式离线包，也未把静态验证表述为真实现场验收。"
+    ],
+    "files_touched": [
+      "baback/yudao-module-cost/yudao-module-cost-biz/src/main/java/cn/iocoder/yudao/module/cost/service/accessscope/CostAccessScopeServiceImpl.java",
+      "baback/yudao-module-cost/yudao-module-cost-biz/src/main/java/cn/iocoder/yudao/module/cost/dal/mysql/accessscope",
+      "baback/yudao-module-cost/yudao-module-cost-biz/src/main/java/cn/iocoder/yudao/module/cost/service/projectbasic/CostProjectBasicServiceImpl.java",
+      "baback/yudao-module-cost/yudao-module-cost-biz/src/main/java/cn/iocoder/yudao/module/cost/service/workorder/CostWorkOrderServiceImpl.java",
+      "baback/yudao-module-cost/yudao-module-cost-biz/src/test/java/cn/iocoder/yudao/module/cost/dal/mysql/CostPermissionGuardTest.java",
+      "baback/sql/mysql|postgresql|postgresql92|dm/costree-access-role-menu-20260817.sql",
+      "baback/sql/postgresql92/costree-deploy/run-new-database.*",
+      "baback/sql/postgresql92/costree-deploy/verify-dws82-compatibility.*",
+      "costree-frontend/src/permission.ts",
+      "costree-frontend/src/store/modules/costAccess.ts",
+      "costree-frontend/src/store/modules/permission.ts",
+      "costree-frontend/src/store/modules/user.ts",
+      "costree-frontend/src/views/cost/accessScope/index.vue",
+      "costree-frontend/src/views/cost/collect/index.vue",
+      "costree-frontend/src/views/cost/workOrderList/index.vue",
+      "costree-frontend/tsconfig.cost.json",
+      "costree-frontend/types/cost-*-shim.d.ts",
+      "deploy/cost-server-offline-template/database/platform/check-cost-permissions.sql",
+      "deploy/cost-server-offline-template/tools/verify-package.ps1",
+      "deploy/cost-server-offline-template/tools/verify-package.sh",
+      "deploy/cost-server-offline-template/docs/02-数据库建库与升级.md",
+      "deploy/cost-server-offline-template/docs/06-网关菜单权限.md",
+      "deploy/cost-server-offline-template/docs/11-三级权限升级与授权操作.md",
+      "note/80-deployment/03-成本树三级权限与双库初始化.md",
+      "note/90-logs/02-变更日志.md"
+    ],
+    "risks": [
+      "真实登录验收仍缺失；必须用四类账号和直接 URL/API 参数验证，不能以按钮隐藏和 vue-tsc 代替。",
+      "真实数据库执行仍缺失；DM 自动提交、PG92/GaussDB 方言与旧库索引现状只能在备份环境确认。",
+      "平台通用认证过滤器和权限缓存未按 userType 全面隔离；成本入口已 fail-closed，但平台层仍需专项回归。",
+      "CostAccessScope 的历史失效 project_code 清理及部分 Mapper 空集合 fail-open 合约尚未统一加固，当前服务调用路径已有前置空结果保护。",
+      "候选包 source-state patch 不包含未跟踪文件内容；正式干净包不受影响，但当前 dirty 候选包不能仅凭 patch 完整重现。",
+      "三个仓库含大量本轮前已有未提交文件，后续审查和提交必须按路径精确分组，禁止整体清理。"
+    ]
+  },
+  "resume_hint": {
+    "text": "下次先运行 D:\\Anaconda\\python.exe .agent-handoff/runtime/agent-handoff/scripts/handoff.py resume .，再检查 root、../sqlbot_with_bcback/baback、../sqlbot_with_bcback/costree-frontend 的 git status 和本轮聚焦 diff。不要重置未提交变更。TASK-005 优先进入真实四账号验收：默认落地、菜单、直接 URL、项目/单位范围、详情/导出、草稿/驳回可编辑、已提交/已审批只读，并补测 MEMBER/ADMIN 同号。TASK-006 随后在备份环境关闭 DM 自动提交执行平台脚本，在 PG92/GaussDB 执行 12 与 20-verify 并核对索引定义。未完成这些现场验证前不要构建正式包或宣称权限验收完成。"
+  }
+}

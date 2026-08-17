@@ -2,6 +2,75 @@
 
 ---
 
+## 2026-08-18
+
+### 修复三级成本权限启动与路由问题，完善项目和管理单位交集授权，完成跨模块提交前审查、聚焦验证和发布准备
+- 恢复并复核三级权限交接状态，检查 root、baback、costree-frontend 三个仓库的完整 dirty 与 untracked 范围。
+- 修复 CostAccessScopeServiceImpl 上误加的 method-level Resource，避免 Bean 创建时因无参资源注入方法导致启动失败；新增 RpcConfiguration 显式启用 AdminUserApi Feign 客户端。
+- 修复四套平台角色 SQL 顶级菜单 path 缺少前导斜杠的问题，并同步平台检查器，消除业务中台登录时 Vue Router 动态路由异常。
+- tenant_admin 归一化为完整成本管理员；授权菜单按 canManageAccess 对管理员可见，普通三类成本角色仍无法直接访问授权页。
+- cost_unit_user 改为同时保存项目和管理单位范围，后端按项目与单位交集过滤；授权页新增领域、项目编号与名称筛选，并处理远程请求乱序。
+- 加固用户类型、角色冲突、授权物理替换、工作令状态机和失效授权修复路径；补齐研制单位创建工作令权限。
+- 非成本角色首次登录不再请求成本 profile，避免其他中台模块依赖 cost-server；成本角色默认落地保持 global viewer 到看板、project office 到项目树。
+- 后端 Maven 聚焦测试共 10 项通过，前端 vue-tsc 成本配置和变更文件 ESLint 通过，三个仓库 diff check 通过。
+- 加固 PG/PG92 scope 索引定义验收、PG92/GaussDB 独立子包布局和 root 验包清单；DWS 27 个 SQL 静态兼容检查通过。
+- snapshot-upsert 增加 LoadSql 空值、文件缺失和模板占位符前置拒绝，状态改为 BUSINESS_SYNCED 到 RECALCULATED 再由最终验收设置 SUCCESS；文档明确跨文件非原子边界。
+- 已形成后端提交 fbfc3e3404b8 和前端提交 bfd196e4282c；root 部署与交接内容将在本轮一并提交并按用户授权推送。
+
+#### 风险与备注
+- 真实 ApplicationContext 启动、AdminUserApi Feign 调用与业务中台四账号登录尚未执行，当前结论仅覆盖静态、编译、单元和脚本检查。
+- 真实 DM、PG92 与 GaussDB/DWS 脚本执行和回滚路径尚未验证，不能把静态兼容检查表述为现场数据库验收。
+- DWS scope 普通索引不能在并发下提供数据库唯一约束，需通过执行流程串行化和重复数据检查控制，后续仍应现场压测。
+- 单位事实表仍按单位名称过滤，同名、改名和一个管理单位映射多个核算单位的场景需要真实数据验收。
+- 工作令状态读取与更新不是单 SQL 条件写，极端并发状态迁移仍存在读后写竞态，后续可用条件 UPDATE 或乐观锁进一步收口。
+- 正式离线包尚未构建；候选 dirty 包的 source-state patch 不包含 untracked 文件内容，只有干净提交后的正式包可完整复现。
+
+---
+
+## 2026-08-17
+
+### 成本树三级数据权限、达梦与成本库双库初始化、PostgreSQL 9.2/GaussDB 全量快照幂等同步及新对话交接
+- 后端 feature/costree 与前端 costree 已同步最新 codeup/master，当前 HEAD 分别为 e2219d0c 和 8ca1b07。
+- 三级成本角色、项目授权、管理单位授权、后端数据范围过滤、前端落地页和成本数据授权页已进入未提交工作区。
+- 补齐达梦 MQB 的 costree-access-role-menu-20260817.sql 和 check-cost-permissions-20260817.sql，并确认平台实际表名为 SYSTEM_USERS、SYSTEM_ROLE、SYSTEM_MENU、SYSTEM_USER_ROLE、SYSTEM_ROLE_MENU。
+- 补齐 MySQL、PostgreSQL、PostgreSQL 9.2/GaussDB 的成本授权表完整 DDL、旧库 12 升级脚本、部署校验和说明。
+- 新增 note/80-deployment/03-成本树三级权限与双库初始化.md，说明系统页面分配角色、成本授权页分配项目/管理单位以及双库边界。
+- 新增 PostgreSQL 9.2/GaussDB snapshot-upsert 数据集成目录，覆盖六类源数据的全量中间表、校验、幂等同步、借方账面重算和差异清单。
+- 新增 note/30-data/11-外部源全量快照中间表幂等同步.md，并更新数据文档索引、变更日志、部署模板入口和包校验器。
+- 将 snapshot-upsert 镜像到忽略 Git 的 cost-intranet-data-kit/release-20260729-data-integration，更新 README、RELEASE-INFO、SHA-256 清单并通过包校验。
+- 遵循用户要求，本轮未重复构建前端、未构建完整离线包、未提交和未推送。
+
+#### 风险与备注
+- 当前三个仓库均有未提交修改，后续操作不得 reset、checkout 或覆盖用户工作；应先逐仓库检查 diff 后继续。
+- 权限验收必须使用真实中台登录态和三类测试账号，前端菜单隐藏不能替代后端数据过滤证明。
+- 达梦平台脚本和 PostgreSQL/GaussDB 成本业务脚本必须连接各自数据库执行，混用会直接失败或污染错误库。
+- snapshot-upsert 目前是标准映射模板，不是已经适配现场源表的最终 SELECT；上线前必须替换占位 schema 并抽样对账。
+- 单位展示和权限依赖核算单位名称到 manage_unit_code 的字典映射；名称不一致、字典停用或缺失时必须失败关闭并进入差异清单。
+- 账面明细保留借贷双方，但工作令账面、预警和八项组成只统计借方；amount 为元、amount_wan 为万元。
+
+### 恢复交接后完成成本树三级权限的静态安全审查、P1 修复、聚焦验证和部署校验加固
+- 按 agent-handoff 恢复 TASK-005，读取三个仓库状态并保持现有未提交改动。
+- 完成后端、前端、SQL/部署三路并行只读审查，收敛高风险权限与部署缺口。
+- 后端 CostAccessScopeService 强制管理后台用户类型，授权保存改为带租户条件的物理替换；项目基本情况和工作令保存接口补齐草稿状态机。
+- 新增 CostPermissionGuardTest，连同 CostMapperAnnotationSqlTest 共 4 项测试通过，Maven Reactor 构建成功。
+- 前端补齐工作令状态只读、授权选择请求序号、profile 跨账号缓存失效、默认角色落地、成本后台菜单裁剪和遗漏 costCapability 时默认拒绝。
+- 扩展 tsconfig.cost.json 覆盖核心权限守卫和 store；pnpm run ts:check:cost 与七个触达文件的定向 ESLint 通过。
+- MySQL、PostgreSQL、PostgreSQL 9.2/GaussDB、DM 四套角色脚本统一 data_scope=5，并更新 DM 与 PG 平台检查口径。
+- 修复 PostgreSQL 9.2/GaussDB 独立数据库子包 new-database/upgrade-existing/data-integration 布局识别；源码布局与模拟独立子包布局的 DWS 静态检查通过。
+- root PowerShell/Shell 验包器补齐平台检查文件、权限清单、manual 和 snapshot-upsert 必需文件；相关 PowerShell/Bash 语法解析通过。
+- 更新权限双库操作文档和变更日志，明确通用 data_scope 边界、达梦关闭自动提交及 PowerShell 7 要求。
+- 遵循既定边界，本轮未提交、未推送、未构建正式离线包，也未把静态验证表述为真实现场验收。
+
+#### 风险与备注
+- 真实登录验收仍缺失；必须用四类账号和直接 URL/API 参数验证，不能以按钮隐藏和 vue-tsc 代替。
+- 真实数据库执行仍缺失；DM 自动提交、PG92/GaussDB 方言与旧库索引现状只能在备份环境确认。
+- 平台通用认证过滤器和权限缓存未按 userType 全面隔离；成本入口已 fail-closed，但平台层仍需专项回归。
+- CostAccessScope 的历史失效 project_code 清理及部分 Mapper 空集合 fail-open 合约尚未统一加固，当前服务调用路径已有前置空结果保护。
+- 候选包 source-state patch 不包含未跟踪文件内容；正式干净包不受影响，但当前 dirty 候选包不能仅凭 patch 完整重现。
+- 三个仓库含大量本轮前已有未提交文件，后续审查和提交必须按路径精确分组，禁止整体清理。
+
+---
+
 ## 2026-07-28
 
 ### 项目办单位金额维护、工作令查询、单位树层级和 20260728 内网部署包收尾

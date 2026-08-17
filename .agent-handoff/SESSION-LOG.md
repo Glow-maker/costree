@@ -1,93 +1,6 @@
 # 会话记录
 
 ## 一次会话
-- 开始时间：2026-06-12 15:30:00 +0800
-- 结束时间：2026-06-12 16:35:00 +0800
-- 本次焦点：接管成本库项目并完成本地页面复核
-
-### 本次进展
-- 读取 agent-handoff 和 note 入口文档，确认当前目标、待办、阻塞、工程约束和本机前后端仓库位置。
-- 确认 cost-server、gateway、Nacos 和前端 dev server 本地链路，前端使用 VITE_BASE_URL=http://127.0.0.1:38080 且不启用 VITE_COST_MOCK_LOGIN。
-- 清理一批无效自动导入并修正 src/main.ts 初始化异常日志调用，解除 Vite 启动 blocker。
-- 通过浏览器复核 /cost/pending-allocation、/cost/warning、/cost/catalog，页面均可渲染当前测试数据和关键交互。
-- 运行前端类型检查、触达文件 ESLint、后端成本模块编译和 diff 检查，并同步更新项目状态、计划、变更日志和新对话接管指南。
-
-### 涉及文件
-- D:\light\academy8-operation-control-center-frontend\src\main.ts
-- D:\light\academy8-operation-control-center-frontend\src\views\... 多处非成本页面无效自动导入清理
-- D:\light\bcback\yudao-module-cost\yudao-module-cost-biz\src\main\resources\application-local.yml
-- D:\light\costree\note\README.md
-- D:\light\costree\note\AGENTS.md
-- D:\light\costree\note\PROJECT_STATE.md
-- D:\light\costree\note\PLAN.md
-- D:\light\costree\note\90-logs\02-变更日志.md
-- D:\light\costree\note\00-overview\06-新对话接管成本库项目启动指南.md
-
-### 下次恢复点
-- 继续成本库项目时，先运行 python D:\light\costree\.agent-handoff\runtime\agent-handoff\scripts\handoff.py resume D:\light\costree；然后按 TASK-002 进入 /cost/analysis 第一版迁移。当前本地前端可访问 http://localhost:5173/，前端继续使用 VITE_BASE_URL=http://127.0.0.1:38080 且不启用 VITE_COST_MOCK_LOGIN。
-
-### 风险与备注
-- 后端 application-local.yml 当前有本地配置变更，提交前需要确认是否属于应纳入版本的 Nacos discovery 默认值调整。
-- 前端触达文件 ESLint 仍有 10 个既有格式警告，但退出码为 0，不阻塞当前成本库页面复核。
-- 内网真实部署、菜单权限和业务金额口径仍待确认。
-
-## 一次会话
-- 开始时间：2026-06-12 16:45:00 +0800
-- 结束时间：2026-06-12 16:55:00 +0800
-- 本次焦点：补充成本库模块化开发边界约束
-
-### 本次进展
-- 根据用户要求确认模块化开发约束：默认只管成本库/成本树相关内容。
-- 更新 AGENTS.md，明确前端和后端默认可修改范围，以及触碰其他模块时的通知和文档要求。
-- 更新 00-overview/04-工程经验与开发约束手册.md，新增 FE-007、BE-007 模块边界经验和每次变更检查项。
-- 更新 DECISIONS.md、PROJECT_STATE.md 和 90-logs/02-变更日志.md，记录该规则为长期决策。
-
-### 涉及文件
-- D:\light\costree\note\AGENTS.md
-- D:\light\costree\note\00-overview\04-工程经验与开发约束手册.md
-- D:\light\costree\note\DECISIONS.md
-- D:\light\costree\note\PROJECT_STATE.md
-- D:\light\costree\note\90-logs\02-变更日志.md
-
-### 下次恢复点
-- 继续成本库项目时，先运行 python D:\light\costree\.agent-handoff\runtime\agent-handoff\scripts\handoff.py resume D:\light\costree；开发 TASK-002 /cost/analysis 时默认只修改成本库/成本树相关文件，如需触碰其他模块先通知用户并写入文档。
-
-### 风险与备注
-- 本规则执行时要区分成本库必要集成变更和其他模块顺手重构；必要集成变更可做，但必须先通知和留痕。
-
-## 一次会话
-- 开始时间：2026-06-17 22:58:49 +0800
-- 结束时间：2026-06-18 02:20:00 +0800
-- 本次焦点：成本树预警、工作令组成穿透、PostgreSQL 适配、部署脚本和离线包收尾
-
-### 本次进展
-- 完成 /cost/tree-detail 账面预警展示，卡片、顶部汇总、详情面板和进度状态按 80%/超目标口径统一。
-- 完成 /cost/tree-unit-detail 账面预警、默认树状卡片、工作令账面组成穿透弹窗；/cost/catalog 默认卡片视图。
-- 修复 /cost/collect 左侧内容超屏不可滚动问题，并将周期字段恢复为年月口径。
-- 对齐内网单位字典、主业项目树、工作令映射、账面明细表字段，补充 cost_work_order 源字段。
-- 新增工作令账面组成后端接口，账面明细按科目 Top8 聚合，前端展示环形图和明细列表。
-- 新增 sql/mysql 与 sql/postgresql 成本模块建表和测试 seed 脚本；PostgreSQL 脚本已做 JDBC dry-run 验证。
-- 补充 PostgreSQL JDBC 依赖，并调整成本模块手写 SQL 兼容 PostgreSQL。
-- 生成 cost-server-offline-package 与 zip 离线包，包含 jar、外部配置、启动脚本、建表脚本和说明。
-- 前端提交 0b657d1 已推送到 codeup/feature/costree2；后端提交 976e511c 已推送到 codeup/feature/costree。
-
-### 涉及文件
-- H:\light\project\sqlbot_with_bcback\costree-frontend\src\views\cost\treeUnitDetail\index.vue
-- H:\light\project\sqlbot_with_bcback\costree-frontend\src\views\cost\treeDetail\index.vue
-- H:\light\project\sqlbot_with_bcback\baback\yudao-module-cost\yudao-module-cost-biz\src\main\java\cn\iocoder\yudao\module\cost
-- H:\light\project\sqlbot_with_bcback\baback\sql\postgresql\costree-cost.sql
-- H:\light\project\costree\cost-server-offline-package
-- H:\light\project\costree\.gitignore
-
-### 下次恢复点
-- 继续项目时，先运行 python H:\light\project\costree\.agent-handoff\runtime\agent-handoff\scripts\handoff.py resume H:\light\project\costree；然后优先验证内网 cost-server 部署链路：建表、配置外部 application-jt.yml、启动服务、确认 Nacos cost-server、经网关访问 /admin-api/cost/**，再用真实登录态复核成本树和单位工作令页面。
-
-### 风险与备注
-- 真实内网环境需要重新确认 Nacos 命名空间、网关路由、菜单权限、租户 ID 和数据权限，否则页面可能能启动但查不到数据或被权限拦截。
-- PostgreSQL 脚本已验证建表和 seed 可执行，但真实数据导入仍需按内网源表字段、租户、单位、工作令编号规则做映射校验。
-- 离线包为本机产物，不进入 Git；后续如需多人复用，应建立制品分发方式。
-
-## 一次会话
 - 开始时间：2026-06-18 02:25:00 +0800
 - 结束时间：2026-06-18 02:37:16 +0800
 - 本次焦点：成本库文档路径可迁移口径收口
@@ -363,3 +276,154 @@
 - 账面只统计借方明细，真实数据导入后必须按工作令、年度和八项科目抽样对账。
 - GaussDB(DWS) 仅完成静态兼容验证，现场执行前必须备份且不得跳过 00-precheck 和 20-verify。
 - 使用 application-jt/local 启动时必须配置 COST_DATASOURCE_* 环境变量。
+
+## 一次会话
+- 开始时间：2026-08-17 09:00:00 +0800
+- 结束时间：2026-08-17 15:00:00 +0800
+- 本次焦点：成本树三级数据权限、达梦与成本库双库初始化、PostgreSQL 9.2/GaussDB 全量快照幂等同步及新对话交接
+
+### 本次进展
+- 后端 feature/costree 与前端 costree 已同步最新 codeup/master，当前 HEAD 分别为 e2219d0c 和 8ca1b07。
+- 三级成本角色、项目授权、管理单位授权、后端数据范围过滤、前端落地页和成本数据授权页已进入未提交工作区。
+- 补齐达梦 MQB 的 costree-access-role-menu-20260817.sql 和 check-cost-permissions-20260817.sql，并确认平台实际表名为 SYSTEM_USERS、SYSTEM_ROLE、SYSTEM_MENU、SYSTEM_USER_ROLE、SYSTEM_ROLE_MENU。
+- 补齐 MySQL、PostgreSQL、PostgreSQL 9.2/GaussDB 的成本授权表完整 DDL、旧库 12 升级脚本、部署校验和说明。
+- 新增 note/80-deployment/03-成本树三级权限与双库初始化.md，说明系统页面分配角色、成本授权页分配项目/管理单位以及双库边界。
+- 新增 PostgreSQL 9.2/GaussDB snapshot-upsert 数据集成目录，覆盖六类源数据的全量中间表、校验、幂等同步、借方账面重算和差异清单。
+- 新增 note/30-data/11-外部源全量快照中间表幂等同步.md，并更新数据文档索引、变更日志、部署模板入口和包校验器。
+- 将 snapshot-upsert 镜像到忽略 Git 的 cost-intranet-data-kit/release-20260729-data-integration，更新 README、RELEASE-INFO、SHA-256 清单并通过包校验。
+- 遵循用户要求，本轮未重复构建前端、未构建完整离线包、未提交和未推送。
+
+### 涉及文件
+- baback/yudao-module-cost/yudao-module-cost-biz/src/main/java/cn/iocoder/yudao/module/cost/service/accessscope
+- baback/yudao-module-cost/yudao-module-cost-biz/src/main/java/cn/iocoder/yudao/module/cost/controller/admin/accessscope
+- baback/sql/dm/costree-access-role-menu-20260817.sql
+- baback/sql/dm/check-cost-permissions-20260817.sql
+- baback/sql/postgresql92/costree-deploy/12-upgrade-existing-to-20260817-access-scope.sql
+- costree-frontend/src/store/modules/costAccess.ts
+- costree-frontend/src/views/cost/accessScope
+- costree-frontend/src/permission.ts
+- deploy/cost-server-offline-template/database/postgresql92/03-data-integration/snapshot-upsert
+- deploy/cost-server-offline-template/database/platform
+- note/30-data/11-外部源全量快照中间表幂等同步.md
+- note/80-deployment/03-成本树三级权限与双库初始化.md
+- cost-intranet-data-kit/release-20260729-data-integration
+
+### 下次恢复点
+- 新对话先运行 python .agent-handoff/runtime/agent-handoff/scripts/handoff.py resume .，再分别检查 root、../sqlbot_with_bcback/baback、../sqlbot_with_bcback/costree-frontend 的 git status。不要重置未提交的三级权限、双库 SQL、部署模板和 snapshot-upsert 改动。先完成三级权限静态/运行验证与真实三账号验收，再适配 snapshot-upsert/03 的内网源字段并在备份的 GaussDB 试点执行；用户确认全部改动后才提交推送并一次性构建完整内网包。
+
+### 风险与备注
+- 当前三个仓库均有未提交修改，后续操作不得 reset、checkout 或覆盖用户工作；应先逐仓库检查 diff 后继续。
+- 权限验收必须使用真实中台登录态和三类测试账号，前端菜单隐藏不能替代后端数据过滤证明。
+- 达梦平台脚本和 PostgreSQL/GaussDB 成本业务脚本必须连接各自数据库执行，混用会直接失败或污染错误库。
+- snapshot-upsert 目前是标准映射模板，不是已经适配现场源表的最终 SELECT；上线前必须替换占位 schema 并抽样对账。
+- 单位展示和权限依赖核算单位名称到 manage_unit_code 的字典映射；名称不一致、字典停用或缺失时必须失败关闭并进入差异清单。
+- 账面明细保留借贷双方，但工作令账面、预警和八项组成只统计借方；amount 为元、amount_wan 为万元。
+
+## 一次会话
+- 开始时间：2026-08-17 15:04:48 +0800
+- 结束时间：2026-08-17 15:52:00 +0800
+- 本次焦点：恢复交接后完成成本树三级权限的静态安全审查、P1 修复、聚焦验证和部署校验加固
+
+### 本次进展
+- 按 agent-handoff 恢复 TASK-005，读取三个仓库状态并保持现有未提交改动。
+- 完成后端、前端、SQL/部署三路并行只读审查，收敛高风险权限与部署缺口。
+- 后端 CostAccessScopeService 强制管理后台用户类型，授权保存改为带租户条件的物理替换；项目基本情况和工作令保存接口补齐草稿状态机。
+- 新增 CostPermissionGuardTest，连同 CostMapperAnnotationSqlTest 共 4 项测试通过，Maven Reactor 构建成功。
+- 前端补齐工作令状态只读、授权选择请求序号、profile 跨账号缓存失效、默认角色落地、成本后台菜单裁剪和遗漏 costCapability 时默认拒绝。
+- 扩展 tsconfig.cost.json 覆盖核心权限守卫和 store；pnpm run ts:check:cost 与七个触达文件的定向 ESLint 通过。
+- MySQL、PostgreSQL、PostgreSQL 9.2/GaussDB、DM 四套角色脚本统一 data_scope=5，并更新 DM 与 PG 平台检查口径。
+- 修复 PostgreSQL 9.2/GaussDB 独立数据库子包 new-database/upgrade-existing/data-integration 布局识别；源码布局与模拟独立子包布局的 DWS 静态检查通过。
+- root PowerShell/Shell 验包器补齐平台检查文件、权限清单、manual 和 snapshot-upsert 必需文件；相关 PowerShell/Bash 语法解析通过。
+- 更新权限双库操作文档和变更日志，明确通用 data_scope 边界、达梦关闭自动提交及 PowerShell 7 要求。
+- 遵循既定边界，本轮未提交、未推送、未构建正式离线包，也未把静态验证表述为真实现场验收。
+
+### 涉及文件
+- baback/yudao-module-cost/yudao-module-cost-biz/src/main/java/cn/iocoder/yudao/module/cost/service/accessscope/CostAccessScopeServiceImpl.java
+- baback/yudao-module-cost/yudao-module-cost-biz/src/main/java/cn/iocoder/yudao/module/cost/dal/mysql/accessscope
+- baback/yudao-module-cost/yudao-module-cost-biz/src/main/java/cn/iocoder/yudao/module/cost/service/projectbasic/CostProjectBasicServiceImpl.java
+- baback/yudao-module-cost/yudao-module-cost-biz/src/main/java/cn/iocoder/yudao/module/cost/service/workorder/CostWorkOrderServiceImpl.java
+- baback/yudao-module-cost/yudao-module-cost-biz/src/test/java/cn/iocoder/yudao/module/cost/dal/mysql/CostPermissionGuardTest.java
+- baback/sql/mysql|postgresql|postgresql92|dm/costree-access-role-menu-20260817.sql
+- baback/sql/postgresql92/costree-deploy/run-new-database.*
+- baback/sql/postgresql92/costree-deploy/verify-dws82-compatibility.*
+- costree-frontend/src/permission.ts
+- costree-frontend/src/store/modules/costAccess.ts
+- costree-frontend/src/store/modules/permission.ts
+- costree-frontend/src/store/modules/user.ts
+- costree-frontend/src/views/cost/accessScope/index.vue
+- costree-frontend/src/views/cost/collect/index.vue
+- costree-frontend/src/views/cost/workOrderList/index.vue
+- costree-frontend/tsconfig.cost.json
+- costree-frontend/types/cost-*-shim.d.ts
+- deploy/cost-server-offline-template/database/platform/check-cost-permissions.sql
+- deploy/cost-server-offline-template/tools/verify-package.ps1
+- deploy/cost-server-offline-template/tools/verify-package.sh
+- deploy/cost-server-offline-template/docs/02-数据库建库与升级.md
+- deploy/cost-server-offline-template/docs/06-网关菜单权限.md
+- deploy/cost-server-offline-template/docs/11-三级权限升级与授权操作.md
+- note/80-deployment/03-成本树三级权限与双库初始化.md
+- note/90-logs/02-变更日志.md
+
+### 下次恢复点
+- 下次先运行 D:\Anaconda\python.exe .agent-handoff/runtime/agent-handoff/scripts/handoff.py resume .，再检查 root、../sqlbot_with_bcback/baback、../sqlbot_with_bcback/costree-frontend 的 git status 和本轮聚焦 diff。不要重置未提交变更。TASK-005 优先进入真实四账号验收：默认落地、菜单、直接 URL、项目/单位范围、详情/导出、草稿/驳回可编辑、已提交/已审批只读，并补测 MEMBER/ADMIN 同号。TASK-006 随后在备份环境关闭 DM 自动提交执行平台脚本，在 PG92/GaussDB 执行 12 与 20-verify 并核对索引定义。未完成这些现场验证前不要构建正式包或宣称权限验收完成。
+
+### 风险与备注
+- 真实登录验收仍缺失；必须用四类账号和直接 URL/API 参数验证，不能以按钮隐藏和 vue-tsc 代替。
+- 真实数据库执行仍缺失；DM 自动提交、PG92/GaussDB 方言与旧库索引现状只能在备份环境确认。
+- 平台通用认证过滤器和权限缓存未按 userType 全面隔离；成本入口已 fail-closed，但平台层仍需专项回归。
+- CostAccessScope 的历史失效 project_code 清理及部分 Mapper 空集合 fail-open 合约尚未统一加固，当前服务调用路径已有前置空结果保护。
+- 候选包 source-state patch 不包含未跟踪文件内容；正式干净包不受影响，但当前 dirty 候选包不能仅凭 patch 完整重现。
+- 三个仓库含大量本轮前已有未提交文件，后续审查和提交必须按路径精确分组，禁止整体清理。
+
+## 一次会话
+- 开始时间：2026-08-17 23:39:00 +0800
+- 结束时间：2026-08-18 02:32:00 +0800
+- 本次焦点：修复三级成本权限启动与路由问题，完善项目和管理单位交集授权，完成跨模块提交前审查、聚焦验证和发布准备
+
+### 本次进展
+- 恢复并复核三级权限交接状态，检查 root、baback、costree-frontend 三个仓库的完整 dirty 与 untracked 范围。
+- 修复 CostAccessScopeServiceImpl 上误加的 method-level Resource，避免 Bean 创建时因无参资源注入方法导致启动失败；新增 RpcConfiguration 显式启用 AdminUserApi Feign 客户端。
+- 修复四套平台角色 SQL 顶级菜单 path 缺少前导斜杠的问题，并同步平台检查器，消除业务中台登录时 Vue Router 动态路由异常。
+- tenant_admin 归一化为完整成本管理员；授权菜单按 canManageAccess 对管理员可见，普通三类成本角色仍无法直接访问授权页。
+- cost_unit_user 改为同时保存项目和管理单位范围，后端按项目与单位交集过滤；授权页新增领域、项目编号与名称筛选，并处理远程请求乱序。
+- 加固用户类型、角色冲突、授权物理替换、工作令状态机和失效授权修复路径；补齐研制单位创建工作令权限。
+- 非成本角色首次登录不再请求成本 profile，避免其他中台模块依赖 cost-server；成本角色默认落地保持 global viewer 到看板、project office 到项目树。
+- 后端 Maven 聚焦测试共 10 项通过，前端 vue-tsc 成本配置和变更文件 ESLint 通过，三个仓库 diff check 通过。
+- 加固 PG/PG92 scope 索引定义验收、PG92/GaussDB 独立子包布局和 root 验包清单；DWS 27 个 SQL 静态兼容检查通过。
+- snapshot-upsert 增加 LoadSql 空值、文件缺失和模板占位符前置拒绝，状态改为 BUSINESS_SYNCED 到 RECALCULATED 再由最终验收设置 SUCCESS；文档明确跨文件非原子边界。
+- 已形成后端提交 fbfc3e3404b8 和前端提交 bfd196e4282c；root 部署与交接内容将在本轮一并提交并按用户授权推送。
+
+### 涉及文件
+- baback/yudao-module-cost/yudao-module-cost-biz/src/main/java/cn/iocoder/yudao/module/cost/service/accessscope/CostAccessScopeServiceImpl.java
+- baback/yudao-module-cost/yudao-module-cost-biz/src/main/java/cn/iocoder/yudao/module/cost/framework/rpc/config/RpcConfiguration.java
+- baback/yudao-module-cost/yudao-module-cost-biz/src/test/java/cn/iocoder/yudao/module/cost/dal/mysql/CostPermissionGuardTest.java
+- baback/sql/mysql|postgresql|postgresql92|dm/costree-access-role-menu-20260817.sql
+- baback/sql/postgresql|postgresql92/costree-deploy/12-upgrade-existing-to-20260817-access-scope.sql
+- baback/sql/postgresql|postgresql92/costree-deploy/20-verify.sql
+- costree-frontend/src/permission.ts
+- costree-frontend/src/router/modules/remaining.ts
+- costree-frontend/src/store/modules/costAccess.ts
+- costree-frontend/src/store/modules/permission.ts
+- costree-frontend/src/views/cost/accessScope/index.vue
+- costree-frontend/src/views/cost/collect/index.vue
+- costree-frontend/src/views/cost/workOrderList/index.vue
+- deploy/cost-server-offline-template/database/platform/check-cost-permissions.sql
+- deploy/cost-server-offline-template/database/postgresql92
+- deploy/cost-server-offline-template/docs/06-网关菜单权限.md
+- deploy/cost-server-offline-template/docs/11-三级权限升级与授权操作.md
+- deploy/cost-server-offline-template/tools/verify-package.ps1
+- deploy/cost-server-offline-template/tools/verify-package.sh
+- note/30-data/11-外部源全量快照中间表幂等同步.md
+- note/80-deployment/03-成本树三级权限与双库初始化.md
+- tools/build-cost-server-offline-package.ps1
+
+### 下次恢复点
+- 下次先运行 D:\Anaconda\python.exe .agent-handoff/runtime/agent-handoff/scripts/handoff.py resume .，再确认 root master、baback feature/costree、costree-frontend costree 对应远端分支状态。TASK-005 优先使用 tenant_admin、cost_global_viewer、cost_project_office、cost_unit_user 四类真实账号验收；unit user 至少覆盖 P1+U1 允许、P1+U2 拒绝、P2+U1 拒绝，以及列表、详情、导出和工作令状态机。TASK-006 随后在备份环境执行 DM、PG92 和 GaussDB/DWS 脚本并核对索引定义。完成真实验收前不要宣称现场通过或构建正式离线包。
+
+### 风险与备注
+- 真实 ApplicationContext 启动、AdminUserApi Feign 调用与业务中台四账号登录尚未执行，当前结论仅覆盖静态、编译、单元和脚本检查。
+- 真实 DM、PG92 与 GaussDB/DWS 脚本执行和回滚路径尚未验证，不能把静态兼容检查表述为现场数据库验收。
+- DWS scope 普通索引不能在并发下提供数据库唯一约束，需通过执行流程串行化和重复数据检查控制，后续仍应现场压测。
+- 单位事实表仍按单位名称过滤，同名、改名和一个管理单位映射多个核算单位的场景需要真实数据验收。
+- 工作令状态读取与更新不是单 SQL 条件写，极端并发状态迁移仍存在读后写竞态，后续可用条件 UPDATE 或乐观锁进一步收口。
+- 正式离线包尚未构建；候选 dirty 包的 source-state patch 不包含 untracked 文件内容，只有干净提交后的正式包可完整复现。

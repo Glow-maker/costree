@@ -1,0 +1,105 @@
+{
+  "session": {
+    "started_at": "2026-08-17T23:39:00+08:00",
+    "ended_at": "2026-08-18T02:32:00+08:00",
+    "focus": "修复三级成本权限启动与路由问题，完善项目和管理单位交集授权，完成跨模块提交前审查、聚焦验证和发布准备"
+  },
+  "current_status": {
+    "phase": "第一阶段 MVP 权限实现已提交，进入真实账号与目标数据库验收",
+    "goal": "在同一业务租户内完成 tenant_admin 授权管理与三类成本业务角色的数据范围控制，并在真实中台、达梦平台库和 PostgreSQL 9.2/GaussDB 成本库完成端到端验收。",
+    "summary": "已修复 Cost 服务缺失 AdminUserApi Bean、平台菜单顶级路由缺少前导斜杠、成本授权菜单不可见、工作令状态机绕过和跨用户类型角色串用等问题。tenant_admin 作为成本授权管理员；cost_global_viewer 默认进入 /cost/index，cost_project_office 默认进入 /cost/catalog，cost_unit_user 必须同时选择项目与管理单位，实际范围取二者交集。非成本账号登录不再同步请求成本 profile，避免成本服务可用性影响其他中台模块。后端提交 fbfc3e3404b8、前端提交 bfd196e4282c；root 部署模板、快照同步和交接记录将一并提交。后端 10 项聚焦测试、前端成本类型检查与定向 ESLint、PowerShell/Bash 语法及 DWS 27 个 SQL 静态检查通过。尚未完成真实 ApplicationContext 启动、真实账号登录和真实目标数据库执行。",
+    "next_step": "在完整中台环境启动 system-server、gateway、cost-server 和前端，使用 tenant_admin、cost_global_viewer、cost_project_office、cost_unit_user 四类真实账号验收默认落地、菜单、直接 URL、项目与单位交集、详情、导出和工作令状态机；随后在备份库执行 DM 平台角色脚本、PG92/GaussDB 12 升级与 20-verify，并替换 snapshot-upsert 的现场源字段映射进行重复同步对账。",
+    "blockers": [
+      "当前没有完整可用的 system-server、gateway、cost-server、Nacos、Redis 和业务数据库链路，AdminUserApi Feign 注册仅通过静态与编译验证，未做真实 ApplicationContext 启动。",
+      "没有可用的四类真实测试账号，本轮不能证明真实菜单、默认落地、直接 URL、详情、导出和工作令状态机端到端验收通过。",
+      "尚未在真实达梦 MQB、PostgreSQL 9.2 或 GaussDB(DWS) 8.2.1 执行本轮脚本；静态兼容检查不能替代目标库验收。",
+      "snapshot-upsert 仍需替换现场源 schema、表名和字段转换；跨文件流程采用分阶段提交，不承诺整批原子回滚。",
+      "DWS 兼容模式下 scope 防重依赖普通索引加重复数据检查，仍需现场并发写入与重复键卫生验收；单位范围当前仍以名称匹配事实表，改名或同名风险需业务数据验证。"
+    ]
+  },
+  "tasks_to_add": [],
+  "tasks_to_update": [
+    {
+      "task_id": "TASK-005",
+      "title": "完成三级成本角色与数据范围权限验收",
+      "details": "实现已完成跨模块审查并提交：后端 fbfc3e3404b8、前端 bfd196e4282c。tenant_admin 可维护授权；global viewer 默认看板，project office 默认项目树；unit user 显式保存项目集合与管理单位集合，列表、详情和导出按交集限制。后端 10 项聚焦测试、前端成本类型检查和定向 ESLint 通过。下一步必须使用四类真实账号验证菜单、默认落地、直接 URL、项目/单位正反组合、详情、导出和工作令状态机。",
+      "priority": "P0"
+    },
+    {
+      "task_id": "TASK-006",
+      "title": "完成双库权限初始化和最终内网部署包",
+      "details": "多方言角色与 access-scope 升级脚本、平台权限检查、PG92/GaussDB 独立子包布局、验包清单、索引定义 fail-fast 和 snapshot-upsert 执行保护已加固；DWS 27 个 SQL 静态检查、PowerShell/Bash 语法与 LoadSql 负例通过。下一步在真实 DM/PG92/GaussDB 备份环境执行并对账，全部现场验收后再构建正式离线包。",
+      "priority": "P0"
+    }
+  ],
+  "tasks_to_complete": [],
+  "tasks_to_add_and_complete": [],
+  "decisions_to_add": [
+    {
+      "summary": "tenant_admin 作为共享业务租户内的成本授权管理员。",
+      "rationale": "不同场所使用同一 tenant_id，并由成本项目和管理单位范围区分；保留 tenant_admin 可确保有人维护授权，同时不需要关闭全局租户插件或把现场用户建成不同租户。"
+    },
+    {
+      "summary": "cost_unit_user 的有效范围采用项目集合与管理单位集合的交集。",
+      "rationale": "研制单位用户需要显式选择项目和单位以避免新增同单位项目时自动扩权；两张既有 scope 表可表达 P×U 范围，无需新增关联表。"
+    },
+    {
+      "summary": "非成本角色登录业务中台时不加载成本权限档案。",
+      "rationale": "成本 profile 只用于成本角色默认落地与菜单裁剪；在所有账号登录时同步调用会把 cost-server 的延迟或故障传播到其他中台模块。"
+    },
+    {
+      "summary": "snapshot-upsert 明确采用分阶段提交状态机而非跨文件原子事务。",
+      "rationale": "现有执行器逐文件启动 psql，无法保证跨文件 ROLLBACK；用 BUSINESS_SYNCED、RECALCULATED、SUCCESS 区分阶段，并只在最终验收脚本设置 SUCCESS，避免假成功。"
+    }
+  ],
+  "session_log": {
+    "progress": [
+      "恢复并复核三级权限交接状态，检查 root、baback、costree-frontend 三个仓库的完整 dirty 与 untracked 范围。",
+      "修复 CostAccessScopeServiceImpl 上误加的 method-level Resource，避免 Bean 创建时因无参资源注入方法导致启动失败；新增 RpcConfiguration 显式启用 AdminUserApi Feign 客户端。",
+      "修复四套平台角色 SQL 顶级菜单 path 缺少前导斜杠的问题，并同步平台检查器，消除业务中台登录时 Vue Router 动态路由异常。",
+      "tenant_admin 归一化为完整成本管理员；授权菜单按 canManageAccess 对管理员可见，普通三类成本角色仍无法直接访问授权页。",
+      "cost_unit_user 改为同时保存项目和管理单位范围，后端按项目与单位交集过滤；授权页新增领域、项目编号与名称筛选，并处理远程请求乱序。",
+      "加固用户类型、角色冲突、授权物理替换、工作令状态机和失效授权修复路径；补齐研制单位创建工作令权限。",
+      "非成本角色首次登录不再请求成本 profile，避免其他中台模块依赖 cost-server；成本角色默认落地保持 global viewer 到看板、project office 到项目树。",
+      "后端 Maven 聚焦测试共 10 项通过，前端 vue-tsc 成本配置和变更文件 ESLint 通过，三个仓库 diff check 通过。",
+      "加固 PG/PG92 scope 索引定义验收、PG92/GaussDB 独立子包布局和 root 验包清单；DWS 27 个 SQL 静态兼容检查通过。",
+      "snapshot-upsert 增加 LoadSql 空值、文件缺失和模板占位符前置拒绝，状态改为 BUSINESS_SYNCED 到 RECALCULATED 再由最终验收设置 SUCCESS；文档明确跨文件非原子边界。",
+      "已形成后端提交 fbfc3e3404b8 和前端提交 bfd196e4282c；root 部署与交接内容将在本轮一并提交并按用户授权推送。"
+    ],
+    "files_touched": [
+      "baback/yudao-module-cost/yudao-module-cost-biz/src/main/java/cn/iocoder/yudao/module/cost/service/accessscope/CostAccessScopeServiceImpl.java",
+      "baback/yudao-module-cost/yudao-module-cost-biz/src/main/java/cn/iocoder/yudao/module/cost/framework/rpc/config/RpcConfiguration.java",
+      "baback/yudao-module-cost/yudao-module-cost-biz/src/test/java/cn/iocoder/yudao/module/cost/dal/mysql/CostPermissionGuardTest.java",
+      "baback/sql/mysql|postgresql|postgresql92|dm/costree-access-role-menu-20260817.sql",
+      "baback/sql/postgresql|postgresql92/costree-deploy/12-upgrade-existing-to-20260817-access-scope.sql",
+      "baback/sql/postgresql|postgresql92/costree-deploy/20-verify.sql",
+      "costree-frontend/src/permission.ts",
+      "costree-frontend/src/router/modules/remaining.ts",
+      "costree-frontend/src/store/modules/costAccess.ts",
+      "costree-frontend/src/store/modules/permission.ts",
+      "costree-frontend/src/views/cost/accessScope/index.vue",
+      "costree-frontend/src/views/cost/collect/index.vue",
+      "costree-frontend/src/views/cost/workOrderList/index.vue",
+      "deploy/cost-server-offline-template/database/platform/check-cost-permissions.sql",
+      "deploy/cost-server-offline-template/database/postgresql92",
+      "deploy/cost-server-offline-template/docs/06-网关菜单权限.md",
+      "deploy/cost-server-offline-template/docs/11-三级权限升级与授权操作.md",
+      "deploy/cost-server-offline-template/tools/verify-package.ps1",
+      "deploy/cost-server-offline-template/tools/verify-package.sh",
+      "note/30-data/11-外部源全量快照中间表幂等同步.md",
+      "note/80-deployment/03-成本树三级权限与双库初始化.md",
+      "tools/build-cost-server-offline-package.ps1"
+    ],
+    "risks": [
+      "真实 ApplicationContext 启动、AdminUserApi Feign 调用与业务中台四账号登录尚未执行，当前结论仅覆盖静态、编译、单元和脚本检查。",
+      "真实 DM、PG92 与 GaussDB/DWS 脚本执行和回滚路径尚未验证，不能把静态兼容检查表述为现场数据库验收。",
+      "DWS scope 普通索引不能在并发下提供数据库唯一约束，需通过执行流程串行化和重复数据检查控制，后续仍应现场压测。",
+      "单位事实表仍按单位名称过滤，同名、改名和一个管理单位映射多个核算单位的场景需要真实数据验收。",
+      "工作令状态读取与更新不是单 SQL 条件写，极端并发状态迁移仍存在读后写竞态，后续可用条件 UPDATE 或乐观锁进一步收口。",
+      "正式离线包尚未构建；候选 dirty 包的 source-state patch 不包含 untracked 文件内容，只有干净提交后的正式包可完整复现。"
+    ]
+  },
+  "resume_hint": {
+    "text": "下次先运行 D:\\Anaconda\\python.exe .agent-handoff/runtime/agent-handoff/scripts/handoff.py resume .，再确认 root master、baback feature/costree、costree-frontend costree 对应远端分支状态。TASK-005 优先使用 tenant_admin、cost_global_viewer、cost_project_office、cost_unit_user 四类真实账号验收；unit user 至少覆盖 P1+U1 允许、P1+U2 拒绝、P2+U1 拒绝，以及列表、详情、导出和工作令状态机。TASK-006 随后在备份环境执行 DM、PG92 和 GaussDB/DWS 脚本并核对索引定义。完成真实验收前不要宣称现场通过或构建正式离线包。"
+  }
+}

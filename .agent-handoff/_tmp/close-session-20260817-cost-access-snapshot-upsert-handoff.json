@@ -1,0 +1,110 @@
+{
+  "session": {
+    "started_at": "2026-08-17T09:00:00+08:00",
+    "ended_at": "2026-08-17T15:00:00+08:00",
+    "focus": "成本树三级数据权限、达梦与成本库双库初始化、PostgreSQL 9.2/GaussDB 全量快照幂等同步及新对话交接"
+  },
+  "current_status": {
+    "phase": "第一阶段 MVP 权限收口、真实数据接入和内网部署准备中",
+    "goal": "完成成本树三级角色与项目/管理单位数据范围控制，形成适配达梦平台库和 PostgreSQL 9.2/GaussDB 成本库的可执行升级、全量快照同步和内网部署流程，并在用户确认全部改动后一次性构建正式离线包。",
+    "summary": "前后端已合并最新主干，当前分别停在后端 e2219d0c、前端 8ca1b07。三级成本权限实现已进入未提交工作区：中台角色为 cost_global_viewer、cost_project_office、cost_unit_user，成本业务库新增项目授权和管理单位授权范围，前端增加按角色落地、入口裁剪和授权管理页。后端同时补齐 MySQL、PostgreSQL、PostgreSQL 9.2/GaussDB 业务授权 DDL/升级脚本以及达梦 MQB 平台角色权限初始化脚本，根文档说明了中台身份权限与成本数据范围的双库边界。本轮另在部署模板和本地 release-20260729-data-integration 数据包中新增 snapshot-upsert 流程：外部源全量进入 cost_sync_stage 中间表，只清空中间表，再按稳定业务键 UPDATE 已有行、INSERT 新行，保护项目办和研制单位人工字段，按全部年度借方明细重算工作令账面。脚本、说明、校验器和 SHA 清单已整理；尚未在真实 GaussDB 和真实登录账号下验收，也未提交、推送或重建完整离线包。",
+    "next_step": "新对话先执行 agent-handoff resume 并检查 root、backend、frontend 三个仓库的未提交改动。随后优先完成三级权限代码审查和验证：后端 Reactor compile/权限测试、前端一次 ts:check:cost、达梦 MQB 角色脚本检查、成本库 12 权限升级脚本检查，并使用三类真实测试账号验证菜单、默认落地页、项目范围、管理单位范围、直接 URL、导出和填报越权。再将内网真实源 schema/字段映射替换进 snapshot-upsert/03-源数据全量装载模板.sql，在备份后的 GaussDB 试点库按 01 至 08 顺序执行并对账。全部需求确认后再提交推送，并只构建一次完整内网离线包。",
+    "blockers": [
+      "三级权限代码和 SQL 仍在前后端及 root 未提交工作区，尚未完成真实登录态三角色验收，不能把页面隐藏视为权限已通过。",
+      "尚未在真实达梦 MQB 执行角色初始化与权限检查，也未在真实 PostgreSQL 9.2/GaussDB 8.2.1 执行 12 权限升级和 snapshot-upsert 全流程。",
+      "snapshot-upsert 的 <源系统schema>、真实表名和字段转换仍需在内网按主业项目树、单位字典、预分预控、工作令字典和账面明细实际结构替换；当前只提供标准中间层模板。",
+      "完整离线包按用户要求暂不重建；现有离线包不能代表当前三级权限和数据同步变更的最终交付版本。",
+      "中台平台库和成本业务库必须使用一致租户与用户 ID；达梦 MQB.SYSTEM_* 只管身份/角色/接口权限，成本库 cost_user_*_scope 只管项目和管理单位范围，脚本不可交叉执行。",
+      "本机 cost-server 曾出现 38108 端口占用提示但瞬时监听查询为空，当前权限版本尚缺一次稳定启动和运行态回归。"
+    ]
+  },
+  "tasks_to_add": [],
+  "tasks_to_update": [
+    {
+      "task_id": "TASK-003",
+      "title": "完成账面明细正式导入与幂等同步落地",
+      "details": "已形成 PostgreSQL 9.2/GaussDB 全量快照中间表、导入前检查、业务 UPDATE+INSERT、借方账面重算和验收脚本；下一步替换真实源字段映射并在内网试点库重复执行、核对源明细 ID、元/万元和借贷口径。",
+      "priority": "P0"
+    },
+    {
+      "task_id": "TASK-004",
+      "title": "完成主业项目树、单位和工作令源数据映射落地",
+      "details": "标准中间表和稳定业务键规则已写入 snapshot-upsert 包；下一步确认内网源项目父子关系、型号叶子规则、核算单位与管理单位映射、工作令项目归属，并把真实 SELECT 映射写入 03 脚本。",
+      "priority": "P0"
+    },
+    {
+      "task_id": "TASK-005",
+      "title": "完成三级成本角色与数据范围权限验收",
+      "details": "前后端已实现全局查看、项目办、研制单位三类角色和项目/管理单位授权，新增超级管理员授权页、路由裁剪和后端强制过滤；下一步完成编译测试、真实登录三账号验收、越权 URL/导出/填报校验并处理发现的问题。",
+      "priority": "P0"
+    },
+    {
+      "task_id": "TASK-006",
+      "title": "完成双库权限初始化和最终内网部署包",
+      "details": "已补达梦 MQB 平台角色脚本、成本库授权表升级、双库初始化文档和 PostgreSQL 9.2/GaussDB 数据同步模板；下一步现场验证租户、Nacos、Redis、网关、菜单和权限，再在全部改动确认后一次性生成并校验完整离线包。",
+      "priority": "P0"
+    }
+  ],
+  "tasks_to_complete": [],
+  "tasks_to_add_and_complete": [
+    {
+      "title": "完成 PostgreSQL 9.2/GaussDB 全量快照幂等同步模板",
+      "details": "在离线包模板新增 cost_sync_stage 六张标准中间表、只清空中间表、源数据装载模板、导入前检查、业务表 UPDATE+INSERT、借方账面重算、同步后验收、缺失差异清单和最简执行脚本，并同步到本地 release-20260729-data-integration 数据包。",
+      "priority": "P0",
+      "notes": "部署包校验通过：42 个文件、41 条 SHA-256；PowerShell 和 shell 语法解析通过；静态扫描确认仅清空中间表，不 DELETE/TRUNCATE 成本业务表。未安装 psql/gsql，尚未在真实 GaussDB 执行。"
+    }
+  ],
+  "decisions_to_add": [
+    {
+      "summary": "成本权限采用中台身份权限与成本数据范围双库分治。",
+      "rationale": "达梦 MQB.SYSTEM_* 已承载登录用户、角色和接口权限，成本 PostgreSQL/GaussDB 更适合只保存项目与管理单位授权；cost-server 通过中台 API 获取身份后再叠加成本范围，避免跨库直连和把业务授权塞入部门权限。"
+    },
+    {
+      "summary": "外部源常规同步采用全量快照进入中间表后按业务键 UPDATE+INSERT。",
+      "rationale": "每批只清空 cost_sync_stage，中间层完成校验后幂等更新业务表；源快照缺失不自动删除，防止抽取不完整误删项目办和研制单位人工维护数据。"
+    },
+    {
+      "summary": "当前系列改动全部确认前不重复构建前端或完整离线包。",
+      "rationale": "前后端和数据库脚本仍在连续调整，反复生产构建和打包会浪费时间并产生多个不可识别版本；完成验证与用户确认后只生成一次正式包。"
+    }
+  ],
+  "session_log": {
+    "progress": [
+      "后端 feature/costree 与前端 costree 已同步最新 codeup/master，当前 HEAD 分别为 e2219d0c 和 8ca1b07。",
+      "三级成本角色、项目授权、管理单位授权、后端数据范围过滤、前端落地页和成本数据授权页已进入未提交工作区。",
+      "补齐达梦 MQB 的 costree-access-role-menu-20260817.sql 和 check-cost-permissions-20260817.sql，并确认平台实际表名为 SYSTEM_USERS、SYSTEM_ROLE、SYSTEM_MENU、SYSTEM_USER_ROLE、SYSTEM_ROLE_MENU。",
+      "补齐 MySQL、PostgreSQL、PostgreSQL 9.2/GaussDB 的成本授权表完整 DDL、旧库 12 升级脚本、部署校验和说明。",
+      "新增 note/80-deployment/03-成本树三级权限与双库初始化.md，说明系统页面分配角色、成本授权页分配项目/管理单位以及双库边界。",
+      "新增 PostgreSQL 9.2/GaussDB snapshot-upsert 数据集成目录，覆盖六类源数据的全量中间表、校验、幂等同步、借方账面重算和差异清单。",
+      "新增 note/30-data/11-外部源全量快照中间表幂等同步.md，并更新数据文档索引、变更日志、部署模板入口和包校验器。",
+      "将 snapshot-upsert 镜像到忽略 Git 的 cost-intranet-data-kit/release-20260729-data-integration，更新 README、RELEASE-INFO、SHA-256 清单并通过包校验。",
+      "遵循用户要求，本轮未重复构建前端、未构建完整离线包、未提交和未推送。"
+    ],
+    "files_touched": [
+      "baback/yudao-module-cost/yudao-module-cost-biz/src/main/java/cn/iocoder/yudao/module/cost/service/accessscope",
+      "baback/yudao-module-cost/yudao-module-cost-biz/src/main/java/cn/iocoder/yudao/module/cost/controller/admin/accessscope",
+      "baback/sql/dm/costree-access-role-menu-20260817.sql",
+      "baback/sql/dm/check-cost-permissions-20260817.sql",
+      "baback/sql/postgresql92/costree-deploy/12-upgrade-existing-to-20260817-access-scope.sql",
+      "costree-frontend/src/store/modules/costAccess.ts",
+      "costree-frontend/src/views/cost/accessScope",
+      "costree-frontend/src/permission.ts",
+      "deploy/cost-server-offline-template/database/postgresql92/03-data-integration/snapshot-upsert",
+      "deploy/cost-server-offline-template/database/platform",
+      "note/30-data/11-外部源全量快照中间表幂等同步.md",
+      "note/80-deployment/03-成本树三级权限与双库初始化.md",
+      "cost-intranet-data-kit/release-20260729-data-integration"
+    ],
+    "risks": [
+      "当前三个仓库均有未提交修改，后续操作不得 reset、checkout 或覆盖用户工作；应先逐仓库检查 diff 后继续。",
+      "权限验收必须使用真实中台登录态和三类测试账号，前端菜单隐藏不能替代后端数据过滤证明。",
+      "达梦平台脚本和 PostgreSQL/GaussDB 成本业务脚本必须连接各自数据库执行，混用会直接失败或污染错误库。",
+      "snapshot-upsert 目前是标准映射模板，不是已经适配现场源表的最终 SELECT；上线前必须替换占位 schema 并抽样对账。",
+      "单位展示和权限依赖核算单位名称到 manage_unit_code 的字典映射；名称不一致、字典停用或缺失时必须失败关闭并进入差异清单。",
+      "账面明细保留借贷双方，但工作令账面、预警和八项组成只统计借方；amount 为元、amount_wan 为万元。"
+    ]
+  },
+  "resume_hint": {
+    "text": "新对话先运行 python .agent-handoff/runtime/agent-handoff/scripts/handoff.py resume .，再分别检查 root、../sqlbot_with_bcback/baback、../sqlbot_with_bcback/costree-frontend 的 git status。不要重置未提交的三级权限、双库 SQL、部署模板和 snapshot-upsert 改动。先完成三级权限静态/运行验证与真实三账号验收，再适配 snapshot-upsert/03 的内网源字段并在备份的 GaussDB 试点执行；用户确认全部改动后才提交推送并一次性构建完整内网包。"
+  }
+}

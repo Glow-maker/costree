@@ -21,7 +21,7 @@ $OutputDirectory = if ($OutputDirectory) { [IO.Path]::GetFullPath($OutputDirecto
     Join-Path $Root 'cost-server-offline-package'
 }
 $TemplateRoot = Join-Path $Root 'deploy\cost-server-offline-template'
-$SchemaVersion = '20260728'
+$SchemaVersion = '20260817'
 
 function Assert-Directory([string]$Path, [string]$Label) {
     if (-not (Test-Path -LiteralPath $Path -PathType Container)) { throw "$Label not found: $Path" }
@@ -135,6 +135,19 @@ if (Test-Path -LiteralPath $pg92ResetSource) {
     Copy-DirectoryContents $pg92ResetSource (Join-Path $pg92Root '04-reset-and-reload')
 }
 
+$platformRoot = Join-Path $output 'database\platform'
+New-Item -ItemType Directory -Force -Path $platformRoot | Out-Null
+Copy-Item -LiteralPath (Join-Path $BackendRoot 'sql\mysql\costree-access-role-menu-20260817.sql') `
+    -Destination (Join-Path $platformRoot 'costree-access-role-menu-mysql-20260817.sql') -Force
+Copy-Item -LiteralPath (Join-Path $BackendRoot 'sql\postgresql\costree-access-role-menu-20260817.sql') `
+    -Destination (Join-Path $platformRoot 'costree-access-role-menu-postgresql-20260817.sql') -Force
+Copy-Item -LiteralPath (Join-Path $BackendRoot 'sql\postgresql92\costree-access-role-menu-20260817.sql') `
+    -Destination (Join-Path $platformRoot 'costree-access-role-menu-postgresql92-20260817.sql') -Force
+Copy-Item -LiteralPath (Join-Path $BackendRoot 'sql\dm\costree-access-role-menu-20260817.sql') `
+    -Destination (Join-Path $platformRoot 'costree-access-role-menu-dm8-20260817.sql') -Force
+Copy-Item -LiteralPath (Join-Path $BackendRoot 'sql\dm\check-cost-permissions-20260817.sql') `
+    -Destination (Join-Path $platformRoot 'check-cost-permissions-dm8.sql') -Force
+
 if ($IncludeSeed) {
     $seedTarget = Join-Path $pgRoot '90-optional-test-seed'
     New-Item -ItemType Directory -Force -Path $seedTarget | Out-Null
@@ -164,11 +177,15 @@ foreach ($name in @(
     '07-内网原表-工作令关联主业项目字典-dwd_bd_bfcustomitem_gzl.md',
     '08-内网原表-项目工作令账面成本明细-dws_bu_pz_pzmx_gzl.md',
     '09-成本库内网数据对接总设计方案.md',
-    '10-成本库数据源与测试导入闭环.md'
+    '10-成本库数据源与测试导入闭环.md',
+    '11-外部源全量快照中间表幂等同步.md'
 )) {
     $source = Join-Path $Root ('note\30-data\' + $name)
     if (Test-Path -LiteralPath $source) { Copy-Item -LiteralPath $source -Destination $appendix -Force }
 }
+
+Copy-Item -LiteralPath (Join-Path $Root 'note\80-deployment\03-成本树三级权限与双库初始化.md') `
+    -Destination (Join-Path $output 'docs\12-成本树三级权限与双库初始化.md') -Force
 
 $releaseType = if ($dirtyRepositories.Count -gt 0) { 'candidate' } else { 'formal' }
 $releaseLines = @(
@@ -185,7 +202,8 @@ $releaseLines = @(
     "backendJar=$($jar.Name)",
     "dirtyRepositories=$($dirtyRepositories -join ',')",
     'databaseDialects=PostgreSQL 14+; PostgreSQL 9.2; GaussDB(DWS) 8.2.1 compatibility profile',
-    'postgresql92Validation=PostgreSQL 9.2.23 Docker execution passed',
+    'platformDatabaseDialects=Dameng DM8 (MQB); PostgreSQL 14+; PostgreSQL 9.2; MySQL 8',
+    'postgresql92Validation=prior baseline passed PostgreSQL 9.2.23 Docker; 20260817 access-scope upgrade requires target-database acceptance',
     'gaussdbDwsValidation=DWS 8.2.1 distribution-key compatibility implemented; onsite precheck and acceptance required',
     'amountUnit=business amounts in 10000 yuan; ledger amount in yuan and amount_wan in 10000 yuan'
 )

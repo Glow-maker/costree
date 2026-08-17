@@ -1,20 +1,21 @@
 # 当前状态
 
-- 最近更新时间：2026-07-28 21:40:00 +0800
-- 当前阶段：第一阶段 MVP 实现、真实数据对齐和内网部署准备收口中
-- 当前目标：在已有业务中台中嵌入成本库/成本树业务模块，让成本库数据可进入、可维护、可查询、可控权限，并用 note 文档中心和 .agent-handoff 形成可持续接管、开发、收尾和经验沉淀机制。
-- 当前摘要：本轮完成项目办按项目进入弹窗、按单位维护目标成本和审定金额；合同和到款只读取自预分预控同步。研制单位采集页调整为左侧工作令记录、右侧填报表单，选择主业项目后仅查询该项目工作令；新增只读工作令查询页。成本树新增 HEAD_OFFICE，院部直属型号且排在最左，总体所只包含八部和509所。后端新增项目办聚合查询与事务保存接口，cost_project_basic 增加 quantity、product_short_name、vertical_division。数据库版本升级为 20260728，MySQL、PostgreSQL 和 PostgreSQL 9.2/GaussDB 均补齐完整 DDL 与增量脚本。正式同步脚本只更新预分预控合同和到款，不覆盖项目办维护的目标和审定。前端提交 c6b81fe 已推送 codeup/feature/costree2，后端提交 114b6202 及前置提交 771efff4 已推送 codeup/feature/costree。
+- 最近更新时间：2026-08-18 02:32:00 +0800
+- 当前阶段：第一阶段 MVP 权限实现已提交，进入真实账号与目标数据库验收
+- 当前目标：在同一业务租户内完成 tenant_admin 授权管理与三类成本业务角色的数据范围控制，并在真实中台、达梦平台库和 PostgreSQL 9.2/GaussDB 成本库完成端到端验收。
+- 当前摘要：已修复 Cost 服务缺失 AdminUserApi Bean、平台菜单顶级路由缺少前导斜杠、成本授权菜单不可见、工作令状态机绕过和跨用户类型角色串用等问题。tenant_admin 作为成本授权管理员；cost_global_viewer 默认进入 /cost/index，cost_project_office 默认进入 /cost/catalog，cost_unit_user 必须同时选择项目与管理单位，实际范围取二者交集。非成本账号登录不再同步请求成本 profile，避免成本服务可用性影响其他中台模块。后端提交 fbfc3e3404b8、前端提交 bfd196e4282c；root 部署模板、快照同步和交接记录将一并提交。后端 10 项聚焦测试、前端成本类型检查与定向 ESLint、PowerShell/Bash 语法及 DWS 27 个 SQL 静态检查通过。尚未完成真实 ApplicationContext 启动、真实账号登录和真实目标数据库执行。
 
 ## 已完成进展
-- TASK-037: 完成项目办按单位维护目标和审定金额
-- TASK-038: 完成研制单位工作令筛选和独立工作令查询页
 - TASK-039: 完成 20260728 多方言数据库升级和内网包模板
+- TASK-040: 完成 PostgreSQL 9.2/GaussDB 全量快照幂等同步模板
+- TASK-041: 完成三级权限静态安全收口
 
 ## 下一步建议
-- 使用根仓库 tools/build-cost-server-offline-package.ps1 从已提交前后端构建正式离线包。内网既有库必须依次执行对应数据库目录的 00-precheck.sql、10-upgrade-existing-to-20260722.sql、11-upgrade-existing-to-20260728-project-office-form.sql、20-verify.sql，再替换后端 jar 和前端资源。数据接入先同步单位、项目树、工作令字典和预分预控合同/到款，再导入借方账面明细，最后由项目办在 /cost/collect 维护单位目标和审定。
+- 在完整中台环境启动 system-server、gateway、cost-server 和前端，使用 tenant_admin、cost_global_viewer、cost_project_office、cost_unit_user 四类真实账号验收默认落地、菜单、直接 URL、项目与单位交集、详情、导出和工作令状态机；随后在备份库执行 DM 平台角色脚本、PG92/GaussDB 12 升级与 20-verify，并替换 snapshot-upsert 的现场源字段映射进行重复同步对账。
 
 ## 当前阻塞
-- 现有数据库不能只替换 jar；未执行 20260728 增量脚本会因 cost_project_basic 缺少 quantity、product_short_name、vertical_division 导致查询失败。
-- 本轮未连接真实 GaussDB(DWS) 8.2.1 执行升级，仅完成 PostgreSQL 9.2/GaussDB 方言静态兼容检查，现场仍需先备份并执行 precheck 和 verify。
-- 真实内网 Nacos、Redis、网关、菜单权限、租户、组织和数据权限仍需现场确认。
-- 后端配置已改为必须显式提供 COST_DATASOURCE_URL、COST_DATASOURCE_USERNAME、COST_DATASOURCE_PASSWORD；未配置时应用会在启动早期失败。
+- 当前没有完整可用的 system-server、gateway、cost-server、Nacos、Redis 和业务数据库链路，AdminUserApi Feign 注册仅通过静态与编译验证，未做真实 ApplicationContext 启动。
+- 没有可用的四类真实测试账号，本轮不能证明真实菜单、默认落地、直接 URL、详情、导出和工作令状态机端到端验收通过。
+- 尚未在真实达梦 MQB、PostgreSQL 9.2 或 GaussDB(DWS) 8.2.1 执行本轮脚本；静态兼容检查不能替代目标库验收。
+- snapshot-upsert 仍需替换现场源 schema、表名和字段转换；跨文件流程采用分阶段提交，不承诺整批原子回滚。
+- DWS 兼容模式下 scope 防重依赖普通索引加重复数据检查，仍需现场并发写入与重复键卫生验收；单位范围当前仍以名称匹配事实表，改名或同名风险需业务数据验证。

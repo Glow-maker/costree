@@ -9,40 +9,45 @@ active:
   completed_at: ''
   notes: ''
 - task_id: TASK-003
-  title: 设计并实现账面明细正式导入或同步流程
-  details: 围绕 cost_work_order_ledger_detail 明确金额单位、借贷方向、冲销规则和源主键后，实现稳定导入/同步路径，保证聚合金额可追溯到凭证明细。
-  priority: P1
-  status: pending
+  title: 完成账面明细正式导入与幂等同步落地
+  details: 已形成 PostgreSQL 9.2/GaussDB 全量快照中间表、导入前检查、业务 UPDATE+INSERT、借方账面重算和验收脚本；下一步替换真实源字段映射并在内网试点库重复执行、核对源明细
+    ID、元/万元和借贷口径。
+  priority: P0
+  status: in_progress
   created_at: '2026-06-12T00:15:17+08:00'
-  updated_at: '2026-06-12T00:15:17+08:00'
+  updated_at: '2026-08-17T15:01:32+08:00'
   completed_at: ''
   notes: ''
 - task_id: TASK-004
-  title: 设计源主业项目树和工作令映射同步规则
-  details: 明确 cost_source_project_tree 到 cost_model_node/cost_project、cost_work_order_project_ref
-    到 cost_work_order 的转换规则、增量字段、异常和重复处理。
-  priority: P2
-  status: pending
+  title: 完成主业项目树、单位和工作令源数据映射落地
+  details: 标准中间表和稳定业务键规则已写入 snapshot-upsert 包；下一步确认内网源项目父子关系、型号叶子规则、核算单位与管理单位映射、工作令项目归属，并把真实
+    SELECT 映射写入 03 脚本。
+  priority: P0
+  status: in_progress
   created_at: '2026-06-12T00:15:17+08:00'
-  updated_at: '2026-06-12T00:15:17+08:00'
+  updated_at: '2026-08-17T15:01:32+08:00'
   completed_at: ''
   notes: ''
 - task_id: TASK-005
-  title: 深化数据采集前台页和角色权限
-  details: 继续拆分项目办、型号两总、研制单位等角色可见页面和可操作按钮，完善草稿、提交、通过、退回轻流程，后续再评估是否接正式 BPM。
-  priority: P2
-  status: pending
+  title: 完成三级成本角色与数据范围权限验收
+  details: 实现已完成跨模块审查并提交：后端 fbfc3e3404b8、前端 bfd196e4282c。tenant_admin 可维护授权；global
+    viewer 默认看板，project office 默认项目树；unit user 显式保存项目集合与管理单位集合，列表、详情和导出按交集限制。后端 10
+    项聚焦测试、前端成本类型检查和定向 ESLint 通过。下一步必须使用四类真实账号验证菜单、默认落地、直接 URL、项目/单位正反组合、详情、导出和工作令状态机。
+  priority: P0
+  status: in_progress
   created_at: '2026-06-12T00:15:17+08:00'
-  updated_at: '2026-06-12T00:15:17+08:00'
+  updated_at: '2026-08-18T02:31:55+08:00'
   completed_at: ''
   notes: ''
 - task_id: TASK-006
-  title: 准备内网部署和菜单权限接入
-  details: 确认内网 MySQL、Redis、Nacos、网关、菜单、按钮权限、租户、组织和数据权限配置；真实库只执行 schema/迁移，不执行 seed-mvp.sql。
-  priority: P2
-  status: pending
+  title: 完成双库权限初始化和最终内网部署包
+  details: 多方言角色与 access-scope 升级脚本、平台权限检查、PG92/GaussDB 独立子包布局、验包清单、索引定义 fail-fast
+    和 snapshot-upsert 执行保护已加固；DWS 27 个 SQL 静态检查、PowerShell/Bash 语法与 LoadSql 负例通过。下一步在真实
+    DM/PG92/GaussDB 备份环境执行并对账，全部现场验收后再构建正式离线包。
+  priority: P0
+  status: in_progress
   created_at: '2026-06-12T00:15:17+08:00'
-  updated_at: '2026-06-12T00:15:17+08:00'
+  updated_at: '2026-08-18T02:31:55+08:00'
   completed_at: ''
   notes: ''
 completed:
@@ -366,3 +371,23 @@ completed:
   updated_at: '2026-07-28T21:39:16+08:00'
   completed_at: '2026-07-28T21:39:16+08:00'
   notes: 后端提交 114b6202 已推送 codeup/feature/costree；PG9.2/GaussDB 静态兼容检查通过。
+- task_id: TASK-040
+  title: 完成 PostgreSQL 9.2/GaussDB 全量快照幂等同步模板
+  details: 在离线包模板新增 cost_sync_stage 六张标准中间表、只清空中间表、源数据装载模板、导入前检查、业务表 UPDATE+INSERT、借方账面重算、同步后验收、缺失差异清单和最简执行脚本，并同步到本地
+    release-20260729-data-integration 数据包。
+  priority: P0
+  status: completed
+  created_at: '2026-08-17T15:01:32+08:00'
+  updated_at: '2026-08-17T15:01:32+08:00'
+  completed_at: '2026-08-17T15:01:32+08:00'
+  notes: 部署包校验通过：42 个文件、41 条 SHA-256；PowerShell 和 shell 语法解析通过；静态扫描确认仅清空中间表，不 DELETE/TRUNCATE
+    成本业务表。未安装 psql/gsql，尚未在真实 GaussDB 执行。
+- task_id: TASK-041
+  title: 完成三级权限静态安全收口
+  details: 对成本权限后端、前端和多方言 SQL/部署链进行并行静态审查，修复已确认的高风险权限、状态机、授权幂等、异步竞态、默认落地、菜单与跨模块数据权限扩张问题，并补充聚焦自动化与脚本布局验证。
+  priority: P0
+  status: completed
+  created_at: '2026-08-17T15:51:21+08:00'
+  updated_at: '2026-08-17T15:51:21+08:00'
+  completed_at: '2026-08-17T15:51:21+08:00'
+  notes: 静态与本地聚焦验证通过，不等于真实登录或真实数据库验收；TASK-005 和 TASK-006 继续保持进行中。

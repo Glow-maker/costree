@@ -78,6 +78,7 @@
 - `30-data/07-内网原表-工作令关联主业项目字典-dwd_bd_bfcustomitem_gzl.md`：整理内网原表 `dwd_bd_bfcustomitem_gzl` 字段和工作令映射待确认项。
 - `30-data/08-内网原表-项目工作令账面成本明细-dws_bu_pz_pzmx_gzl.md`：整理内网原表 `dws_bu_pz_pzmx_gzl` 字段和账面明细映射待确认项。
 - `80-deployment/01-外网到内网迁移说明.md`：记录内网部署时 MySQL、Redis、Nacos、网关、菜单权限需要怎么配置。
+- `80-deployment/03-成本树三级权限与双库初始化.md`：说明达梦中台角色、PostgreSQL/GaussDB 成本数据范围、已有用户授权和双库排障。
 - `PROJECT_STATE.md`：恢复当前项目状态和下一步最小任务。
 
 ## 已有输入
