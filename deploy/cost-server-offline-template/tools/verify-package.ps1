@@ -11,6 +11,7 @@ foreach ($required in @(
     'database\postgresql\02-upgrade-existing\10-upgrade-existing-to-20260722.sql',
     'database\postgresql\02-upgrade-existing\11-upgrade-existing-to-20260728-project-office-form.sql',
     'database\postgresql\02-upgrade-existing\12-upgrade-existing-to-20260817-access-scope.sql',
+    'database\postgresql\02-upgrade-existing\13-upgrade-existing-to-20260818-domain-scope.sql',
     'database\postgresql\02-upgrade-existing\20-verify.sql',
     'database\postgresql\03-data-integration\10-sync-to-cost.sql',
     'database\postgresql\03-data-integration\30-diagnose-book-zero.sql',
@@ -23,6 +24,7 @@ foreach ($required in @(
     'database\postgresql92\02-upgrade-existing\10-upgrade-existing-to-20260722.sql',
     'database\postgresql92\02-upgrade-existing\11-upgrade-existing-to-20260728-project-office-form.sql',
     'database\postgresql92\02-upgrade-existing\12-upgrade-existing-to-20260817-access-scope.sql',
+    'database\postgresql92\02-upgrade-existing\13-upgrade-existing-to-20260818-domain-scope.sql',
     'database\postgresql92\02-upgrade-existing\20-verify.sql',
     'database\postgresql92\03-data-integration\load-and-sync.ps1',
     'database\postgresql92\03-data-integration\10-sync-to-cost.sql',
@@ -63,6 +65,33 @@ foreach ($required in @(
     if (-not (Test-Path -LiteralPath (Join-Path $root $required))) {
         throw "Missing package file: $required"
     }
+}
+$requiredRoleCodes = @(
+    'cost_global_viewer',
+    'cost_research_department',
+    'cost_project_office',
+    'cost_unit_user'
+)
+foreach ($platformScript in @(
+    'database\platform\costree-access-role-menu-mysql-20260817.sql',
+    'database\platform\costree-access-role-menu-postgresql-20260817.sql',
+    'database\platform\costree-access-role-menu-postgresql92-20260817.sql',
+    'database\platform\costree-access-role-menu-dm8-20260817.sql'
+)) {
+    $scriptText = Get-Content -LiteralPath (Join-Path $root $platformScript) -Raw
+    foreach ($roleCode in $requiredRoleCodes) {
+        if ($scriptText.IndexOf($roleCode, [StringComparison]::Ordinal) -lt 0) {
+            throw "Platform role script is missing role ${roleCode}: $platformScript"
+        }
+    }
+}
+$checkerText = Get-Content -LiteralPath (Join-Path $root 'database\platform\check-cost-permissions.sql') -Raw
+if ($checkerText -notmatch 'expected_mapping_count' -or $checkerText -notmatch '\b29\b') {
+    throw 'PostgreSQL platform checker must validate all 29 expected role-menu mappings.'
+}
+$dmCheckerText = Get-Content -LiteralPath (Join-Path $root 'database\platform\check-cost-permissions-dm8.sql') -Raw
+if ($dmCheckerText -notmatch 'EXPECTED_MAPPING_COUNT' -or $dmCheckerText -notmatch '\b29\b') {
+    throw 'DM8 platform checker must validate all 29 expected role-menu mappings.'
 }
 $releaseDoc = Get-ChildItem -LiteralPath (Join-Path $root 'docs') -Filter '10-20260728*.md' -File |
     Select-Object -First 1

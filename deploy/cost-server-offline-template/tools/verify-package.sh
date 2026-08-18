@@ -8,6 +8,7 @@ for file in RELEASE-INFO.txt backend/app/cost-server.jar frontend/dist/index.htm
   database/postgresql/02-upgrade-existing/10-upgrade-existing-to-20260722.sql \
   database/postgresql/02-upgrade-existing/11-upgrade-existing-to-20260728-project-office-form.sql \
   database/postgresql/02-upgrade-existing/12-upgrade-existing-to-20260817-access-scope.sql \
+  database/postgresql/02-upgrade-existing/13-upgrade-existing-to-20260818-domain-scope.sql \
   database/postgresql/02-upgrade-existing/20-verify.sql \
   database/postgresql/03-data-integration/10-sync-to-cost.sql \
   database/postgresql/03-data-integration/30-diagnose-book-zero.sql \
@@ -20,6 +21,7 @@ for file in RELEASE-INFO.txt backend/app/cost-server.jar frontend/dist/index.htm
   database/postgresql92/02-upgrade-existing/10-upgrade-existing-to-20260722.sql \
   database/postgresql92/02-upgrade-existing/11-upgrade-existing-to-20260728-project-office-form.sql \
   database/postgresql92/02-upgrade-existing/12-upgrade-existing-to-20260817-access-scope.sql \
+  database/postgresql92/02-upgrade-existing/13-upgrade-existing-to-20260818-domain-scope.sql \
   database/postgresql92/02-upgrade-existing/20-verify.sql \
   database/postgresql92/03-data-integration/load-and-sync.sh \
   database/postgresql92/03-data-integration/10-sync-to-cost.sql \
@@ -59,5 +61,18 @@ for file in RELEASE-INFO.txt backend/app/cost-server.jar frontend/dist/index.htm
   SHA256SUMS.txt; do
   [[ -f "$file" ]] || { echo "Missing package file: $file" >&2; exit 1; }
 done
+for script in \
+  database/platform/costree-access-role-menu-mysql-20260817.sql \
+  database/platform/costree-access-role-menu-postgresql-20260817.sql \
+  database/platform/costree-access-role-menu-postgresql92-20260817.sql \
+  database/platform/costree-access-role-menu-dm8-20260817.sql; do
+  for role in cost_global_viewer cost_research_department cost_project_office cost_unit_user; do
+    grep -q "$role" "$script" || { echo "Platform role script is missing role $role: $script" >&2; exit 1; }
+  done
+done
+grep -Eq 'expected_mapping_count|EXPECTED_MAPPING_COUNT' database/platform/check-cost-permissions.sql
+grep -Eq '29' database/platform/check-cost-permissions.sql
+grep -Eq 'EXPECTED_MAPPING_COUNT' database/platform/check-cost-permissions-dm8.sql
+grep -Eq '29' database/platform/check-cost-permissions-dm8.sql
 sed 's/ \*/  /' SHA256SUMS.txt | sha256sum --check --strict
 echo 'Package verification passed.'
