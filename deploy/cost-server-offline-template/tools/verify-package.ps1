@@ -12,6 +12,7 @@ foreach ($required in @(
     'database\postgresql\02-upgrade-existing\11-upgrade-existing-to-20260728-project-office-form.sql',
     'database\postgresql\02-upgrade-existing\12-upgrade-existing-to-20260817-access-scope.sql',
     'database\postgresql\02-upgrade-existing\13-upgrade-existing-to-20260818-domain-scope.sql',
+    'database\postgresql\02-upgrade-existing\14-upgrade-existing-to-20260819-manual-fields-subsystem.sql',
     'database\postgresql\02-upgrade-existing\20-verify.sql',
     'database\postgresql\03-data-integration\10-sync-to-cost.sql',
     'database\postgresql\03-data-integration\30-diagnose-book-zero.sql',
@@ -25,6 +26,7 @@ foreach ($required in @(
     'database\postgresql92\02-upgrade-existing\11-upgrade-existing-to-20260728-project-office-form.sql',
     'database\postgresql92\02-upgrade-existing\12-upgrade-existing-to-20260817-access-scope.sql',
     'database\postgresql92\02-upgrade-existing\13-upgrade-existing-to-20260818-domain-scope.sql',
+    'database\postgresql92\02-upgrade-existing\14-upgrade-existing-to-20260819-manual-fields-subsystem.sql',
     'database\postgresql92\02-upgrade-existing\20-verify.sql',
     'database\postgresql92\03-data-integration\load-and-sync.ps1',
     'database\postgresql92\03-data-integration\10-sync-to-cost.sql',
@@ -51,6 +53,16 @@ foreach ($required in @(
     'database\postgresql92\03-data-integration\snapshot-upsert\08-缺失数据差异清单.sql',
     'database\postgresql92\03-data-integration\snapshot-upsert\09-定时任务最简顺序.md',
     'database\postgresql92\03-data-integration\snapshot-upsert\10-最简过程.ps1',
+    'database\postgresql92\03-data-integration\manual-preservation\00-开始这里.md',
+    'database\postgresql92\03-data-integration\manual-preservation\01-创建手工快照表.sql',
+    'database\postgresql92\03-data-integration\manual-preservation\02-生成清库前快照.sql',
+    'database\postgresql92\03-data-integration\manual-preservation\03-清库前验收.sql',
+    'database\postgresql92\03-data-integration\manual-preservation\04-清库后恢复.sql',
+    'database\postgresql92\03-data-integration\manual-preservation\05-恢复后验收.sql',
+    'database\postgresql92\03-data-integration\manual-preservation\10-旧清库保护过程.ps1',
+    'database\postgresql92\03-data-integration\business-upgrade\00-开始这里.md',
+    'database\postgresql92\03-data-integration\business-upgrade\01-升级填报保护与分系统字典-20260819.sql',
+    'database\postgresql92\03-data-integration\business-upgrade\02-检查填报保护与分系统字典-20260819.sql',
     'database\platform\costree-access-role-menu-mysql-20260817.sql',
     'database\platform\costree-access-role-menu-postgresql-20260817.sql',
     'database\platform\costree-access-role-menu-postgresql92-20260817.sql',
@@ -92,6 +104,74 @@ if ($checkerText -notmatch 'expected_mapping_count' -or $checkerText -notmatch '
 $dmCheckerText = Get-Content -LiteralPath (Join-Path $root 'database\platform\check-cost-permissions-dm8.sql') -Raw
 if ($dmCheckerText -notmatch 'EXPECTED_MAPPING_COUNT' -or $dmCheckerText -notmatch '\b29\b') {
     throw 'DM8 platform checker must validate all 29 expected role-menu mappings.'
+}
+
+$snapshotRoot = Join-Path $root 'database\postgresql92\03-data-integration\snapshot-upsert'
+$snapshotSql = (Get-ChildItem -LiteralPath $snapshotRoot -Filter '*.sql' -File | ForEach-Object {
+    Get-Content -LiteralPath $_.FullName -Raw -Encoding UTF8
+}) -join "`n"
+if ($snapshotSql -match '(?im)^\s*(TRUNCATE|DELETE\s+FROM)\s+(?:TABLE\s+)?(?:"?costree_mvp"?\.)') {
+    throw 'Regular snapshot-upsert must not clear costree_mvp business tables.'
+}
+if ($snapshotSql -match '(?im)^\s*(?:INSERT\s+INTO|UPDATE|DELETE\s+FROM|TRUNCATE(?:\s+TABLE)?)\s+(?:"?costree_mvp"?\.)?cost_project_basic\b') {
+    throw 'cost_project_basic must never be an external snapshot write target.'
+}
+$syncText = Get-Content -LiteralPath (Join-Path $snapshotRoot '05-业务表幂等同步.sql') -Raw -Encoding UTF8
+$protectedByTable = @{
+    cost_project = @('batch_no', 'stage_codes', 'unit_id', 'unit_name', 'unit_type',
+                     'project_office_status', 'unit_fill_status', 'audit_status',
+                     'dept_id', 'owner_user_id', 'warning_status', 'remark')
+    cost_unit_cost_detail = @('target_cost_amount', 'book_cost_amount', 'approved_amount',
+                              'salary_amount', 'material_amount', 'outsource_amount',
+                              'manage_amount', 'fuel_power_amount', 'other_amount', 'remark')
+    cost_work_order = @('product_target_cost', 'contract_amount', 'income_amount',
+                        'book_cost_amount', 'stage_codes', 'max_stage_code',
+                        'subsystem_name', 'product_short_name', 'quantity',
+                        'vertical_division', 'approved_amount', 'status', 'remark',
+                        'import_batch_id', 'dept_id', 'owner_user_id')
+}
+foreach ($tableName in $protectedByTable.Keys) {
+    $match = [regex]::Match($syncText,
+        "(?is)UPDATE\s+`"costree_mvp`"\.$tableName\s+\w+\s+SET\s+(?<set>.*?)\s+FROM")
+    if (-not $match.Success) { throw "Missing expected UPDATE block: $tableName" }
+    foreach ($column in $protectedByTable[$tableName]) {
+        if ($match.Groups['set'].Value -match "(?i)\b$column\s*=") {
+            throw "External snapshot UPDATE modifies protected field: $tableName.$column"
+        }
+    }
+}
+if ($syncText -match '(?is)UPDATE\s+"costree_mvp"\.cost_unit_cost_detail\s+\w+\s+SET\s+(?:(?!FROM).)*(project_id|project_name|domain_code|model_code|unit_id|unit_name|stage_code|deleted)\s*=') {
+    throw 'Unit amount UPDATE may only change contract, income and source trace fields.'
+}
+foreach ($token in @('manual_field_digest', 'manual_field_baseline', '手工字段或流程状态', "load_status = 'SUCCESS'")) {
+    if ($snapshotSql.IndexOf($token, [StringComparison]::OrdinalIgnoreCase) -lt 0) {
+        throw "Snapshot-upsert manual-field protection is missing token: $token"
+    }
+}
+
+$manualRoot = Join-Path $root 'database\postgresql92\03-data-integration\manual-preservation'
+$manualText = (Get-ChildItem -LiteralPath $manualRoot -File | ForEach-Object {
+    Get-Content -LiteralPath $_.FullName -Raw -Encoding UTF8
+}) -join "`n"
+foreach ($token in @('SNAPSHOT_READY', 'PRECHECK_OK', 'BackupVerified', 'I_UNDERSTAND_COST_BUSINESS_RESET',
+                      'RESTORED_PENDING_VERIFY', 'restore_exception', '恢复后验收')) {
+    if ($manualText.IndexOf($token, [StringComparison]::OrdinalIgnoreCase) -lt 0) {
+        throw "Manual reset protection is missing token: $token"
+    }
+}
+$businessUpgradeRoot = Join-Path $root 'database\postgresql92\03-data-integration\business-upgrade'
+$businessUpgrade = Get-Content -LiteralPath (Join-Path $businessUpgradeRoot '01-升级填报保护与分系统字典-20260819.sql') -Raw -Encoding UTF8
+$businessCheck = Get-Content -LiteralPath (Join-Path $businessUpgradeRoot '02-检查填报保护与分系统字典-20260819.sql') -Raw -Encoding UTF8
+foreach ($token in @('cost_subsystem_dict', 'varchar(255)', 'vertical_division DROP DEFAULT', '20260819')) {
+    if ($businessUpgrade.IndexOf($token, [StringComparison]::OrdinalIgnoreCase) -lt 0) {
+        throw "20260819 business upgrade is missing token: $token"
+    }
+}
+foreach ($token in @('subsystem_dict_duplicate_name', 'subsystem_dict_invalid_record',
+                      'subsystem_dict_business_guard_index', '20260819')) {
+    if ($businessCheck.IndexOf($token, [StringComparison]::OrdinalIgnoreCase) -lt 0) {
+        throw "20260819 business checker is missing token: $token"
+    }
 }
 $releaseDoc = Get-ChildItem -LiteralPath (Join-Path $root 'docs') -Filter '10-20260728*.md' -File |
     Select-Object -First 1

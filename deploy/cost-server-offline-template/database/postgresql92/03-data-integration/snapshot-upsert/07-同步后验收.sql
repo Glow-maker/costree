@@ -115,6 +115,147 @@ BEGIN
     END IF;
 END $$;
 
+DROP TABLE IF EXISTS tmp_cost_current_manual_baseline;
+CREATE TEMP TABLE tmp_cost_current_manual_baseline
+(
+    object_name  varchar(64) NOT NULL,
+    record_id    int8        NOT NULL,
+    digest_value varchar(32) NOT NULL
+) ON COMMIT DELETE ROWS;
+
+INSERT INTO tmp_cost_current_manual_baseline(object_name, record_id, digest_value)
+SELECT baseline.object_name, baseline.record_id,
+       md5(ROW(
+           basic.id, basic.project_id, basic.project_code, basic.project_name,
+           basic.product_attachment_type, basic.subsystem_name, basic.quantity,
+           basic.product_short_name, basic.vertical_division, basic.user_name,
+           basic.acquire_method, basic.batch_category, basic.platform_series,
+           basic.research_unit_id, basic.research_unit_name, basic.target_price,
+           basic.competitor_unit_1, basic.competitor_price_1,
+           basic.competitor_unit_2, basic.competitor_price_2,
+           basic.contract_amount, basic.tax_exempt, basic.target_cost_amount,
+           basic.approved_amount, basic.cycle_start, basic.cycle_end,
+           basic.stage_code, basic.basic_info, basic.status, basic.remark,
+           basic.import_batch_id, basic.dept_id, basic.owner_user_id,
+           basic.creator, basic.create_time, basic.updater, basic.update_time, basic.deleted
+       )::text)
+FROM cost_sync_stage.sync_control control
+JOIN cost_sync_stage.manual_field_baseline baseline
+  ON baseline.batch_code = control.batch_code AND baseline.tenant_id = control.tenant_id
+ AND baseline.object_name = 'project_basic'
+JOIN "costree_mvp".cost_project_basic basic
+  ON basic.tenant_id = control.tenant_id AND basic.id = baseline.record_id
+WHERE control.id = 1
+UNION ALL
+SELECT baseline.object_name, baseline.record_id,
+       md5(ROW(
+           project.id, project.project_code, project.batch_no, project.stage_codes,
+           project.unit_id, project.unit_name, project.unit_type,
+           project.project_office_status, project.unit_fill_status, project.audit_status,
+           project.dept_id, project.owner_user_id, project.warning_status,
+           project.remark
+       )::text)
+FROM cost_sync_stage.sync_control control
+JOIN cost_sync_stage.manual_field_baseline baseline
+  ON baseline.batch_code = control.batch_code AND baseline.tenant_id = control.tenant_id
+ AND baseline.object_name = 'project_state'
+JOIN "costree_mvp".cost_project project
+  ON project.tenant_id = control.tenant_id AND project.id = baseline.record_id
+WHERE control.id = 1
+UNION ALL
+SELECT baseline.object_name, baseline.record_id,
+       md5(ROW(
+           unit_cost.id,
+           unit_cost.target_cost_amount, unit_cost.approved_amount,
+           unit_cost.salary_amount, unit_cost.material_amount, unit_cost.outsource_amount,
+           unit_cost.manage_amount, unit_cost.fuel_power_amount, unit_cost.other_amount,
+           unit_cost.remark, unit_cost.deleted
+       )::text)
+FROM cost_sync_stage.sync_control control
+JOIN cost_sync_stage.manual_field_baseline baseline
+  ON baseline.batch_code = control.batch_code AND baseline.tenant_id = control.tenant_id
+ AND baseline.object_name = 'unit_fill'
+JOIN "costree_mvp".cost_unit_cost_detail unit_cost
+  ON unit_cost.tenant_id = control.tenant_id AND unit_cost.id = baseline.record_id
+WHERE control.id = 1
+UNION ALL
+SELECT baseline.object_name, baseline.record_id,
+       md5(ROW(
+           work_order.id, work_order.product_target_cost,
+           work_order.contract_amount, work_order.income_amount, work_order.approved_amount,
+           work_order.stage_codes, work_order.max_stage_code, work_order.subsystem_name,
+           work_order.product_short_name, work_order.quantity, work_order.vertical_division,
+           work_order.status, work_order.remark, work_order.import_batch_id,
+           work_order.dept_id, work_order.owner_user_id, work_order.deleted
+       )::text)
+FROM cost_sync_stage.sync_control control
+JOIN cost_sync_stage.manual_field_baseline baseline
+  ON baseline.batch_code = control.batch_code AND baseline.tenant_id = control.tenant_id
+ AND baseline.object_name = 'work_order_fill'
+JOIN "costree_mvp".cost_work_order work_order
+  ON work_order.tenant_id = control.tenant_id AND work_order.id = baseline.record_id
+WHERE control.id = 1
+UNION ALL
+SELECT baseline.object_name, baseline.record_id,
+       md5(ROW(
+           warning.id, warning.project_id, warning.work_order_id, warning.warning_source,
+           warning.warning_title, warning.target_cost_amount, warning.actual_cost_amount,
+           warning.over_amount, warning.over_rate, warning.threshold_rate,
+           warning.warning_level, warning.responsible_unit_name, warning.push_status,
+           warning.pushed_time, warning.receiver_scope, warning.message_id,
+           warning.status, warning.remark, warning.creator, warning.create_time,
+           warning.updater, warning.update_time, warning.deleted
+       )::text)
+FROM cost_sync_stage.sync_control control
+JOIN cost_sync_stage.manual_field_baseline baseline
+  ON baseline.batch_code = control.batch_code AND baseline.tenant_id = control.tenant_id
+ AND baseline.object_name = 'warning_state'
+JOIN "costree_mvp".cost_warning_record warning
+  ON warning.tenant_id = control.tenant_id AND warning.id = baseline.record_id
+WHERE control.id = 1;
+
+DO $$
+DECLARE
+    v_mismatch text;
+BEGIN
+    SELECT string_agg(baseline.object_name || '#' || baseline.record_id::text, ', ')
+      INTO v_mismatch
+    FROM cost_sync_stage.sync_control control
+    JOIN cost_sync_stage.manual_field_baseline baseline
+      ON baseline.batch_code = control.batch_code
+     AND baseline.tenant_id = control.tenant_id
+    LEFT JOIN tmp_cost_current_manual_baseline current_baseline
+      ON current_baseline.object_name = baseline.object_name
+     AND current_baseline.record_id = baseline.record_id
+    WHERE control.id = 1
+      AND (current_baseline.record_id IS NULL
+           OR baseline.digest_value <> current_baseline.digest_value);
+
+    IF v_mismatch IS NOT NULL THEN
+        RAISE EXCEPTION '验收失败：常规同步改动了成本库手工字段或流程状态：%', v_mismatch;
+    END IF;
+
+    IF (SELECT count(*) FROM cost_sync_stage.sync_control control
+        JOIN cost_sync_stage.manual_field_digest digest
+          ON digest.batch_code = control.batch_code AND digest.tenant_id = control.tenant_id
+        WHERE control.id = 1) <> 5 THEN
+        RAISE EXCEPTION '验收失败：同步前手工字段摘要不完整，拒绝标记 SUCCESS';
+    END IF;
+
+    IF (SELECT COALESCE(sum(digest.row_count), 0)
+        FROM cost_sync_stage.sync_control control
+        JOIN cost_sync_stage.manual_field_digest digest
+          ON digest.batch_code = control.batch_code AND digest.tenant_id = control.tenant_id
+        WHERE control.id = 1) <>
+       (SELECT count(*)
+        FROM cost_sync_stage.sync_control control
+        JOIN cost_sync_stage.manual_field_baseline baseline
+          ON baseline.batch_code = control.batch_code AND baseline.tenant_id = control.tenant_id
+        WHERE control.id = 1) THEN
+        RAISE EXCEPTION '验收失败：手工字段摘要与逐行基线不一致';
+    END IF;
+END $$;
+
 UPDATE cost_sync_stage.sync_control
 SET load_status = 'SUCCESS',
     synced_at = CURRENT_TIMESTAMP,

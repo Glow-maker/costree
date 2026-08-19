@@ -49,6 +49,31 @@ CREATE TABLE IF NOT EXISTS cost_sync_stage.sync_history
     remark           varchar(500)
 );
 
+-- 常规同步前保存的手工字段摘要。02 只清空六张 stg_* 表，不会清空本表。
+CREATE TABLE IF NOT EXISTS cost_sync_stage.manual_field_digest
+(
+    batch_code   varchar(64)  NOT NULL,
+    tenant_id    int8         NOT NULL,
+    object_name  varchar(64)  NOT NULL,
+    row_count    int8         NOT NULL,
+    digest_value varchar(32)  NOT NULL,
+    captured_at  timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT pk_cost_sync_manual_digest PRIMARY KEY (batch_code, tenant_id, object_name)
+);
+
+-- 摘要的逐行基线。同步后只复核同步前已存在的行，新插入的外部基础行不会造成误报。
+CREATE TABLE IF NOT EXISTS cost_sync_stage.manual_field_baseline
+(
+    batch_code   varchar(64) NOT NULL,
+    tenant_id    int8        NOT NULL,
+    object_name  varchar(64) NOT NULL,
+    record_id    int8        NOT NULL,
+    digest_value varchar(32) NOT NULL,
+    captured_at  timestamp   NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT pk_cost_sync_manual_baseline
+        PRIMARY KEY (batch_code, tenant_id, object_name, record_id)
+);
+
 CREATE TABLE IF NOT EXISTS cost_sync_stage.stg_unit_dict
 (
     source_record_id     varchar(255),

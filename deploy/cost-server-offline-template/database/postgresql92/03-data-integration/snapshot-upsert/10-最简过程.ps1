@@ -25,7 +25,7 @@ if (-not $SkipClearAndLoad) {
     }
 }
 
-$files = @()
+$files = @(Join-Path $scriptRoot '01-创建标准中间表.sql')
 if (-not $SkipClearAndLoad) {
     $files += Join-Path $scriptRoot '02-只清空中间表.sql'
     $files += $LoadSql

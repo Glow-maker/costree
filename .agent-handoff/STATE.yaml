@@ -1,21 +1,17 @@
 version: 1
 project: costree
 created_at: 2026-06-12 00:04:41 +0800
-updated_at: 2026-08-18 02:32:00 +0800
-last_resumed_at: 2026-08-17 15:04:48 +0800
-current_phase: 第一阶段 MVP 权限实现已提交，进入真实账号与目标数据库验收
-current_goal: 在同一业务租户内完成 tenant_admin 授权管理与三类成本业务角色的数据范围控制，并在真实中台、达梦平台库和 PostgreSQL
-  9.2/GaussDB 成本库完成端到端验收。
-next_step: 在完整中台环境启动 system-server、gateway、cost-server 和前端，使用 tenant_admin、cost_global_viewer、cost_project_office、cost_unit_user
-  四类真实账号验收默认落地、菜单、直接 URL、项目与单位交集、详情、导出和工作令状态机；随后在备份库执行 DM 平台角色脚本、PG92/GaussDB 12 升级与
-  20-verify，并替换 snapshot-upsert 的现场源字段映射进行重复同步对账。
+updated_at: 2026-08-19 03:45:00 +0800
+last_resumed_at: 2026-08-19 02:50:03 +0800
+current_phase: 20260819 数据保护与分系统字典实现完成，等待真实 PostgreSQL 9.2/GaussDB(DWS) 演练
+current_goal: 确保外部全量快照只更新外部拥有字段，成本库填报和流程状态不被覆盖，并为旧清库流程提供独立可验收的恢复保护层。
+next_step: 在真实 PostgreSQL 9.2/GaussDB(DWS) 备份环境先执行 20260819 升级与检查，再用两批相同源快照验证幂等和手工字段不变，最后以专用测试库执行一次
+  cost_manual_snapshot 清库恢复往返；完成前不得宣称内网上线验收通过。
 blockers:
-- 当前没有完整可用的 system-server、gateway、cost-server、Nacos、Redis 和业务数据库链路，AdminUserApi Feign
-  注册仅通过静态与编译验证，未做真实 ApplicationContext 启动。
-- 没有可用的四类真实测试账号，本轮不能证明真实菜单、默认落地、直接 URL、详情、导出和工作令状态机端到端验收通过。
-- 尚未在真实达梦 MQB、PostgreSQL 9.2 或 GaussDB(DWS) 8.2.1 执行本轮脚本；静态兼容检查不能替代目标库验收。
-- snapshot-upsert 仍需替换现场源 schema、表名和字段转换；跨文件流程采用分阶段提交，不承诺整批原子回滚。
-- DWS 兼容模式下 scope 防重依赖普通索引加重复数据检查，仍需现场并发写入与重复键卫生验收；单位范围当前仍以名称匹配事实表，改名或同名风险需业务数据验证。
+- 本机没有 psql、gsql、mysql 或 disql，尚未执行真实数据库 SQL、两批幂等同步或清库恢复演练。
+- 发布目录 cost-intranet-data-kit 被根仓库 .gitignore 忽略，内容已落盘并通过 SHA256/验包，但不会自动进入普通 Git
+  提交。
+- 当前三个仓库还包含前序已批准但未提交的成本功能和交接状态变更，本轮没有提交或推送。
 key_files:
 - .agent-handoff/START-HERE.md
 - .agent-handoff/CURRENT.md

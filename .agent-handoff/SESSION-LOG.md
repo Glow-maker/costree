@@ -1,66 +1,6 @@
 # 会话记录
 
 ## 一次会话
-- 开始时间：2026-06-18 02:25:00 +0800
-- 结束时间：2026-06-18 02:37:16 +0800
-- 本次焦点：成本库文档路径可迁移口径收口
-
-### 本次进展
-- 统一 note 活跃 Markdown 中的本机绝对路径为占位符或相对路径。
-- 更新 README.md 和 AGENTS.md，明确 <costree-root>、<frontend-root>、<backend-root> 以及推荐相对布局。
-- 更新 00-overview/00-文档结构与维护规范.md，新增路径书写规则。
-- 更新 00-overview/06-新对话接管成本库项目启动指南.md，将启动 prompt 和常用命令改成项目根目录下的相对路径。
-- 更新 PROJECT_STATE.md、PLAN.md、DECISIONS.md 和 90-logs/02-变更日志.md，记录路径可迁移口径和当前前后端已推送基线。
-
-### 涉及文件
-- note/README.md
-- note/AGENTS.md
-- note/PROJECT_STATE.md
-- note/PLAN.md
-- note/DECISIONS.md
-- note/00-overview/00-文档结构与维护规范.md
-- note/00-overview/06-新对话接管成本库项目启动指南.md
-- note/90-logs/02-变更日志.md
-- .agent-handoff/_tmp/close-session-20260618-portable-paths.json
-
-### 下次恢复点
-- 继续项目时，先在 <costree-root> 运行 python .agent-handoff/runtime/agent-handoff/scripts/handoff.py resume .；随后按 PROJECT_STATE.md 的下一步最小任务推进内网部署验证。
-
-### 风险与备注
-- 历史 .agent-handoff 会话日志和归档记录可能仍包含当时真实执行路径；这些属于历史记录，不作为当前操作指南使用。
-- 如果内网仓库不采用推荐相对布局，需要先把 <frontend-root> 和 <backend-root> 替换为实际仓库根目录。
-
-## 一次会话
-- 开始时间：2026-06-21 23:20:00 +0800
-- 结束时间：2026-06-22 00:03:25 +0800
-- 本次焦点：成本库内网数据源表映射和两个型号试点步骤收口
-
-### 本次进展
-- 整理主业项目树原表 ads_lc_lshsxm2022 的字段和它到 cost_model_node、cost_project 的映射思路。
-- 整理工作令关联主业项目字典 dwd_bd_bfcustomitem_gzl 的字段和它到 cost_work_order 的映射思路。
-- 整理项目工作令账面成本明细 dws_bu_pz_pzmx_gzl 的字段和它到 cost_work_order_ledger_detail 的映射思路。
-- 解释 /cost/catalog 左侧树来自 cost_model_node，右侧项目卡片来自 cost_project，工作令数量来自 cost_work_order，账面成本来自账面明细聚合。
-- 将原本偏专业的总设计方案调整为更容易交接理解的语言，并补充两个型号试点的操作顺序。
-
-### 涉及文件
-- note/30-data/05-内网源表与成本库业务表关系实施方案.md
-- note/30-data/06-内网原表-主业项目树-ads_lc_lshsxm2022.md
-- note/30-data/07-内网原表-工作令关联主业项目字典-dwd_bd_bfcustomitem_gzl.md
-- note/30-data/08-内网原表-项目工作令账面成本明细-dws_bu_pz_pzmx_gzl.md
-- note/30-data/09-成本库内网数据对接总设计方案.md
-- note/30-data/README.md
-- note/90-logs/02-变更日志.md
-- .agent-handoff/_tmp/close-session-20260622-cost-data-mapping-wrapup.json
-
-### 下次恢复点
-- 继续项目时先运行 python .agent-handoff/runtime/agent-handoff/scripts/handoff.py resume .；下一步从两个型号试点第 4 步开始，补 cost_work_order 目标成本、阶段、分系统等业务字段，再核验成本树、预警和组成穿透。
-
-### 风险与备注
-- 当前映射方案来自内网截图和现有 DDL/代码理解，正式上线前仍需拿到内网真实 DDL 和样本数据复核。
-- 如果 source_work_order_id 或 project_code 在真实库中不能稳定匹配，需要补映射表或改导入规则。
-- 如果账面明细达到百万级以上，应优先靠数据库索引和 SQL 聚合，不要在 Java 内存中全量汇总。
-
-## 一次会话
 - 开始时间：2026-06-26 08:00:00 +0800
 - 结束时间：2026-06-26 10:25:00 +0800
 - 本次焦点：成本库树页面展示优化、数据采集字段口径调整和前后端提交推送收尾
@@ -427,3 +367,85 @@
 - 单位事实表仍按单位名称过滤，同名、改名和一个管理单位映射多个核算单位的场景需要真实数据验收。
 - 工作令状态读取与更新不是单 SQL 条件写，极端并发状态迁移仍存在读后写竞态，后续可用条件 UPDATE 或乐观锁进一步收口。
 - 正式离线包尚未构建；候选 dirty 包的 source-state patch 不包含 untracked 文件内容，只有干净提交后的正式包可完整复现。
+
+## 一次会话
+- 开始时间：2026-08-18 02:32:00 +0800
+- 结束时间：2026-08-18 02:49:00 +0800
+- 本次焦点：修复达梦中台权限初始化的旧路由兼容与误删风险，并把中台权限 SQL、验收和说明加入指定数据集成发布目录
+
+### 本次进展
+- 按 agent-handoff 恢复最新权限与发布状态，确认数据集成发布目录被 .gitignore 忽略。
+- 核对控制器、四方言脚本和 DM checker，确认 18 个权限点与 22 个角色映射齐全，tenant_admin 无需新增映射。
+- 在 DM 初始化脚本中增加旧 cost-access-permissions 顶级路由的子权限迁移、旧角色映射清理和逻辑删除。
+- 把 DM 角色映射清理从 PERMISSION LIKE cost:% 收窄为 18 个精确受管权限，避免误删目录外现场自定义成本权限。
+- 扩展 DM checker，检查正确与旧路径数量、角色去重、权限点重复、缺失映射、多余受管映射和同用户多成本角色冲突。
+- 在指定 release-20260729-data-integration 下新增 platform/README.md 与 platform/dm8 两个 SQL，并更新总入口和 RELEASE-INFO。
+- 发现发布包 snapshot 内容落后于 root 受控模板，就地同步 00、06、07、09、10 和外部源快照设计说明，保留用户指定目录名。
+- 扩展包校验器，要求两个 DM SQL 和说明存在，并断言三个角色、18 权限、正确/旧路由处理、DATA_SCOPE=5、禁止宽泛 cost:% 删除及禁止写 SYSTEM_USER_ROLE。
+- 重新生成相关 SHA256 条目并执行包校验：manual 9、snapshot 8、DM8 2、应用二进制 0、前端资源 0；44 个文件与 manifest 一一对应。
+- 逐字节核对发布包 DM SQL 与 baback 源文件一致，snapshot 全目录与 root 受控模板一致；两个仓库 diff check 通过。
+
+### 涉及文件
+- baback/sql/dm/costree-access-role-menu-20260817.sql
+- baback/sql/dm/check-cost-permissions-20260817.sql
+- cost-intranet-data-kit/release-20260729-data-integration/00-开始这里.md
+- cost-intranet-data-kit/release-20260729-data-integration/RELEASE-INFO.txt
+- cost-intranet-data-kit/release-20260729-data-integration/SHA256SUMS.txt
+- cost-intranet-data-kit/release-20260729-data-integration/platform/README.md
+- cost-intranet-data-kit/release-20260729-data-integration/platform/dm8/costree-access-role-menu-20260817.sql
+- cost-intranet-data-kit/release-20260729-data-integration/platform/dm8/check-cost-permissions-20260817.sql
+- cost-intranet-data-kit/release-20260729-data-integration/postgresql92/snapshot-upsert/00-开始这里.md
+- cost-intranet-data-kit/release-20260729-data-integration/postgresql92/snapshot-upsert/06-重算工作令账面.sql
+- cost-intranet-data-kit/release-20260729-data-integration/postgresql92/snapshot-upsert/07-同步后验收.sql
+- cost-intranet-data-kit/release-20260729-data-integration/postgresql92/snapshot-upsert/09-定时任务最简顺序.md
+- cost-intranet-data-kit/release-20260729-data-integration/postgresql92/snapshot-upsert/10-最简过程.ps1
+- cost-intranet-data-kit/release-20260729-data-integration/docs/11-外部源全量快照中间表幂等同步.md
+- cost-intranet-data-kit/release-20260729-data-integration/tools/verify-package.ps1
+
+### 下次恢复点
+- 下次先运行 D:\Anaconda\python.exe .agent-handoff/runtime/agent-handoff/scripts/handoff.py resume .。重点检查 baback 两个未提交 DM SQL，以及 ignored 的 cost-intranet-data-kit/release-20260729-data-integration/platform 与 SHA256SUMS。真实执行时先备份 MQB 五张平台表、替换租户 124、关闭自动提交并串行运行初始化，再执行 checker，前六组 STATUS 必须全为 OK；随后做四账号登录验收。没有真实 DM 结果前不要宣称现场通过。
+
+### 风险与备注
+- 未连接真实 DM8，当前无法证明 UPDATE 同表子查询、客户端自动提交关闭和异常后整体回滚在现场工具中符合预期。
+- 初始化脚本会重建三个成本角色在隐藏权限目录、目录子菜单及 18 个受管权限点上的映射；现场人工定制必须在执行前导出对比。
+- DM 表缺少本脚本可依赖的唯一约束或显式锁语法证明，并发运行可能创建重复路由或权限点；文档要求串行执行，checker 会发现重复但不会自动修复。
+- ignored 发布目录无法依靠普通 Git 提交复现，本次由 RELEASE-INFO、SHA256SUMS 和源文件哈希对照提供本地证据。
+
+## 一次会话
+- 开始时间：2026-08-19 02:30:00 +0800
+- 结束时间：2026-08-19 03:45:00 +0800
+- 本次焦点：实现内网常规快照同步手工字段保护、旧清库快照恢复、成本分系统字典及 20260819 发布包
+
+### 本次进展
+- 新增 cost_subsystem_dict 的 MySQL、PostgreSQL、PostgreSQL 9.2/DWS 全量和 20260819 增量结构，历史项目办与工作令分系统值去重回填。
+- 新增成本分系统字典后端查询/维护接口、租户内重名校验、管理员权限、服务测试，以及成本后台管理页和菜单可见性。
+- collect 页移除中台通用 cost_subsystem 字典依赖，项目办与工作令均改用成本字典多选；阶段继续以逗号分隔多选保存。
+- snapshot-upsert 新增逐行 manual_field_baseline 和五类摘要；同步后对项目办、项目状态、单位填报、工作令填报和预警状态逐行复验，异常拒绝 SUCCESS。
+- 收紧工作令同步字段所有权，既有行不再被同步清空 fiscal_year，合同、到款、目标、审定、阶段、分系统、简称、配套数、纵向分工和状态均不进入外部 UPDATE SET。
+- 新增 cost_manual_snapshot 建表、生成快照、清库前验收、业务键恢复、异常清单、恢复后验收及显式备份/确认包装器。
+- 指定 release-20260729-data-integration 原地升级 20260819，新增 business-upgrade、manual-preservation、验收文档、RELEASE-INFO、验包规则和 58 项 SHA256。
+- 验证通过：后端 16 测试、前端成本 vue-tsc 与目标 ESLint、DWS 29 SQL PowerShell/Bash 静态检查、三个仓库 diff check、发布包验包，以及三个模板目录与发布副本逐文件 SHA256 一致。
+
+### 涉及文件
+- baback/sql/mysql/costree-cost.sql
+- baback/sql/postgresql/costree-cost.sql
+- baback/sql/postgresql92/costree-cost.sql
+- baback/sql/*/costree-cost-20260819-manual-fields-subsystem.sql
+- baback/sql/postgresql*/costree-deploy/14-upgrade-existing-to-20260819-manual-fields-subsystem.sql
+- baback/yudao-module-cost/.../subsystemdict/
+- costree-frontend/src/api/cost/subsystemDict/
+- costree-frontend/src/views/cost/subsystemDict/
+- costree-frontend/src/views/cost/collect/index.vue
+- deploy/cost-server-offline-template/database/postgresql92/03-data-integration/snapshot-upsert/
+- deploy/cost-server-offline-template/database/postgresql92/03-data-integration/manual-preservation/
+- deploy/cost-server-offline-template/database/postgresql92/03-data-integration/business-upgrade/
+- cost-intranet-data-kit/release-20260729-data-integration/
+
+### 下次恢复点
+- 下次先执行 agent-handoff resume。重点进入 ignored 的 cost-intranet-data-kit/release-20260729-data-integration，按 docs/12 和 postgresql92/business-upgrade 先升级检查，再执行 snapshot-upsert 两批幂等验收，最后仅在完整备份的专用测试库用 manual-preservation 做一次清库恢复往返。要求外部字段更新、手工字段和状态摘要不变、源缺失只出差异、不删除业务行；无真实结果前不要宣称内网上线通过。
+
+### 风险与备注
+- 未在真实 PostgreSQL 9.2 或 GaussDB(DWS) 执行新增 DDL、逐行摘要、恢复 SQL 和动态索引检查，静态兼容通过不能替代现场执行。
+- 清库恢复会按稳定业务键重映射项目、单位和工作令；真实历史数据中的重复键、单位别名或孤立预警必须通过 restore_exception 和现场演练确认。
+- cost_manual_snapshot 表通过当前 20260819 业务表结构创建，必须先完成 20260819 升级；未来新增手工字段时需同步升级保护表和摘要。
+- Maven 构建仍输出仓库既有重复依赖声明警告，本轮聚焦测试成功但未处理这些无关 POM 问题。

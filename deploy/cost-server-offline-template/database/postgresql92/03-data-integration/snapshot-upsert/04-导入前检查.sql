@@ -1,6 +1,8 @@
 -- 全量快照导入前检查。任何异常都会中止，不修改业务表。
 -- 现场需把业务 schema costree_mvp 和租户 124 调整为实际值。
 
+BEGIN;
+
 DO $$
 DECLARE
     v_tenant_id int8;
@@ -24,9 +26,10 @@ BEGIN
       AND table_name IN (
           'cost_unit_dict', 'cost_model_node', 'cost_project',
           'cost_unit_cost_detail', 'cost_work_order',
-          'cost_work_order_ledger_detail'
+          'cost_work_order_ledger_detail', 'cost_project_basic',
+          'cost_warning_record', 'cost_subsystem_dict'
       );
-    IF v_table_count <> 6 THEN
+    IF v_table_count <> 9 THEN
         RAISE EXCEPTION '成本库业务 schema costree_mvp 缺少必要业务表，请先执行当前完整 DDL/升级脚本';
     END IF;
 
@@ -46,8 +49,16 @@ BEGIN
         SELECT 1 FROM information_schema.columns
         WHERE table_schema = 'costree_mvp' AND table_name = 'cost_work_order_ledger_detail'
           AND column_name = 'amount_wan'
+    ) OR NOT EXISTS (
+        SELECT 1 FROM information_schema.columns
+        WHERE table_schema = 'costree_mvp' AND table_name = 'cost_project_basic'
+          AND column_name = 'stage_code' AND character_maximum_length >= 255
+    ) OR EXISTS (
+        SELECT 1 FROM information_schema.columns
+        WHERE table_schema = 'costree_mvp' AND table_name = 'cost_work_order'
+          AND column_name = 'vertical_division' AND column_default IS NOT NULL
     ) THEN
-        RAISE EXCEPTION '业务表不是当前版本，缺少管理单位、溯源、到款或万元金额字段';
+        RAISE EXCEPTION '业务表不是 20260819 结构，缺少字段、阶段长度不足或纵向分工仍有默认值';
     END IF;
 
     IF NOT EXISTS (SELECT 1 FROM cost_sync_stage.stg_model_node)
@@ -235,6 +246,113 @@ BEGIN
         RAISE EXCEPTION '成本库目标表已存在重复业务键，请先清理重复记录再同步';
     END IF;
 END $$;
+
+DELETE FROM cost_sync_stage.manual_field_digest digest
+USING cost_sync_stage.sync_control control
+WHERE control.id = 1
+  AND digest.batch_code = control.batch_code
+  AND digest.tenant_id = control.tenant_id;
+
+DELETE FROM cost_sync_stage.manual_field_baseline baseline
+USING cost_sync_stage.sync_control control
+WHERE control.id = 1
+  AND baseline.batch_code = control.batch_code
+  AND baseline.tenant_id = control.tenant_id;
+
+INSERT INTO cost_sync_stage.manual_field_baseline
+    (batch_code, tenant_id, object_name, record_id, digest_value, captured_at)
+SELECT control.batch_code, control.tenant_id, 'project_basic', basic.id,
+       md5(ROW(
+           basic.id, basic.project_id, basic.project_code, basic.project_name,
+           basic.product_attachment_type, basic.subsystem_name, basic.quantity,
+           basic.product_short_name, basic.vertical_division, basic.user_name,
+           basic.acquire_method, basic.batch_category, basic.platform_series,
+           basic.research_unit_id, basic.research_unit_name, basic.target_price,
+           basic.competitor_unit_1, basic.competitor_price_1,
+           basic.competitor_unit_2, basic.competitor_price_2,
+           basic.contract_amount, basic.tax_exempt, basic.target_cost_amount,
+           basic.approved_amount, basic.cycle_start, basic.cycle_end,
+           basic.stage_code, basic.basic_info, basic.status, basic.remark,
+           basic.import_batch_id, basic.dept_id, basic.owner_user_id,
+           basic.creator, basic.create_time, basic.updater, basic.update_time, basic.deleted
+       )::text), CURRENT_TIMESTAMP
+FROM cost_sync_stage.sync_control control
+JOIN "costree_mvp".cost_project_basic basic ON basic.tenant_id = control.tenant_id
+WHERE control.id = 1
+UNION ALL
+SELECT control.batch_code, control.tenant_id, 'project_state', project.id,
+       md5(ROW(
+           project.id, project.project_code, project.batch_no, project.stage_codes,
+           project.unit_id, project.unit_name, project.unit_type,
+           project.project_office_status, project.unit_fill_status, project.audit_status,
+           project.dept_id, project.owner_user_id, project.warning_status,
+           project.remark
+       )::text), CURRENT_TIMESTAMP
+FROM cost_sync_stage.sync_control control
+JOIN "costree_mvp".cost_project project ON project.tenant_id = control.tenant_id
+WHERE control.id = 1
+UNION ALL
+SELECT control.batch_code, control.tenant_id, 'unit_fill', unit_cost.id,
+       md5(ROW(
+           unit_cost.id,
+           unit_cost.target_cost_amount, unit_cost.approved_amount,
+           unit_cost.salary_amount, unit_cost.material_amount, unit_cost.outsource_amount,
+           unit_cost.manage_amount, unit_cost.fuel_power_amount, unit_cost.other_amount,
+           unit_cost.remark, unit_cost.deleted
+       )::text), CURRENT_TIMESTAMP
+FROM cost_sync_stage.sync_control control
+JOIN "costree_mvp".cost_unit_cost_detail unit_cost ON unit_cost.tenant_id = control.tenant_id
+WHERE control.id = 1
+UNION ALL
+SELECT control.batch_code, control.tenant_id, 'work_order_fill', work_order.id,
+       md5(ROW(
+           work_order.id, work_order.product_target_cost,
+           work_order.contract_amount, work_order.income_amount, work_order.approved_amount,
+           work_order.stage_codes, work_order.max_stage_code, work_order.subsystem_name,
+           work_order.product_short_name, work_order.quantity, work_order.vertical_division,
+           work_order.status, work_order.remark, work_order.import_batch_id,
+           work_order.dept_id, work_order.owner_user_id, work_order.deleted
+       )::text), CURRENT_TIMESTAMP
+FROM cost_sync_stage.sync_control control
+JOIN "costree_mvp".cost_work_order work_order ON work_order.tenant_id = control.tenant_id
+WHERE control.id = 1
+UNION ALL
+SELECT control.batch_code, control.tenant_id, 'warning_state', warning.id,
+       md5(ROW(
+           warning.id, warning.project_id, warning.work_order_id, warning.warning_source,
+           warning.warning_title, warning.target_cost_amount, warning.actual_cost_amount,
+           warning.over_amount, warning.over_rate, warning.threshold_rate,
+           warning.warning_level, warning.responsible_unit_name, warning.push_status,
+           warning.pushed_time, warning.receiver_scope, warning.message_id,
+           warning.status, warning.remark, warning.creator, warning.create_time,
+           warning.updater, warning.update_time, warning.deleted
+       )::text), CURRENT_TIMESTAMP
+FROM cost_sync_stage.sync_control control
+JOIN "costree_mvp".cost_warning_record warning ON warning.tenant_id = control.tenant_id
+WHERE control.id = 1;
+
+INSERT INTO cost_sync_stage.manual_field_digest
+    (batch_code, tenant_id, object_name, row_count, digest_value, captured_at)
+SELECT control.batch_code, control.tenant_id, object_type.object_name,
+       count(baseline.record_id)::int8,
+       md5(COALESCE(string_agg(baseline.digest_value, '' ORDER BY baseline.record_id), 'EMPTY')),
+       CURRENT_TIMESTAMP
+FROM cost_sync_stage.sync_control control
+CROSS JOIN (
+    SELECT 'project_basic'::varchar(64) AS object_name
+    UNION ALL SELECT 'project_state'::varchar(64)
+    UNION ALL SELECT 'unit_fill'::varchar(64)
+    UNION ALL SELECT 'work_order_fill'::varchar(64)
+    UNION ALL SELECT 'warning_state'::varchar(64)
+) object_type
+LEFT JOIN cost_sync_stage.manual_field_baseline baseline
+  ON baseline.batch_code = control.batch_code
+ AND baseline.tenant_id = control.tenant_id
+ AND baseline.object_name = object_type.object_name
+WHERE control.id = 1
+GROUP BY control.batch_code, control.tenant_id, object_type.object_name;
+
+COMMIT;
 
 SELECT 'precheck passed' AS result,
        tenant_id, batch_code, source_tag, load_status, loaded_at

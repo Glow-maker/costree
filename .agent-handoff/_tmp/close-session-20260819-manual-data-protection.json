@@ -1,0 +1,86 @@
+{
+  "session": {
+    "started_at": "2026-08-19T02:30:00+08:00",
+    "ended_at": "2026-08-19T03:45:00+08:00",
+    "focus": "实现内网常规快照同步手工字段保护、旧清库快照恢复、成本分系统字典及 20260819 发布包"
+  },
+  "current_status": {
+    "phase": "20260819 数据保护与分系统字典实现完成，等待真实 PostgreSQL 9.2/GaussDB(DWS) 演练",
+    "goal": "确保外部全量快照只更新外部拥有字段，成本库填报和流程状态不被覆盖，并为旧清库流程提供独立可验收的恢复保护层。",
+    "summary": "已将 snapshot-upsert 固定为常规入口，只清六张 cost_sync_stage 中间表并按业务键 UPDATE + INSERT；同步前建立逐行手工字段基线和五类摘要，同步后逐行复验，异常不标记 SUCCESS。新增 cost_manual_snapshot 独立保护层及强确认 PowerShell 包装器，覆盖项目办、项目状态、单位填报、工作令填报和预警状态的快照、恢复、异常清单与复验。新增成本库 cost_subsystem_dict、管理员维护 API/页面和 collect 多选，阶段扩至 varchar(255)，移除 vertical_division 的旧默认值但不改历史 false。指定 release-20260729-data-integration 已原地升级为 20260819，新增升级、检查、保护恢复、说明、验包规则和 58 项 SHA256。后端 16 个聚焦测试、前端成本类型与目标 ESLint、DWS 29 SQL 静态检查、发布包验包和模板/发布哈希均通过。",
+    "next_step": "在真实 PostgreSQL 9.2/GaussDB(DWS) 备份环境先执行 20260819 升级与检查，再用两批相同源快照验证幂等和手工字段不变，最后以专用测试库执行一次 cost_manual_snapshot 清库恢复往返；完成前不得宣称内网上线验收通过。",
+    "blockers": [
+      "本机没有 psql、gsql、mysql 或 disql，尚未执行真实数据库 SQL、两批幂等同步或清库恢复演练。",
+      "发布目录 cost-intranet-data-kit 被根仓库 .gitignore 忽略，内容已落盘并通过 SHA256/验包，但不会自动进入普通 Git 提交。",
+      "当前三个仓库还包含前序已批准但未提交的成本功能和交接状态变更，本轮没有提交或推送。"
+    ]
+  },
+  "tasks_to_add": [],
+  "tasks_to_update": [
+    {
+      "task_id": "TASK-006",
+      "title": "完成双库权限初始化和最终内网部署包",
+      "details": "发布包已原地升级为 20260819：新增业务结构升级、成本分系统字典、snapshot-upsert 手工字段基线复验、cost_manual_snapshot 清库保护和验包强制规则。静态、单测和包校验通过；仍需真实 DM8 权限验收及 PostgreSQL 9.2/DWS 两批同步和一次恢复演练。",
+      "priority": "P0"
+    }
+  ],
+  "tasks_to_complete": [],
+  "tasks_to_add_and_complete": [
+    {
+      "title": "实现 20260819 内网同步与填报数据保护升级",
+      "details": "完成常规 snapshot-upsert 手工字段保护、旧清库快照恢复、成本分系统字典、结构升级、前后端填报改造、发布包原地升级与验包。",
+      "priority": "P0",
+      "notes": "本地聚焦测试和静态检查通过；真实 PG9.2/DWS 数据库验收仍属于 TASK-006 的上线前阻断。"
+    }
+  ],
+  "decisions_to_add": [
+    {
+      "summary": "常规生产同步唯一入口继续使用 snapshot-upsert，永不清空成本业务表。",
+      "rationale": "外部全量数据只进入六张中间表，业务表按稳定业务键 UPDATE + INSERT，缺失源记录只进入差异清单，避免破坏成本库填报和状态。"
+    },
+    {
+      "summary": "旧清库兼容使用独立 cost_manual_snapshot，且必须先验证整库备份并显式确认。",
+      "rationale": "清库恢复是灾备兼容能力，不应进入定时同步；独立 schema、异常清单和恢复后复验可降低静默丢失手工数据的风险，但不能替代数据库备份。"
+    },
+    {
+      "summary": "分系统字典归成本数据库和成本后台维护。",
+      "rationale": "项目办与研制单位填报依赖成本专用启用项，避免耦合 DM8 中台通用字典；仅 tenant_admin/super_admin 可维护。"
+    }
+  ],
+  "session_log": {
+    "progress": [
+      "新增 cost_subsystem_dict 的 MySQL、PostgreSQL、PostgreSQL 9.2/DWS 全量和 20260819 增量结构，历史项目办与工作令分系统值去重回填。",
+      "新增成本分系统字典后端查询/维护接口、租户内重名校验、管理员权限、服务测试，以及成本后台管理页和菜单可见性。",
+      "collect 页移除中台通用 cost_subsystem 字典依赖，项目办与工作令均改用成本字典多选；阶段继续以逗号分隔多选保存。",
+      "snapshot-upsert 新增逐行 manual_field_baseline 和五类摘要；同步后对项目办、项目状态、单位填报、工作令填报和预警状态逐行复验，异常拒绝 SUCCESS。",
+      "收紧工作令同步字段所有权，既有行不再被同步清空 fiscal_year，合同、到款、目标、审定、阶段、分系统、简称、配套数、纵向分工和状态均不进入外部 UPDATE SET。",
+      "新增 cost_manual_snapshot 建表、生成快照、清库前验收、业务键恢复、异常清单、恢复后验收及显式备份/确认包装器。",
+      "指定 release-20260729-data-integration 原地升级 20260819，新增 business-upgrade、manual-preservation、验收文档、RELEASE-INFO、验包规则和 58 项 SHA256。",
+      "验证通过：后端 16 测试、前端成本 vue-tsc 与目标 ESLint、DWS 29 SQL PowerShell/Bash 静态检查、三个仓库 diff check、发布包验包，以及三个模板目录与发布副本逐文件 SHA256 一致。"
+    ],
+    "files_touched": [
+      "baback/sql/mysql/costree-cost.sql",
+      "baback/sql/postgresql/costree-cost.sql",
+      "baback/sql/postgresql92/costree-cost.sql",
+      "baback/sql/*/costree-cost-20260819-manual-fields-subsystem.sql",
+      "baback/sql/postgresql*/costree-deploy/14-upgrade-existing-to-20260819-manual-fields-subsystem.sql",
+      "baback/yudao-module-cost/.../subsystemdict/",
+      "costree-frontend/src/api/cost/subsystemDict/",
+      "costree-frontend/src/views/cost/subsystemDict/",
+      "costree-frontend/src/views/cost/collect/index.vue",
+      "deploy/cost-server-offline-template/database/postgresql92/03-data-integration/snapshot-upsert/",
+      "deploy/cost-server-offline-template/database/postgresql92/03-data-integration/manual-preservation/",
+      "deploy/cost-server-offline-template/database/postgresql92/03-data-integration/business-upgrade/",
+      "cost-intranet-data-kit/release-20260729-data-integration/"
+    ],
+    "risks": [
+      "未在真实 PostgreSQL 9.2 或 GaussDB(DWS) 执行新增 DDL、逐行摘要、恢复 SQL 和动态索引检查，静态兼容通过不能替代现场执行。",
+      "清库恢复会按稳定业务键重映射项目、单位和工作令；真实历史数据中的重复键、单位别名或孤立预警必须通过 restore_exception 和现场演练确认。",
+      "cost_manual_snapshot 表通过当前 20260819 业务表结构创建，必须先完成 20260819 升级；未来新增手工字段时需同步升级保护表和摘要。",
+      "Maven 构建仍输出仓库既有重复依赖声明警告，本轮聚焦测试成功但未处理这些无关 POM 问题。"
+    ]
+  },
+  "resume_hint": {
+    "text": "下次先执行 agent-handoff resume。重点进入 ignored 的 cost-intranet-data-kit/release-20260729-data-integration，按 docs/12 和 postgresql92/business-upgrade 先升级检查，再执行 snapshot-upsert 两批幂等验收，最后仅在完整备份的专用测试库用 manual-preservation 做一次清库恢复往返。要求外部字段更新、手工字段和状态摘要不变、源缺失只出差异、不删除业务行；无真实结果前不要宣称内网上线通过。"
+  }
+}

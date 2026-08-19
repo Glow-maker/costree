@@ -160,3 +160,27 @@ items:
   rationale: 现有执行器逐文件启动 psql，无法保证跨文件 ROLLBACK；用 BUSINESS_SYNCED、RECALCULATED、SUCCESS
     区分阶段，并只在最终验收脚本设置 SUCCESS，避免假成功。
   time: '2026-08-18T02:31:55+08:00'
+- decision_id: DEC-040
+  summary: 达梦权限初始化必须主动清理旧版无前导斜杠的顶级动态路由。
+  rationale: 只修正新插入路径无法处理已执行旧脚本的中台库；错误顶级路径会在全局动态路由生成时影响业务中台登录，即使用户尚未进入成本模块。
+  time: '2026-08-18T02:49:08+08:00'
+- decision_id: DEC-041
+  summary: tenant_admin 不写入成本业务角色和 18 条角色菜单映射。
+  rationale: tenant_admin 是平台内置租户管理员，权限服务已与 super_admin 一样自动放行，重复插入会混淆平台管理员和三个互斥成本业务角色的边界。
+  time: '2026-08-18T02:49:08+08:00'
+- decision_id: DEC-042
+  summary: 指定数据集成包通过 platform/dm8 目录承载中台权限附加项。
+  rationale: 成本业务同步仍在 PG92/GaussDB 执行，中台角色和菜单只在 DM8/MQB 执行；独立目录和入口说明可避免双库脚本误连。
+  time: '2026-08-18T02:49:08+08:00'
+- decision_id: DEC-043
+  summary: 常规生产同步唯一入口继续使用 snapshot-upsert，永不清空成本业务表。
+  rationale: 外部全量数据只进入六张中间表，业务表按稳定业务键 UPDATE + INSERT，缺失源记录只进入差异清单，避免破坏成本库填报和状态。
+  time: '2026-08-19T03:42:51+08:00'
+- decision_id: DEC-044
+  summary: 旧清库兼容使用独立 cost_manual_snapshot，且必须先验证整库备份并显式确认。
+  rationale: 清库恢复是灾备兼容能力，不应进入定时同步；独立 schema、异常清单和恢复后复验可降低静默丢失手工数据的风险，但不能替代数据库备份。
+  time: '2026-08-19T03:42:51+08:00'
+- decision_id: DEC-045
+  summary: 分系统字典归成本数据库和成本后台维护。
+  rationale: 项目办与研制单位填报依赖成本专用启用项，避免耦合 DM8 中台通用字典；仅 tenant_admin/super_admin 可维护。
+  time: '2026-08-19T03:42:51+08:00'

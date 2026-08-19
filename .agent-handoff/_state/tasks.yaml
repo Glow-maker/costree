@@ -41,13 +41,12 @@ active:
   notes: ''
 - task_id: TASK-006
   title: 完成双库权限初始化和最终内网部署包
-  details: 多方言角色与 access-scope 升级脚本、平台权限检查、PG92/GaussDB 独立子包布局、验包清单、索引定义 fail-fast
-    和 snapshot-upsert 执行保护已加固；DWS 27 个 SQL 静态检查、PowerShell/Bash 语法与 LoadSql 负例通过。下一步在真实
-    DM/PG92/GaussDB 备份环境执行并对账，全部现场验收后再构建正式离线包。
+  details: 发布包已原地升级为 20260819：新增业务结构升级、成本分系统字典、snapshot-upsert 手工字段基线复验、cost_manual_snapshot
+    清库保护和验包强制规则。静态、单测和包校验通过；仍需真实 DM8 权限验收及 PostgreSQL 9.2/DWS 两批同步和一次恢复演练。
   priority: P0
   status: in_progress
   created_at: '2026-06-12T00:15:17+08:00'
-  updated_at: '2026-08-18T02:31:55+08:00'
+  updated_at: '2026-08-19T03:42:51+08:00'
   completed_at: ''
   notes: ''
 completed:
@@ -391,3 +390,12 @@ completed:
   updated_at: '2026-08-17T15:51:21+08:00'
   completed_at: '2026-08-17T15:51:21+08:00'
   notes: 静态与本地聚焦验证通过，不等于真实登录或真实数据库验收；TASK-005 和 TASK-006 继续保持进行中。
+- task_id: TASK-042
+  title: 实现 20260819 内网同步与填报数据保护升级
+  details: 完成常规 snapshot-upsert 手工字段保护、旧清库快照恢复、成本分系统字典、结构升级、前后端填报改造、发布包原地升级与验包。
+  priority: P0
+  status: completed
+  created_at: '2026-08-19T03:42:51+08:00'
+  updated_at: '2026-08-19T03:42:51+08:00'
+  completed_at: '2026-08-19T03:42:51+08:00'
+  notes: 本地聚焦测试和静态检查通过；真实 PG9.2/DWS 数据库验收仍属于 TASK-006 的上线前阻断。

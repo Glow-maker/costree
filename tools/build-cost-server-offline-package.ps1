@@ -21,7 +21,7 @@ $OutputDirectory = if ($OutputDirectory) { [IO.Path]::GetFullPath($OutputDirecto
     Join-Path $Root 'cost-server-offline-package'
 }
 $TemplateRoot = Join-Path $Root 'deploy\cost-server-offline-template'
-$SchemaVersion = '20260818'
+$SchemaVersion = '20260819'
 
 function Assert-Directory([string]$Path, [string]$Label) {
     if (-not (Test-Path -LiteralPath $Path -PathType Container)) { throw "$Label not found: $Path" }
@@ -203,7 +203,7 @@ $releaseLines = @(
     "dirtyRepositories=$($dirtyRepositories -join ',')",
     'databaseDialects=PostgreSQL 14+; PostgreSQL 9.2; GaussDB(DWS) 8.2.1 compatibility profile',
     'platformDatabaseDialects=Dameng DM8 (MQB); PostgreSQL 14+; PostgreSQL 9.2; MySQL 8',
-    'postgresql92Validation=prior baseline passed PostgreSQL 9.2.23 Docker; 20260818 domain-scope upgrade requires target-database acceptance',
+    'postgresql92Validation=prior baseline passed PostgreSQL 9.2.23 Docker; 20260819 manual-field/subsystem upgrade requires target-database acceptance',
     'gaussdbDwsValidation=DWS 8.2.1 distribution-key compatibility implemented; onsite precheck and acceptance required',
     'amountUnit=business amounts in 10000 yuan; ledger amount in yuan and amount_wan in 10000 yuan'
 )

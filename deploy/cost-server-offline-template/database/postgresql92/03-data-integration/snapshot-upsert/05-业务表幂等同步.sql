@@ -290,22 +290,10 @@ FROM tmp_cost_sync_amount s
 CROSS JOIN tmp_cost_sync_context c;
 
 UPDATE "costree_mvp".cost_unit_cost_detail x
-SET project_id = COALESCE(s.project_id, x.project_id),
-    project_code = s.project_code,
-    project_name = COALESCE(s.project_name, x.project_name),
-    domain_code = COALESCE(s.domain_code, x.domain_code),
-    domain_name = COALESCE(s.domain_name, x.domain_name),
-    model_node_id = COALESCE(s.model_node_id, x.model_node_id),
-    model_code = COALESCE(s.model_code, x.model_code),
-    model_name = COALESCE(s.model_name, x.model_name),
-    unit_id = COALESCE(s.unit_id, x.unit_id),
-    unit_name = COALESCE(s.unit_name, x.unit_name),
-    stage_code = 'ALL',
-    source_record_id = COALESCE(s.source_record_id, x.source_record_id),
+SET source_record_id = COALESCE(s.source_record_id, x.source_record_id),
     source_update_time = COALESCE(s.source_update_time, x.source_update_time),
     contract_amount = s.contract_amount,
     income_amount = s.income_amount,
-    deleted = s.deleted,
     updater = c.source_tag,
     update_time = CURRENT_TIMESTAMP
 FROM tmp_cost_sync_amount_match s
@@ -385,11 +373,9 @@ SET source_work_order_id = COALESCE(s.source_work_order_id, w.source_work_order_
     unit_name = COALESCE(s.unit_name, w.unit_name),
     accounting_unit_code = COALESCE(s.accounting_unit_code, w.accounting_unit_code),
     accounting_unit_name = COALESCE(s.unit_name, w.accounting_unit_name),
-    fiscal_year = '',
     work_order_no = s.work_order_no,
     work_order_name = COALESCE(s.work_order_name, w.work_order_name),
-    disabled = s.disabled,
-    deleted = s.deleted,
+    disabled = (s.disabled OR s.deleted <> 0),
     updater = c.source_tag,
     update_time = CURRENT_TIMESTAMP
 FROM tmp_cost_sync_work_order_match s
@@ -399,7 +385,7 @@ WHERE w.id = s.target_id;
 INSERT INTO "costree_mvp".cost_work_order (
     source_work_order_id, project_id, project_code, project_name,
     unit_id, unit_name, accounting_unit_code, accounting_unit_name,
-    fiscal_year, work_order_no, work_order_name,
+    work_order_no, work_order_name,
     product_target_cost, contract_amount, income_amount, book_cost_amount,
     stage_codes, max_stage_code, subsystem_name, product_short_name,
     quantity, vertical_division, disabled, approved_amount, status,
@@ -408,7 +394,7 @@ INSERT INTO "costree_mvp".cost_work_order (
 SELECT
     s.source_work_order_id, s.project_id, s.project_code, s.project_name,
     s.unit_id, s.unit_name, s.accounting_unit_code, s.unit_name,
-    '', s.work_order_no, s.work_order_name,
+    s.work_order_no, s.work_order_name,
     NULL, NULL, NULL, 0,
     NULL, NULL, NULL, NULL,
     NULL, NULL, s.disabled, NULL, 'DRAFT',
