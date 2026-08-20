@@ -43,9 +43,19 @@ BEGIN
     WHERE s.batch_code = v_batch AND s.tenant_id = v_tenant
       AND (t.tenant_id <> v_tenant OR t.project_code <> s.project_code OR t.unit_name <> s.unit_name OR t.work_order_no <> s.work_order_no)
     UNION ALL
-    SELECT v_batch, v_tenant, 'warning_state', s.id::text, '原预警主键已被其他租户占用'
-    FROM cost_manual_snapshot.warning_state s
+    SELECT v_batch, v_tenant, 'warning_state_v2', s.id::text, '原预警主键已被其他租户占用'
+    FROM cost_manual_snapshot.warning_state_v2 s
     JOIN "costree_mvp".cost_warning_record t ON t.id = s.id
+    WHERE s.batch_code = v_batch AND s.tenant_id = v_tenant AND t.tenant_id <> v_tenant
+    UNION ALL
+    SELECT v_batch, v_tenant, 'warning_receiver', s.id::text, '接收人主键已被其他租户占用'
+    FROM cost_manual_snapshot.warning_receiver s
+    JOIN "costree_mvp".cost_warning_receiver t ON t.id = s.id
+    WHERE s.batch_code = v_batch AND s.tenant_id = v_tenant AND t.tenant_id <> v_tenant
+    UNION ALL
+    SELECT v_batch, v_tenant, 'warning_action_log', s.id::text, '操作日志主键已被其他租户占用'
+    FROM cost_manual_snapshot.warning_action_log s
+    JOIN "costree_mvp".cost_warning_action_log t ON t.id = s.id
     WHERE s.batch_code = v_batch AND s.tenant_id = v_tenant AND t.tenant_id <> v_tenant;
 
     IF EXISTS (SELECT 1 FROM cost_manual_snapshot.restore_exception WHERE batch_code = v_batch AND tenant_id = v_tenant) THEN
@@ -59,7 +69,9 @@ BEGIN
             ('project_basic', 'cost_project_basic', 'NOT EXISTS (SELECT 1 FROM "costree_mvp".cost_project_basic x WHERE x.id = s.id)'),
             ('unit_fill', 'cost_unit_cost_detail', 'NOT EXISTS (SELECT 1 FROM "costree_mvp".cost_unit_cost_detail x WHERE x.tenant_id = s.tenant_id AND x.project_code = s.project_code AND x.unit_name = s.unit_name)'),
             ('work_order_fill', 'cost_work_order', 'NOT EXISTS (SELECT 1 FROM "costree_mvp".cost_work_order x WHERE x.tenant_id = s.tenant_id AND x.project_code = s.project_code AND x.unit_name = s.unit_name AND x.work_order_no = s.work_order_no)'),
-            ('warning_state', 'cost_warning_record', 'NOT EXISTS (SELECT 1 FROM "costree_mvp".cost_warning_record x WHERE x.id = s.id)')
+            ('warning_state_v2', 'cost_warning_record', 'NOT EXISTS (SELECT 1 FROM "costree_mvp".cost_warning_record x WHERE x.id = s.id)'),
+            ('warning_receiver', 'cost_warning_receiver', 'NOT EXISTS (SELECT 1 FROM "costree_mvp".cost_warning_receiver x WHERE x.id = s.id)'),
+            ('warning_action_log', 'cost_warning_action_log', 'NOT EXISTS (SELECT 1 FROM "costree_mvp".cost_warning_action_log x WHERE x.id = s.id)')
         ) AS objects(snapshot_table, target_table, insert_guard)
     LOOP
         SELECT string_agg(quote_ident(target_column.column_name), ', ' ORDER BY target_column.ordinal_position)
@@ -159,9 +171,20 @@ SET warning_source = snapshot.warning_source, warning_title = snapshot.warning_t
     responsible_unit_name = snapshot.responsible_unit_name, push_status = snapshot.push_status,
     pushed_time = snapshot.pushed_time, receiver_scope = snapshot.receiver_scope,
     message_id = snapshot.message_id, status = snapshot.status, remark = snapshot.remark,
+    project_code = snapshot.project_code, project_name = snapshot.project_name,
+    domain_code = snapshot.domain_code, domain_name = snapshot.domain_name,
+    model_code = snapshot.model_code, model_name = snapshot.model_name,
+    cycle_no = snapshot.cycle_no, workflow_status = snapshot.workflow_status,
+    active_marker = snapshot.active_marker, initiator_user_id = snapshot.initiator_user_id,
+    initiator_user_name = snapshot.initiator_user_name, initiated_time = snapshot.initiated_time,
+    disposition_user_id = snapshot.disposition_user_id, disposition_user_name = snapshot.disposition_user_name,
+    cause_analysis = snapshot.cause_analysis, disposal_measure = snapshot.disposal_measure,
+    expected_completion_date = snapshot.expected_completion_date, disposition_time = snapshot.disposition_time,
+    close_user_id = snapshot.close_user_id, close_user_name = snapshot.close_user_name,
+    close_time = snapshot.close_time, return_reason = snapshot.return_reason,
     creator = snapshot.creator, create_time = snapshot.create_time,
     updater = snapshot.updater, update_time = snapshot.update_time, deleted = snapshot.deleted
-FROM cost_manual_snapshot.warning_state snapshot
+FROM cost_manual_snapshot.warning_state_v2 snapshot
 JOIN cost_manual_snapshot.snapshot_control control
   ON control.id = 1 AND snapshot.batch_code = control.current_batch_code AND snapshot.tenant_id = control.tenant_id
 WHERE target.id = snapshot.id;
@@ -188,7 +211,7 @@ WHERE work_order.tenant_id = project.tenant_id AND work_order.project_code = pro
 UPDATE "costree_mvp".cost_warning_record warning
 SET project_id = project.id,
     work_order_id = work_order.id
-FROM cost_manual_snapshot.warning_state snapshot
+FROM cost_manual_snapshot.warning_state_v2 snapshot
 LEFT JOIN "costree_mvp".cost_project project
   ON project.tenant_id = snapshot.tenant_id AND project.project_code = snapshot.project_code_key
 LEFT JOIN "costree_mvp".cost_work_order work_order
@@ -213,7 +236,9 @@ BEGIN
             ('cost_project_basic_seq', 'cost_project_basic'),
             ('cost_unit_cost_detail_seq', 'cost_unit_cost_detail'),
             ('cost_work_order_seq', 'cost_work_order'),
-            ('cost_warning_record_seq', 'cost_warning_record')
+            ('cost_warning_record_seq', 'cost_warning_record'),
+            ('cost_warning_receiver_seq', 'cost_warning_receiver'),
+            ('cost_warning_action_log_seq', 'cost_warning_action_log')
         ) AS sequence_map(sequence_name, table_name)
     LOOP
         EXECUTE 'SELECT max(id) FROM "costree_mvp".' || quote_ident(v_table) INTO v_max_id;

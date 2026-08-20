@@ -15,4 +15,5 @@ cost:work-order:export
 cost:work-order:import
 cost:warning:query
 cost:warning:push
-cost:warning:update
+cost:warning:feedback
+cost:warning:close

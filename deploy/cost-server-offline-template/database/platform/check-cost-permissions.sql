@@ -1,5 +1,5 @@
 -- PostgreSQL 平台库检查脚本；在若依平台库执行，不是在独立成本业务库执行。
--- 达梦 MQB 请执行 check-cost-permissions-dm8.sql。
+-- 达梦 MQB 请按 dm8/00-开始这里.md 执行 dm8/03-check-cost-permissions-20260820.sql。
 -- 执行前将下方租户编号 124 改为内网实际租户编号。
 WITH required(permission) AS (
     VALUES
@@ -12,7 +12,8 @@ WITH required(permission) AS (
         ('cost:work-order:approve'),
         ('cost:work-order:delete'), ('cost:work-order:query'),
         ('cost:work-order:export'), ('cost:work-order:import'),
-        ('cost:warning:query'), ('cost:warning:push'), ('cost:warning:update')
+        ('cost:warning:query'), ('cost:warning:push'),
+        ('cost:warning:feedback'), ('cost:warning:close')
 ), missing AS (
     SELECT r.permission
     FROM required r
@@ -83,13 +84,18 @@ WITH expected(role_code, permission) AS (
         ('cost_project_office', 'cost:project-basic:export'),
         ('cost_project_office', 'cost:work-order:query'),
         ('cost_project_office', 'cost:work-order:export'),
+        ('cost_project_office', 'cost:warning:query'),
+        ('cost_project_office', 'cost:warning:push'),
+        ('cost_project_office', 'cost:warning:close'),
         ('cost_unit_user', '__PARENT__'),
         ('cost_unit_user', 'cost:project:query'),
         ('cost_unit_user', 'cost:project-basic:query'),
         ('cost_unit_user', 'cost:work-order:query'),
         ('cost_unit_user', 'cost:work-order:create'),
         ('cost_unit_user', 'cost:work-order:update'),
-        ('cost_unit_user', 'cost:work-order:export')
+        ('cost_unit_user', 'cost:work-order:export'),
+        ('cost_unit_user', 'cost:warning:query'),
+        ('cost_unit_user', 'cost:warning:feedback')
 ), missing AS (
     SELECT expected.role_code, expected.permission
     FROM expected
@@ -111,7 +117,7 @@ WITH expected(role_code, permission) AS (
     )
 )
 SELECT CASE WHEN count(*) = 0 THEN 'OK' ELSE 'ERROR' END AS status,
-       29 AS expected_mapping_count,
+       34 AS expected_mapping_count,
        count(*) AS missing_mapping_count,
        string_agg(role_code || ':' || permission, ', ' ORDER BY role_code, permission) AS missing_mappings
 FROM missing;
@@ -141,13 +147,18 @@ WITH expected(role_code, permission) AS (
         ('cost_project_office', 'cost:project-basic:export'),
         ('cost_project_office', 'cost:work-order:query'),
         ('cost_project_office', 'cost:work-order:export'),
+        ('cost_project_office', 'cost:warning:query'),
+        ('cost_project_office', 'cost:warning:push'),
+        ('cost_project_office', 'cost:warning:close'),
         ('cost_unit_user', '__PARENT__'),
         ('cost_unit_user', 'cost:project:query'),
         ('cost_unit_user', 'cost:project-basic:query'),
         ('cost_unit_user', 'cost:work-order:query'),
         ('cost_unit_user', 'cost:work-order:create'),
         ('cost_unit_user', 'cost:work-order:update'),
-        ('cost_unit_user', 'cost:work-order:export')
+        ('cost_unit_user', 'cost:work-order:export'),
+        ('cost_unit_user', 'cost:warning:query'),
+        ('cost_unit_user', 'cost:warning:feedback')
 ), actual AS (
     SELECT DISTINCT role.code AS role_code,
            CASE WHEN menu.path = '/cost-access-permissions'

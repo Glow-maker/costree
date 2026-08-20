@@ -1,10 +1,14 @@
-param([string]$PackageRoot = (Split-Path $PSScriptRoot -Parent))
+param(
+    [string]$PackageRoot = (Split-Path $PSScriptRoot -Parent),
+    [switch]$RequireFormal
+)
 $ErrorActionPreference = 'Stop'
 $root = [IO.Path]::GetFullPath($PackageRoot)
 $manifest = Join-Path $root 'SHA256SUMS.txt'
 foreach ($required in @(
     'RELEASE-INFO.txt',
     'backend\app\cost-server.jar',
+    'frontend\costree-frontend-dist-prod.zip',
     'frontend\dist\index.html',
     'database\postgresql\01-new-database\costree-cost.sql',
     'database\postgresql\02-upgrade-existing\00-precheck.sql',
@@ -13,6 +17,7 @@ foreach ($required in @(
     'database\postgresql\02-upgrade-existing\12-upgrade-existing-to-20260817-access-scope.sql',
     'database\postgresql\02-upgrade-existing\13-upgrade-existing-to-20260818-domain-scope.sql',
     'database\postgresql\02-upgrade-existing\14-upgrade-existing-to-20260819-manual-fields-subsystem.sql',
+    'database\postgresql\02-upgrade-existing\15-upgrade-existing-to-20260820-warning-workflow.sql',
     'database\postgresql\02-upgrade-existing\20-verify.sql',
     'database\postgresql\03-data-integration\10-sync-to-cost.sql',
     'database\postgresql\03-data-integration\30-diagnose-book-zero.sql',
@@ -27,6 +32,7 @@ foreach ($required in @(
     'database\postgresql92\02-upgrade-existing\12-upgrade-existing-to-20260817-access-scope.sql',
     'database\postgresql92\02-upgrade-existing\13-upgrade-existing-to-20260818-domain-scope.sql',
     'database\postgresql92\02-upgrade-existing\14-upgrade-existing-to-20260819-manual-fields-subsystem.sql',
+    'database\postgresql92\02-upgrade-existing\15-upgrade-existing-to-20260820-warning-workflow.sql',
     'database\postgresql92\02-upgrade-existing\20-verify.sql',
     'database\postgresql92\03-data-integration\load-and-sync.ps1',
     'database\postgresql92\03-data-integration\10-sync-to-cost.sql',
@@ -60,18 +66,21 @@ foreach ($required in @(
     'database\postgresql92\03-data-integration\manual-preservation\04-清库后恢复.sql',
     'database\postgresql92\03-data-integration\manual-preservation\05-恢复后验收.sql',
     'database\postgresql92\03-data-integration\manual-preservation\10-旧清库保护过程.ps1',
-    'database\postgresql92\03-data-integration\business-upgrade\00-开始这里.md',
-    'database\postgresql92\03-data-integration\business-upgrade\01-升级填报保护与分系统字典-20260819.sql',
-    'database\postgresql92\03-data-integration\business-upgrade\02-检查填报保护与分系统字典-20260819.sql',
     'database\platform\costree-access-role-menu-mysql-20260817.sql',
     'database\platform\costree-access-role-menu-postgresql-20260817.sql',
     'database\platform\costree-access-role-menu-postgresql92-20260817.sql',
-    'database\platform\costree-access-role-menu-dm8-20260817.sql',
     'database\platform\check-cost-permissions.sql',
-    'database\platform\check-cost-permissions-dm8.sql',
+    'database\platform\cost-warning-notify-template-mysql-20260820.sql',
+    'database\platform\cost-warning-notify-template-postgresql-20260820.sql',
+    'database\platform\cost-warning-notify-template-postgresql92-20260820.sql',
+    'database\platform\dm8\00-开始这里.md',
+    'database\platform\dm8\01-costree-role-menu-full-20260820.sql',
+    'database\platform\dm8\02-cost-warning-notify-template-20260820.sql',
+    'database\platform\dm8\03-check-cost-permissions-20260820.sql',
     'database\platform\required-permissions.txt',
     'docs\11-三级权限升级与授权操作.md',
     'docs\12-成本树三级权限与双库初始化.md',
+    'docs\13-预警分析与闭环处置.md',
     'SHA256SUMS.txt'
 )) {
     if (-not (Test-Path -LiteralPath (Join-Path $root $required))) {
@@ -88,7 +97,7 @@ foreach ($platformScript in @(
     'database\platform\costree-access-role-menu-mysql-20260817.sql',
     'database\platform\costree-access-role-menu-postgresql-20260817.sql',
     'database\platform\costree-access-role-menu-postgresql92-20260817.sql',
-    'database\platform\costree-access-role-menu-dm8-20260817.sql'
+    'database\platform\dm8\01-costree-role-menu-full-20260820.sql'
 )) {
     $scriptText = Get-Content -LiteralPath (Join-Path $root $platformScript) -Raw
     foreach ($roleCode in $requiredRoleCodes) {
@@ -98,12 +107,12 @@ foreach ($platformScript in @(
     }
 }
 $checkerText = Get-Content -LiteralPath (Join-Path $root 'database\platform\check-cost-permissions.sql') -Raw
-if ($checkerText -notmatch 'expected_mapping_count' -or $checkerText -notmatch '\b29\b') {
-    throw 'PostgreSQL platform checker must validate all 29 expected role-menu mappings.'
+if ($checkerText -notmatch 'expected_mapping_count' -or $checkerText -notmatch '\b34\b') {
+    throw 'PostgreSQL platform checker must validate all 34 expected role-menu mappings.'
 }
-$dmCheckerText = Get-Content -LiteralPath (Join-Path $root 'database\platform\check-cost-permissions-dm8.sql') -Raw
-if ($dmCheckerText -notmatch 'EXPECTED_MAPPING_COUNT' -or $dmCheckerText -notmatch '\b29\b') {
-    throw 'DM8 platform checker must validate all 29 expected role-menu mappings.'
+$dmCheckerText = Get-Content -LiteralPath (Join-Path $root 'database\platform\dm8\03-check-cost-permissions-20260820.sql') -Raw
+if ($dmCheckerText -notmatch 'EXPECTED_MAPPING_COUNT' -or $dmCheckerText -notmatch '\b34\b') {
+    throw 'DM8 platform checker must validate all 34 expected role-menu mappings.'
 }
 
 $snapshotRoot = Join-Path $root 'database\postgresql92\03-data-integration\snapshot-upsert'
@@ -115,6 +124,9 @@ if ($snapshotSql -match '(?im)^\s*(TRUNCATE|DELETE\s+FROM)\s+(?:TABLE\s+)?(?:"?c
 }
 if ($snapshotSql -match '(?im)^\s*(?:INSERT\s+INTO|UPDATE|DELETE\s+FROM|TRUNCATE(?:\s+TABLE)?)\s+(?:"?costree_mvp"?\.)?cost_project_basic\b') {
     throw 'cost_project_basic must never be an external snapshot write target.'
+}
+if ($snapshotSql -match '(?im)^\s*(?:INSERT\s+INTO|UPDATE|DELETE\s+FROM|TRUNCATE(?:\s+TABLE)?)\s+(?:"?costree_mvp"?\.)?cost_warning_(?:record|receiver|action_log)\b') {
+    throw 'Regular snapshot-upsert must not modify warning workflow history tables.'
 }
 $syncText = Get-Content -LiteralPath (Join-Path $snapshotRoot '05-业务表幂等同步.sql') -Raw -Encoding UTF8
 $protectedByTable = @{
@@ -154,24 +166,98 @@ $manualText = (Get-ChildItem -LiteralPath $manualRoot -File | ForEach-Object {
     Get-Content -LiteralPath $_.FullName -Raw -Encoding UTF8
 }) -join "`n"
 foreach ($token in @('SNAPSHOT_READY', 'PRECHECK_OK', 'BackupVerified', 'I_UNDERSTAND_COST_BUSINESS_RESET',
-                      'RESTORED_PENDING_VERIFY', 'restore_exception', '恢复后验收')) {
+                      'RESTORED_PENDING_VERIFY', 'restore_exception', '恢复后验收',
+                      'warning_state_v2', 'warning_receiver', 'warning_action_log')) {
     if ($manualText.IndexOf($token, [StringComparison]::OrdinalIgnoreCase) -lt 0) {
         throw "Manual reset protection is missing token: $token"
     }
 }
-$businessUpgradeRoot = Join-Path $root 'database\postgresql92\03-data-integration\business-upgrade'
-$businessUpgrade = Get-Content -LiteralPath (Join-Path $businessUpgradeRoot '01-升级填报保护与分系统字典-20260819.sql') -Raw -Encoding UTF8
-$businessCheck = Get-Content -LiteralPath (Join-Path $businessUpgradeRoot '02-检查填报保护与分系统字典-20260819.sql') -Raw -Encoding UTF8
+$upgradeRoot = Join-Path $root 'database\postgresql92\02-upgrade-existing'
+$businessUpgrade = Get-Content -LiteralPath (Join-Path $upgradeRoot '14-upgrade-existing-to-20260819-manual-fields-subsystem.sql') -Raw -Encoding UTF8
+$warningUpgrade = Get-Content -LiteralPath (Join-Path $upgradeRoot '15-upgrade-existing-to-20260820-warning-workflow.sql') -Raw -Encoding UTF8
+$upgradeCheck = Get-Content -LiteralPath (Join-Path $upgradeRoot '20-verify.sql') -Raw -Encoding UTF8
 foreach ($token in @('cost_subsystem_dict', 'varchar(255)', 'vertical_division DROP DEFAULT', '20260819')) {
     if ($businessUpgrade.IndexOf($token, [StringComparison]::OrdinalIgnoreCase) -lt 0) {
         throw "20260819 business upgrade is missing token: $token"
     }
 }
-foreach ($token in @('subsystem_dict_duplicate_name', 'subsystem_dict_invalid_record',
-                      'subsystem_dict_business_guard_index', '20260819')) {
-    if ($businessCheck.IndexOf($token, [StringComparison]::OrdinalIgnoreCase) -lt 0) {
-        throw "20260819 business checker is missing token: $token"
+foreach ($token in @('cost_warning_receiver', 'cost_warning_action_log', 'workflow_status', 'active_marker', '20260820')) {
+    if ($warningUpgrade.IndexOf($token, [StringComparison]::OrdinalIgnoreCase) -lt 0) {
+        throw "20260820 warning workflow upgrade is missing token: $token"
     }
+}
+foreach ($token in @('subsystem_dict_duplicate_name', 'subsystem_dict_invalid_record',
+                      'warning_active_duplicate_key', 'warning_receiver_duplicate_key',
+                      'legacy_status_missing', '20260820')) {
+    if ($upgradeCheck.IndexOf($token, [StringComparison]::OrdinalIgnoreCase) -lt 0) {
+        throw "20260820 warning workflow checker is missing token: $token"
+    }
+}
+
+$forbiddenDirectories = @(
+    'database\postgresql92\04-reset-and-reload',
+    'database\postgresql\90-optional-test-seed',
+    'database\postgresql\91-optional-demo',
+    'database\postgresql92\90-optional-test-seed',
+    'database\postgresql92\91-optional-demo'
+)
+foreach ($relative in $forbiddenDirectories) {
+    if (Test-Path -LiteralPath (Join-Path $root $relative)) {
+        throw "Forbidden production package directory: $relative"
+    }
+}
+if (Get-ChildItem -LiteralPath $root -Recurse -Directory -Force | Where-Object Name -eq 'node_modules' | Select-Object -First 1) {
+    throw 'Production package must not contain node_modules.'
+}
+
+$releaseInfo = @{}
+foreach ($line in Get-Content -LiteralPath (Join-Path $root 'RELEASE-INFO.txt') -Encoding UTF8) {
+    if ($line -match '^([^=]+)=(.*)$') { $releaseInfo[$Matches[1]] = $Matches[2] }
+}
+if ($RequireFormal -and $releaseInfo.releaseType -ne 'formal') { throw 'RELEASE-INFO releaseType must be formal.' }
+$jarPath = Join-Path $root 'backend\app\cost-server.jar'
+$frontendZipPath = Join-Path $root 'frontend\costree-frontend-dist-prod.zip'
+if ((Get-Item -LiteralPath $jarPath).Length -lt 1MB) { throw 'Backend JAR is unexpectedly small.' }
+$jarHash = (Get-FileHash -LiteralPath $jarPath -Algorithm SHA256).Hash
+$frontendZipHash = (Get-FileHash -LiteralPath $frontendZipPath -Algorithm SHA256).Hash
+if ($releaseInfo.backendJarSha256 -ne $jarHash) { throw 'Backend JAR hash does not match RELEASE-INFO.' }
+if ($releaseInfo.frontendZipSha256 -ne $frontendZipHash) { throw 'Frontend ZIP hash does not match RELEASE-INFO.' }
+
+Add-Type -AssemblyName System.IO.Compression.FileSystem
+$archive = [IO.Compression.ZipFile]::OpenRead($frontendZipPath)
+try {
+    $indexEntry = $archive.GetEntry('index.html')
+    if (-not $indexEntry) { throw 'Frontend ZIP must contain index.html at the archive root.' }
+    $zipEntries = @{}
+    foreach ($entry in $archive.Entries) { $zipEntries[$entry.FullName.TrimStart('/')] = $entry }
+    $reader = [IO.StreamReader]::new($indexEntry.Open(), [Text.Encoding]::UTF8)
+    try { $indexText = $reader.ReadToEnd() } finally { $reader.Dispose() }
+    $references = [regex]::Matches($indexText, '(?:src|href)=["''](?<path>[^"'']+)["'']') |
+        ForEach-Object { $_.Groups['path'].Value } |
+        Where-Object { $_ -and $_ -notmatch '^(?:https?:|data:|//|#)' } |
+        Sort-Object -Unique
+    foreach ($reference in $references) {
+        $relative = $reference.Split('?')[0].Split('#')[0].TrimStart('/', '.')
+        if ($relative -and -not $zipEntries.ContainsKey($relative)) {
+            throw "Frontend ZIP index references a missing asset: $reference"
+        }
+        $expanded = Join-Path (Join-Path $root 'frontend\dist') $relative.Replace('/', [IO.Path]::DirectorySeparatorChar)
+        if ($relative -and -not (Test-Path -LiteralPath $expanded -PathType Leaf)) {
+            throw "Expanded frontend is missing asset: $reference"
+        }
+        if ($relative) {
+            $sha = [Security.Cryptography.SHA256]::Create()
+            $entryStream = $zipEntries[$relative].Open()
+            try { $zipHash = [BitConverter]::ToString($sha.ComputeHash($entryStream)).Replace('-', '') }
+            finally { $entryStream.Dispose(); $sha.Dispose() }
+            $expandedHash = (Get-FileHash -LiteralPath $expanded -Algorithm SHA256).Hash
+            if ($zipHash -ne $expandedHash) { throw "Expanded frontend asset differs from ZIP: $reference" }
+        }
+    }
+    $expandedIndexText = Get-Content -LiteralPath (Join-Path $root 'frontend\dist\index.html') -Raw -Encoding UTF8
+    if ($indexText -ne $expandedIndexText) { throw 'Expanded frontend index.html differs from ZIP.' }
+} finally {
+    $archive.Dispose()
 }
 $releaseDoc = Get-ChildItem -LiteralPath (Join-Path $root 'docs') -Filter '10-20260728*.md' -File |
     Select-Object -First 1
@@ -179,15 +265,24 @@ if (-not $releaseDoc) {
     throw 'Missing package file: docs\10-20260728*.md'
 }
 $checked = 0
+$manifestFiles = [Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase)
 foreach ($line in Get-Content -LiteralPath $manifest -Encoding UTF8) {
     if (-not $line.Trim()) { continue }
     if ($line -notmatch '^([0-9a-fA-F]{64}) \*(.+)$') { throw "Invalid manifest line: $line" }
     $expected = $Matches[1].ToLowerInvariant()
     $relative = $Matches[2].Replace('/', [IO.Path]::DirectorySeparatorChar)
+    [void]$manifestFiles.Add($relative)
     $file = Join-Path $root $relative
     if (-not (Test-Path -LiteralPath $file)) { throw "Manifest file missing: $relative" }
     $actual = (Get-FileHash -LiteralPath $file -Algorithm SHA256).Hash.ToLowerInvariant()
     if ($actual -ne $expected) { throw "SHA256 mismatch: $relative" }
     $checked++
+}
+$unlistedFiles = Get-ChildItem -LiteralPath $root -Recurse -File | Where-Object {
+    $_.FullName -ne $manifest -and
+    -not $manifestFiles.Contains($_.FullName.Substring($root.Length + 1))
+}
+if ($unlistedFiles) {
+    throw "SHA256SUMS.txt does not cover package file: $($unlistedFiles[0].FullName.Substring($root.Length + 1))"
 }
 Write-Host "Package verification passed: $checked files."

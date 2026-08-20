@@ -83,22 +83,60 @@ WHERE control.id = 1 AND (target.id IS NULL OR md5(ROW(
     snapshot.updater, snapshot.update_time, snapshot.deleted
 )::text))
 UNION ALL
-SELECT control.current_batch_code, control.tenant_id, 'warning_state', snapshot.id::text, '预警推送/处理状态或审计字段不一致'
+SELECT control.current_batch_code, control.tenant_id, 'warning_state_v2', snapshot.id::text, '预警任务、处置状态或审计字段不一致'
 FROM cost_manual_snapshot.snapshot_control control
-JOIN cost_manual_snapshot.warning_state snapshot ON snapshot.batch_code = control.current_batch_code AND snapshot.tenant_id = control.tenant_id
+JOIN cost_manual_snapshot.warning_state_v2 snapshot ON snapshot.batch_code = control.current_batch_code AND snapshot.tenant_id = control.tenant_id
 LEFT JOIN "costree_mvp".cost_warning_record target ON target.id = snapshot.id
 WHERE control.id = 1 AND (target.id IS NULL OR md5(ROW(
     target.warning_source, target.warning_title, target.target_cost_amount, target.actual_cost_amount,
     target.over_amount, target.over_rate, target.threshold_rate, target.warning_level,
     target.responsible_unit_name, target.push_status, target.pushed_time, target.receiver_scope,
-    target.message_id, target.status, target.remark, target.creator, target.create_time,
+    target.message_id, target.status, target.remark,
+    target.project_code, target.project_name, target.domain_code, target.domain_name,
+    target.model_code, target.model_name, target.cycle_no, target.workflow_status, target.active_marker,
+    target.initiator_user_id, target.initiator_user_name, target.initiated_time,
+    target.disposition_user_id, target.disposition_user_name, target.cause_analysis,
+    target.disposal_measure, target.expected_completion_date, target.disposition_time,
+    target.close_user_id, target.close_user_name, target.close_time, target.return_reason,
+    target.creator, target.create_time,
     target.updater, target.update_time, target.deleted
 )::text) <> md5(ROW(
     snapshot.warning_source, snapshot.warning_title, snapshot.target_cost_amount, snapshot.actual_cost_amount,
     snapshot.over_amount, snapshot.over_rate, snapshot.threshold_rate, snapshot.warning_level,
     snapshot.responsible_unit_name, snapshot.push_status, snapshot.pushed_time, snapshot.receiver_scope,
-    snapshot.message_id, snapshot.status, snapshot.remark, snapshot.creator, snapshot.create_time,
+    snapshot.message_id, snapshot.status, snapshot.remark,
+    snapshot.project_code, snapshot.project_name, snapshot.domain_code, snapshot.domain_name,
+    snapshot.model_code, snapshot.model_name, snapshot.cycle_no, snapshot.workflow_status, snapshot.active_marker,
+    snapshot.initiator_user_id, snapshot.initiator_user_name, snapshot.initiated_time,
+    snapshot.disposition_user_id, snapshot.disposition_user_name, snapshot.cause_analysis,
+    snapshot.disposal_measure, snapshot.expected_completion_date, snapshot.disposition_time,
+    snapshot.close_user_id, snapshot.close_user_name, snapshot.close_time, snapshot.return_reason,
+    snapshot.creator, snapshot.create_time,
     snapshot.updater, snapshot.update_time, snapshot.deleted
+)::text))
+UNION ALL
+SELECT control.current_batch_code, control.tenant_id, 'warning_receiver', snapshot.id::text, '预警接收账号或通知状态不一致'
+FROM cost_manual_snapshot.snapshot_control control
+JOIN cost_manual_snapshot.warning_receiver snapshot ON snapshot.batch_code=control.current_batch_code AND snapshot.tenant_id=control.tenant_id
+LEFT JOIN "costree_mvp".cost_warning_receiver target ON target.id=snapshot.id
+WHERE control.id=1 AND (target.id IS NULL OR md5(ROW(
+    target.warning_record_id,target.user_id,target.username,target.nickname,target.notify_status,
+    target.message_id,target.notified_time,target.failure_reason,target.deleted
+)::text) <> md5(ROW(
+    snapshot.warning_record_id,snapshot.user_id,snapshot.username,snapshot.nickname,snapshot.notify_status,
+    snapshot.message_id,snapshot.notified_time,snapshot.failure_reason,snapshot.deleted
+)::text))
+UNION ALL
+SELECT control.current_batch_code, control.tenant_id, 'warning_action_log', snapshot.id::text, '预警操作时间线不一致'
+FROM cost_manual_snapshot.snapshot_control control
+JOIN cost_manual_snapshot.warning_action_log snapshot ON snapshot.batch_code=control.current_batch_code AND snapshot.tenant_id=control.tenant_id
+LEFT JOIN "costree_mvp".cost_warning_action_log target ON target.id=snapshot.id
+WHERE control.id=1 AND (target.id IS NULL OR md5(ROW(
+    target.warning_record_id,target.action_type,target.operator_user_id,target.operator_user_name,
+    target.operator_role_code,target.from_status,target.to_status,target.action_content,target.create_time,target.deleted
+)::text) <> md5(ROW(
+    snapshot.warning_record_id,snapshot.action_type,snapshot.operator_user_id,snapshot.operator_user_name,
+    snapshot.operator_role_code,snapshot.from_status,snapshot.to_status,snapshot.action_content,snapshot.create_time,snapshot.deleted
 )::text));
 
 DO $$

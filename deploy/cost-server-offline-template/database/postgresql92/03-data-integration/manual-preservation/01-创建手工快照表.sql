@@ -68,6 +68,54 @@ SELECT ''::varchar(64) AS batch_code, warning.*,
        ''::varchar(128) AS work_order_no_key
 FROM "costree_mvp".cost_warning_record warning WHERE false;
 
+CREATE OR REPLACE FUNCTION pg_temp.cost_manual_add_warning_column(p_name text, p_definition text)
+RETURNS void AS $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns
+                   WHERE table_schema='cost_manual_snapshot' AND table_name='warning_state'
+                     AND column_name=p_name) THEN
+        EXECUTE 'ALTER TABLE cost_manual_snapshot.warning_state ADD COLUMN ' || quote_ident(p_name) || ' ' || p_definition;
+    END IF;
+END $$ LANGUAGE plpgsql;
+SELECT pg_temp.cost_manual_add_warning_column('project_code','varchar(100)');
+SELECT pg_temp.cost_manual_add_warning_column('project_name','varchar(255)');
+SELECT pg_temp.cost_manual_add_warning_column('domain_code','varchar(100)');
+SELECT pg_temp.cost_manual_add_warning_column('domain_name','varchar(255)');
+SELECT pg_temp.cost_manual_add_warning_column('model_code','varchar(100)');
+SELECT pg_temp.cost_manual_add_warning_column('model_name','varchar(255)');
+SELECT pg_temp.cost_manual_add_warning_column('cycle_no','int4');
+SELECT pg_temp.cost_manual_add_warning_column('workflow_status','varchar(32)');
+SELECT pg_temp.cost_manual_add_warning_column('active_marker','int2');
+SELECT pg_temp.cost_manual_add_warning_column('initiator_user_id','int8');
+SELECT pg_temp.cost_manual_add_warning_column('initiator_user_name','varchar(128)');
+SELECT pg_temp.cost_manual_add_warning_column('initiated_time','timestamp');
+SELECT pg_temp.cost_manual_add_warning_column('disposition_user_id','int8');
+SELECT pg_temp.cost_manual_add_warning_column('disposition_user_name','varchar(128)');
+SELECT pg_temp.cost_manual_add_warning_column('cause_analysis','varchar(1000)');
+SELECT pg_temp.cost_manual_add_warning_column('disposal_measure','varchar(1000)');
+SELECT pg_temp.cost_manual_add_warning_column('expected_completion_date','date');
+SELECT pg_temp.cost_manual_add_warning_column('disposition_time','timestamp');
+SELECT pg_temp.cost_manual_add_warning_column('close_user_id','int8');
+SELECT pg_temp.cost_manual_add_warning_column('close_user_name','varchar(128)');
+SELECT pg_temp.cost_manual_add_warning_column('close_time','timestamp');
+SELECT pg_temp.cost_manual_add_warning_column('return_reason','varchar(500)');
+
+CREATE TABLE IF NOT EXISTS cost_manual_snapshot.warning_receiver AS
+SELECT ''::varchar(64) AS batch_code, receiver.*
+FROM "costree_mvp".cost_warning_receiver receiver WHERE false;
+
+-- v2 独立表固定保存 20260820 后的完整预警任务结构，避免旧 warning_state 列顺序影响恢复。
+CREATE TABLE IF NOT EXISTS cost_manual_snapshot.warning_state_v2 AS
+SELECT ''::varchar(64) AS batch_code, warning.*,
+       ''::varchar(128) AS project_code_key,
+       ''::varchar(255) AS work_order_unit_key,
+       ''::varchar(128) AS work_order_no_key
+FROM "costree_mvp".cost_warning_record warning WHERE false;
+
+CREATE TABLE IF NOT EXISTS cost_manual_snapshot.warning_action_log AS
+SELECT ''::varchar(64) AS batch_code, action_log.*
+FROM "costree_mvp".cost_warning_action_log action_log WHERE false;
+
 DO $$
 BEGIN
     IF NOT EXISTS (SELECT 1 FROM pg_indexes WHERE schemaname = 'cost_manual_snapshot' AND indexname = 'idx_cost_manual_project_batch') THEN
@@ -84,6 +132,15 @@ BEGIN
     END IF;
     IF NOT EXISTS (SELECT 1 FROM pg_indexes WHERE schemaname = 'cost_manual_snapshot' AND indexname = 'idx_cost_manual_warning_batch') THEN
         EXECUTE 'CREATE INDEX idx_cost_manual_warning_batch ON cost_manual_snapshot.warning_state (batch_code, tenant_id, id)';
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM pg_indexes WHERE schemaname = 'cost_manual_snapshot' AND indexname = 'idx_cost_manual_warning_receiver_batch') THEN
+        EXECUTE 'CREATE INDEX idx_cost_manual_warning_receiver_batch ON cost_manual_snapshot.warning_receiver (batch_code, tenant_id, warning_record_id, user_id)';
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM pg_indexes WHERE schemaname = 'cost_manual_snapshot' AND indexname = 'idx_cost_manual_warning_v2_batch') THEN
+        EXECUTE 'CREATE INDEX idx_cost_manual_warning_v2_batch ON cost_manual_snapshot.warning_state_v2 (batch_code, tenant_id, id)';
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM pg_indexes WHERE schemaname = 'cost_manual_snapshot' AND indexname = 'idx_cost_manual_warning_action_batch') THEN
+        EXECUTE 'CREATE INDEX idx_cost_manual_warning_action_batch ON cost_manual_snapshot.warning_action_log (batch_code, tenant_id, warning_record_id, id)';
     END IF;
 END $$;
 
