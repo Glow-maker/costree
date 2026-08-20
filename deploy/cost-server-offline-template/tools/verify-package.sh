@@ -111,6 +111,7 @@ grep -qi 'cost_subsystem_dict' database/postgresql92/02-upgrade-existing/14-upgr
 grep -qi 'vertical_division DROP DEFAULT' database/postgresql92/02-upgrade-existing/14-upgrade-existing-to-20260819-manual-fields-subsystem.sql
 grep -qi 'cost_warning_receiver' database/postgresql92/02-upgrade-existing/15-upgrade-existing-to-20260820-warning-workflow.sql
 grep -qi 'warning_active_duplicate_key' database/postgresql92/02-upgrade-existing/20-verify.sql
+grep -qi 'legacy_status_missing' database/postgresql92/02-upgrade-existing/20-verify.sql
 grep -qi 'subsystem_dict_duplicate_name' database/postgresql92/02-upgrade-existing/20-verify.sql
 for forbidden in \
   database/postgresql92/04-reset-and-reload \
