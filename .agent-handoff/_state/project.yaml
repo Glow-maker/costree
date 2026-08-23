@@ -1,12 +1,13 @@
 version: 1
 project: costree
 created_at: '2026-06-12T00:04:41+08:00'
-updated_at: '2026-08-24T02:46:49+08:00'
+updated_at: '2026-08-24T02:55:02+08:00'
 last_resumed_at: '2026-08-24T02:51:07+08:00'
-current_phase: 型号比对实现完成，等待真实内网验收
+current_phase: 型号比对与部署更新已提交推送，等待真实内网验收
 current_goal: 上线型号项目级多项目对比，并保持成本权限和内网部署链路一致
-summary: 型号比对页已增加页面内纵向滚动，详细差异矩阵可正常到达；类型、ESLint、Stylelint、差异检查及本地登录态浏览器滚动验证均通过。
-next_step: 部署新的后端 JAR 和前端 dist，在 DM/MQB 一次性执行权限脚本并精确失效权限缓存，再用五类真实账号和真实成本库验收。
+summary: root 4a16981、后端 e76c2369、前端 a6138aea 已分别推送；后端 31 项聚焦测试、前端成本类型检查与 ESLint、型号比对页
+  Stylelint、发布包验包及三个仓库 diff check 通过。
+next_step: 部署新的后端 JAR 和前端 dist，在 DM/MQB 一次性执行 20260824 权限脚本并精确失效权限缓存，再用五类真实账号和真实成本库验收。
 blockers:
 - 尚未连接真实 DM/MQB 与 GaussDB/DWS 执行升级
 - 尚未使用管理员、全局查看、科研部、项目办和研制单位真实账号完成端到端验收

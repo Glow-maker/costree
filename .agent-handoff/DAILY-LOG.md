@@ -35,6 +35,20 @@
 - 前端工作树包含用户原有未提交修改，本轮未提交或推送
 - 真实内网浏览器与部署制品仍需上线后复验
 
+### 审查、提交并推送型号比对与 20260824 部署更新
+- 确认 root、backend、frontend 与对应远端均为 0/0 无分叉
+- 后端 31/31 聚焦测试通过，前端成本类型检查和 ESLint 通过，型号比对页 Stylelint 通过
+- 20260824 本地数据集成发布包验包通过，PowerShell/Bash 验包脚本语法通过
+- root 4a16981 推送 origin/jt/cost-server-offline-20260820
+- 后端 e76c2369 推送 codeup/feature/costree
+- 前端 a6138aea 推送 codeup/feature/costree2
+
+#### 风险与备注
+- 前端 package-lock.json 的本地 npm 机械变化未提交并原样保留
+- 被 .gitignore 忽略的本地发布成品目录未强制纳入 Git，版本证据仍依赖 RELEASE-INFO 与 SHA256SUMS
+- 全量 Stylelint 扫描仍显示旧成本页面既有格式债务，本轮未扩大范围重排样式
+- 静态与本地验证不能替代真实内网数据库、缓存和五类账号验收
+
 ---
 
 ## 2026-08-19

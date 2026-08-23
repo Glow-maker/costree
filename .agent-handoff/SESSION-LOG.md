@@ -1,51 +1,6 @@
 # 会话记录
 
 ## 一次会话
-- 开始时间：2026-07-22 03:00:00 +0800
-- 结束时间：2026-07-22 04:16:53 +0800
-- 本次焦点：项目展示、阶段筛选、账面组成穿透导出与 PostgreSQL 内网升级包收尾
-
-### 本次进展
-- 完成项目详情顶部项目基本情况、单位成本和工作令维护布局及完整字段展示。
-- 完成首页领域账面组成到借方明细页的穿透和当前筛选条件 Excel 导出。
-- 完成 /cost/collect 两类表单字段标签悬停说明组件和集中说明文案。
-- 新增统一阶段集合工具，/cost/tree-detail 与 /cost/tree-unit-detail 均按完整集合匹配。
-- 单位页增加到款；工作令卡片增加编号、目标和账面，展开详情以合同金额替换产品简称。
-- 将查阅超支详情统一改为查看详情，修复 ECharts 弹窗多次打开后实例与 DOM 脱节，并用请求序号避免串数据。
-- 工作令组成弹窗可进入组成明细页并预选八项科目，返回时恢复项目、管理单位、单位类别和阶段条件。
-- 新增 export-work-order-composition-excel，批量汇总借方八项金额和占比，限制最多 5000 条工作令。
-- 新增 PostgreSQL costree-deploy 升级包：00-precheck、10-upgrade、20-verify、README 和打包/执行/校验脚本。
-- 前端 pnpm run ts:check:cost 与定向 ESLint 通过，前后端 git diff --check 通过。
-- 后端 Reactor compile 和 CostMapperAnnotationSqlTest 通过：1 个测试，0 失败，BUILD SUCCESS。
-- 前端提交 f78d9c0 已推送 codeup/feature/costree2。
-- 后端提交 1f245334 已推送 codeup/feature/costree。
-
-### 涉及文件
-- costree-frontend/src/views/cost/projectDetail/index.vue
-- costree-frontend/src/views/cost/overview/CompositionDetailDialog.vue
-- costree-frontend/src/views/cost/ledgerCompositionDetail/index.vue
-- costree-frontend/src/views/cost/collect/FieldHelpLabel.vue
-- costree-frontend/src/views/cost/collect/index.vue
-- costree-frontend/src/views/cost/utils/stage.ts
-- costree-frontend/src/views/cost/treeDetail/index.vue
-- costree-frontend/src/views/cost/treeUnitDetail/index.vue
-- costree-frontend/src/api/cost/workOrderLedger/index.ts
-- baback/yudao-module-cost/yudao-module-cost-biz/src/main/java/cn/iocoder/yudao/module/cost/controller/admin/workorderledger/CostWorkOrderLedgerController.java
-- baback/yudao-module-cost/yudao-module-cost-biz/src/main/java/cn/iocoder/yudao/module/cost/service/workorderledger/CostWorkOrderLedgerServiceImpl.java
-- baback/yudao-module-cost/yudao-module-cost-biz/src/main/java/cn/iocoder/yudao/module/cost/dal/mysql/workorderledger/CostWorkOrderLedgerDetailMapper.java
-- baback/sql/postgresql/costree-deploy/README.md
-- baback/sql/postgresql/costree-deploy/10-upgrade-existing-to-20260722.sql
-
-### 下次恢复点
-- 继续项目时先运行 python .agent-handoff/runtime/agent-handoff/scripts/handoff.py resume .；内网部署使用前端 f78d9c0、后端 1f245334，并严格按 baback/sql/postgresql/costree-deploy/README.md 完成数据库检查、升级和验证，再做有登录态的阶段组合与两类导出回归。
-
-### 风险与备注
-- 只替换前后端制品而不执行数据库升级包，会产生缺列、旧唯一约束或重复工作令问题。
-- 工作令八项组成导出依赖账面明细科目映射和借方口径，内网正式数据应抽样与财务源表对账。
-- 阶段筛选已统一为集合完整匹配，其他非树页面若仍用最高阶段或任一命中，需要后续按业务范围逐页确认。
-- 浏览器未取得业务登录态，最终视觉、权限及实际下载文件仍有现场回归风险。
-
-## 一次会话
 - 开始时间：2026-07-28 18:30:00 +0800
 - 结束时间：2026-07-28 21:40:00 +0800
 - 本次焦点：项目办单位金额维护、工作令查询、单位树层级和 20260728 内网部署包收尾
@@ -395,3 +350,31 @@
 ### 风险与备注
 - 前端工作树包含用户原有未提交修改，本轮未提交或推送
 - 真实内网浏览器与部署制品仍需上线后复验
+
+## 一次会话
+- 开始时间：2026-08-24 02:47:00 +0800
+- 结束时间：2026-08-24 02:55:02 +0800
+- 本次焦点：审查、提交并推送型号比对与 20260824 部署更新
+
+### 本次进展
+- 确认 root、backend、frontend 与对应远端均为 0/0 无分叉
+- 后端 31/31 聚焦测试通过，前端成本类型检查和 ESLint 通过，型号比对页 Stylelint 通过
+- 20260824 本地数据集成发布包验包通过，PowerShell/Bash 验包脚本语法通过
+- root 4a16981 推送 origin/jt/cost-server-offline-20260820
+- 后端 e76c2369 推送 codeup/feature/costree
+- 前端 a6138aea 推送 codeup/feature/costree2
+
+### 涉及文件
+- H:/light/project/costree/deploy/cost-server-offline-template
+- H:/light/project/sqlbot_with_bcback/baback/yudao-module-cost
+- H:/light/project/sqlbot_with_bcback/costree-frontend/src/views/cost/modelComparison
+- H:/light/project/sqlbot_with_bcback/costree-frontend/src/views/cost
+
+### 下次恢复点
+- 从真实内网验收开始；源码基线为 root 4a16981、后端 e76c2369、前端 a6138aea。先部署制品，再按 20260824 文档执行 DM/MQB 权限初始化、检查和精确缓存失效。
+
+### 风险与备注
+- 前端 package-lock.json 的本地 npm 机械变化未提交并原样保留
+- 被 .gitignore 忽略的本地发布成品目录未强制纳入 Git，版本证据仍依赖 RELEASE-INFO 与 SHA256SUMS
+- 全量 Stylelint 扫描仍显示旧成本页面既有格式债务，本轮未扩大范围重排样式
+- 静态与本地验证不能替代真实内网数据库、缓存和五类账号验收

@@ -1,0 +1,60 @@
+{
+  "session": {
+    "started_at": "2026-08-24T02:47:00+08:00",
+    "ended_at": "2026-08-24T02:55:02+08:00",
+    "focus": "审查、提交并推送型号比对与 20260824 部署更新"
+  },
+  "current_status": {
+    "phase": "型号比对与部署更新已提交推送，等待真实内网验收",
+    "goal": "上线型号项目级多项目对比，并保持成本权限和内网部署链路一致",
+    "summary": "root 4a16981、后端 e76c2369、前端 a6138aea 已分别推送；后端 31 项聚焦测试、前端成本类型检查与 ESLint、型号比对页 Stylelint、发布包验包及三个仓库 diff check 通过。",
+    "next_step": "部署新的后端 JAR 和前端 dist，在 DM/MQB 一次性执行 20260824 权限脚本并精确失效权限缓存，再用五类真实账号和真实成本库验收。",
+    "blockers": [
+      "尚未连接真实 DM/MQB 与 GaussDB/DWS 执行升级",
+      "尚未使用管理员、全局查看、科研部、项目办和研制单位真实账号完成端到端验收"
+    ]
+  },
+  "tasks_to_add": [],
+  "tasks_to_update": [
+    {
+      "task_id": "TASK-005",
+      "title": "完成三级成本角色与数据范围权限验收",
+      "details": "最新成本功能已提交并推送：后端 e76c2369、前端 a6138aea，包含型号比对 query/export 权限、科研部与项目办分段填报、研制单位自主管理及既有项目和单位范围控制。下一步必须使用五类真实账号验证菜单、默认落地、直接 URL/API、项目与单位交集、型号选择范围、金额对账和导出。",
+      "priority": "P0"
+    },
+    {
+      "task_id": "TASK-006",
+      "title": "完成双库权限初始化和最终内网部署包",
+      "details": "root 部署模板提交 4a16981 已推送 origin/jt/cost-server-offline-20260820；本地 release-20260729-data-integration 已原地升级为 20260824 首次权限部署包并通过验包。仍需真实 DM8/MQB 权限执行、Redis 精确缓存失效、五类账号验收，以及 PostgreSQL 9.2/DWS 两批同步和一次恢复演练。",
+      "priority": "P0"
+    }
+  ],
+  "tasks_to_complete": [],
+  "tasks_to_add_and_complete": [],
+  "decisions_to_add": [],
+  "session_log": {
+    "progress": [
+      "确认 root、backend、frontend 与对应远端均为 0/0 无分叉",
+      "后端 31/31 聚焦测试通过，前端成本类型检查和 ESLint 通过，型号比对页 Stylelint 通过",
+      "20260824 本地数据集成发布包验包通过，PowerShell/Bash 验包脚本语法通过",
+      "root 4a16981 推送 origin/jt/cost-server-offline-20260820",
+      "后端 e76c2369 推送 codeup/feature/costree",
+      "前端 a6138aea 推送 codeup/feature/costree2"
+    ],
+    "files_touched": [
+      "H:/light/project/costree/deploy/cost-server-offline-template",
+      "H:/light/project/sqlbot_with_bcback/baback/yudao-module-cost",
+      "H:/light/project/sqlbot_with_bcback/costree-frontend/src/views/cost/modelComparison",
+      "H:/light/project/sqlbot_with_bcback/costree-frontend/src/views/cost"
+    ],
+    "risks": [
+      "前端 package-lock.json 的本地 npm 机械变化未提交并原样保留",
+      "被 .gitignore 忽略的本地发布成品目录未强制纳入 Git，版本证据仍依赖 RELEASE-INFO 与 SHA256SUMS",
+      "全量 Stylelint 扫描仍显示旧成本页面既有格式债务，本轮未扩大范围重排样式",
+      "静态与本地验证不能替代真实内网数据库、缓存和五类账号验收"
+    ]
+  },
+  "resume_hint": {
+    "text": "从真实内网验收开始；源码基线为 root 4a16981、后端 e76c2369、前端 a6138aea。先部署制品，再按 20260824 文档执行 DM/MQB 权限初始化、检查和精确缓存失效。"
+  }
+}
