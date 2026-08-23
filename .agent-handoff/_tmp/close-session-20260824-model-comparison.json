@@ -1,0 +1,61 @@
+{
+  "session": {
+    "started_at": "2026-08-24T01:30:00+08:00",
+    "ended_at": "2026-08-24T02:30:43+08:00",
+    "focus": "实现型号比对模块及内网权限发布更新"
+  },
+  "current_status": {
+    "phase": "型号比对实现完成，等待真实内网验收",
+    "goal": "上线型号项目级多项目对比，并保持成本权限和内网部署链路一致",
+    "summary": "已完成型号比对后端聚合与导出、前端页面与入口、四方言权限脚本、离线模板和数据集成发布包更新；本地定向测试和静态验包通过。",
+    "next_step": "部署新的后端 JAR 和前端 dist，在 DM/MQB 一次性执行权限脚本并精确失效权限缓存，再用五类真实账号和真实成本库验收。",
+    "blockers": [
+      "尚未连接真实 DM/MQB 与 GaussDB/DWS 执行升级",
+      "尚未使用管理员、全局查看、科研部、项目办和研制单位真实账号完成端到端验收"
+    ]
+  },
+  "tasks_to_add": [],
+  "tasks_to_update": [],
+  "tasks_to_complete": [],
+  "tasks_to_add_and_complete": [
+    {
+      "title": "实现型号比对模块",
+      "details": "新增 1 至 6 个授权项目的型号项目级对比，包含基础属性、核心金额、比率、八项及未分类、差异矩阵、账面下钻和双工作表 Excel 导出；同步更新权限 SQL 与发布包。",
+      "priority": "high",
+      "notes": "后端定向测试 7/7，前端类型检查、目标 ESLint、Stylelint、四方言权限矩阵检查、发布包验包及脚本语法检查通过。"
+    }
+  ],
+  "decisions_to_add": [
+    {
+      "summary": "型号比对不新增业务表",
+      "rationale": "复用现有项目、填报、单位金额和账面明细实时聚合，内网只新增两个接口权限及四类成本角色映射。"
+    },
+    {
+      "summary": "任一项目越权时整次比对返回 403",
+      "rationale": "避免部分返回造成授权范围推断；研制单位金额继续按授权项目与授权单位交集汇总。"
+    }
+  ],
+  "session_log": {
+    "progress": [
+      "新增 /cost/model-comparison/options、compare、export-excel 接口及权限注解",
+      "新增门户型号比对入口、远程选择、基准排序、金额与组成图表、差异矩阵和下钻",
+      "四方言及 DM8 发布脚本新增 query/export 权限，当前目标为 21 个权限点和 42 条角色权限映射",
+      "release-20260729-data-integration 原地更新并通过验包"
+    ],
+    "files_touched": [
+      "H:/light/project/sqlbot_with_bcback/baback/yudao-module-cost/yudao-module-cost-biz/src/main/java/cn/iocoder/yudao/module/cost/controller/admin/modelcomparison",
+      "H:/light/project/sqlbot_with_bcback/baback/yudao-module-cost/yudao-module-cost-biz/src/main/java/cn/iocoder/yudao/module/cost/service/modelcomparison",
+      "H:/light/project/sqlbot_with_bcback/costree-frontend/src/views/cost/modelComparison/index.vue",
+      "H:/light/project/sqlbot_with_bcback/costree-frontend/src/api/cost/modelComparison/index.ts",
+      "H:/light/project/costree/deploy/cost-server-offline-template/database/platform",
+      "H:/light/project/costree/cost-intranet-data-kit/release-20260729-data-integration"
+    ],
+    "risks": [
+      "三个仓库均有用户原有未提交修改，本轮未提交或推送",
+      "静态测试不能替代真实数据库、缓存和账号权限验收"
+    ]
+  },
+  "resume_hint": {
+    "text": "从真实环境验收开始：先部署前后端，再执行 DM/MQB 权限脚本和检查脚本，精确失效 role、menu_role_ids、permission_menu_ids 缓存，最后逐类账号验证选择范围、直接 API 越权、单位交集、金额对账和导出。"
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "session": {
+    "started_at": "2026-08-24T02:34:00+08:00",
+    "ended_at": "2026-08-24T02:40:40+08:00",
+    "focus": "将指定内网数据集成目录原地升级为 20260824 权限首次部署包"
+  },
+  "current_status": {
+    "phase": "20260824 内网权限发布包完成，等待真实环境执行",
+    "goal": "在尚未导入成本权限的内网环境一次性部署完整角色、权限、站内信与型号比对权限",
+    "summary": "指定 release-20260729-data-integration 目录已原地升级为 20260824：权限初始化和检查脚本改用 20260824 文件名，补充型号比对首次导入验收文档，更新入口、平台说明、RELEASE-INFO、验包器和 SHA256；本地静态验包通过。",
+    "next_step": "在备份后的 MQB 中按 platform/README.md 执行 20260824 权限初始化、20260820 站内信模板和 20260824 权限检查，精确失效 Redis 缓存并用五类真实账号验收。",
+    "blockers": [
+      "尚未在真实 DM8/MQB 执行 20260824 权限初始化和检查脚本",
+      "尚未在真实 Redis 精确失效权限缓存并重新登录",
+      "尚未使用五类真实账号完成型号比对、授权范围和直接 API 越权验收"
+    ]
+  },
+  "tasks_to_add": [],
+  "tasks_to_update": [
+    {
+      "task_id": "TASK-006",
+      "title": "完成双库权限初始化和最终内网部署包",
+      "details": "release-20260729-data-integration 已原地升级为 20260824 首次权限部署包，包含 21 个权限点、42 对受管角色映射、型号比对 query/export 权限、预警站内信模板、20260824 检查器和验收说明；包校验与 SHA256 通过。仍需真实 DM8/MQB 权限执行、Redis 精确缓存失效、五类账号验收，以及 PostgreSQL 9.2/DWS 两批同步和一次恢复演练。",
+      "priority": "P0"
+    }
+  ],
+  "tasks_to_complete": [],
+  "tasks_to_add_and_complete": [],
+  "decisions_to_add": [
+    {
+      "summary": "数据集成发布目录保留历史路径，包内版本以 RELEASE-INFO 为准",
+      "rationale": "内网工作流已引用 release-20260729-data-integration 路径；原地升级到 20260824 可避免现场路径失效，同时通过版本元数据、文件名、验包器和哈希清单明确实际版本。"
+    }
+  ],
+  "session_log": {
+    "progress": [
+      "将 PACKAGE_REVISION 和 BUILD_DATE 更新为 20260824，成本业务结构版本保持 20260820",
+      "将 DM8 权限初始化和权限检查文件重命名为 20260824，并更新全部执行入口引用",
+      "新增 20260824 型号比对与权限首次导入验收文档，明确无需先跑旧 20260817 权限脚本",
+      "更新验包器必需文件、版本令牌和 SHA256SUMS，67 个文件中除清单自身外 66 个文件全部纳入哈希",
+      "包验收、PowerShell 语法、8 条型号比对角色映射及源/发布权限脚本哈希核对通过"
+    ],
+    "files_touched": [
+      "cost-intranet-data-kit/release-20260729-data-integration/00-开始这里.md",
+      "cost-intranet-data-kit/release-20260729-data-integration/RELEASE-INFO.txt",
+      "cost-intranet-data-kit/release-20260729-data-integration/SHA256SUMS.txt",
+      "cost-intranet-data-kit/release-20260729-data-integration/platform/README.md",
+      "cost-intranet-data-kit/release-20260729-data-integration/platform/dm8/costree-access-role-menu-20260824.sql",
+      "cost-intranet-data-kit/release-20260729-data-integration/platform/dm8/check-cost-permissions-20260824.sql",
+      "cost-intranet-data-kit/release-20260729-data-integration/docs/14-20260824型号比对与权限首次导入验收.md",
+      "cost-intranet-data-kit/release-20260729-data-integration/tools/verify-package.ps1"
+    ],
+    "risks": [
+      "发布目录被 root .gitignore 忽略，交付证据依赖本地目录、RELEASE-INFO 和 SHA256SUMS",
+      "静态验包不能替代真实 DM8、Redis、中台登录和权限范围验收",
+      "执行权限初始化前必须备份平台表、替换示例租户 124、关闭自动提交并串行执行"
+    ]
+  },
+  "resume_hint": {
+    "text": "下一次从 docs/14-20260824型号比对与权限首次导入验收.md 开始；连接 MQB 后按 platform/README 顺序执行 costree-access-role-menu-20260824.sql、cost-warning-notify-template-20260820.sql、check-cost-permissions-20260824.sql，前六组必须为 OK，再精确清缓存并用五类账号验收。"
+  }
+}

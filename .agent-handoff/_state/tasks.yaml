@@ -41,12 +41,13 @@ active:
   notes: ''
 - task_id: TASK-006
   title: 完成双库权限初始化和最终内网部署包
-  details: 发布包已原地升级为 20260819：新增业务结构升级、成本分系统字典、snapshot-upsert 手工字段基线复验、cost_manual_snapshot
-    清库保护和验包强制规则。静态、单测和包校验通过；仍需真实 DM8 权限验收及 PostgreSQL 9.2/DWS 两批同步和一次恢复演练。
+  details: release-20260729-data-integration 已原地升级为 20260824 首次权限部署包，包含 21 个权限点、42
+    对受管角色映射、型号比对 query/export 权限、预警站内信模板、20260824 检查器和验收说明；包校验与 SHA256 通过。仍需真实 DM8/MQB
+    权限执行、Redis 精确缓存失效、五类账号验收，以及 PostgreSQL 9.2/DWS 两批同步和一次恢复演练。
   priority: P0
   status: in_progress
   created_at: '2026-06-12T00:15:17+08:00'
-  updated_at: '2026-08-19T03:42:51+08:00'
+  updated_at: '2026-08-24T02:41:20+08:00'
   completed_at: ''
   notes: ''
 completed:
@@ -399,3 +400,22 @@ completed:
   updated_at: '2026-08-19T03:42:51+08:00'
   completed_at: '2026-08-19T03:42:51+08:00'
   notes: 本地聚焦测试和静态检查通过；真实 PG9.2/DWS 数据库验收仍属于 TASK-006 的上线前阻断。
+- task_id: TASK-043
+  title: 实现型号比对模块
+  details: 新增 1 至 6 个授权项目的型号项目级对比，包含基础属性、核心金额、比率、八项及未分类、差异矩阵、账面下钻和双工作表 Excel 导出；同步更新权限
+    SQL 与发布包。
+  priority: high
+  status: completed
+  created_at: '2026-08-24T02:31:24+08:00'
+  updated_at: '2026-08-24T02:31:24+08:00'
+  completed_at: '2026-08-24T02:31:24+08:00'
+  notes: 后端定向测试 7/7，前端类型检查、目标 ESLint、Stylelint、四方言权限矩阵检查、发布包验包及脚本语法检查通过。
+- task_id: TASK-044
+  title: 修复型号比对页纵向滚动
+  details: 为 model-comparison 页面根容器增加固定视口高度和独立纵向滚动，保留详细差异矩阵自身的横向滚动。
+  priority: medium
+  status: completed
+  created_at: '2026-08-24T02:47:14+08:00'
+  updated_at: '2026-08-24T02:47:14+08:00'
+  completed_at: '2026-08-24T02:47:14+08:00'
+  notes: 本地实测 clientHeight 720、scrollHeight 2795，滚动至 scrollTop 1700 后详细差异矩阵进入可视区，控制台无报错。

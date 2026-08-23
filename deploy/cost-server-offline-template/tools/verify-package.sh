@@ -53,6 +53,9 @@ for file in RELEASE-INFO.txt backend/app/cost-server.jar frontend/costree-fronte
   database/postgresql92/03-data-integration/snapshot-upsert/08-缺失数据差异清单.sql \
   database/postgresql92/03-data-integration/snapshot-upsert/09-定时任务最简顺序.md \
   database/postgresql92/03-data-integration/snapshot-upsert/10-最简过程.ps1 \
+  database/postgresql92/03-data-integration/pako-daily/00-开始这里.md \
+  database/postgresql92/03-data-integration/pako-daily/01-同库全量装载-现场只改此文件.sql \
+  database/postgresql92/03-data-integration/pako-daily/02-跨库装载完成标记.sql \
   database/postgresql92/03-data-integration/manual-preservation/00-开始这里.md \
   database/postgresql92/03-data-integration/manual-preservation/01-创建手工快照表.sql \
   database/postgresql92/03-data-integration/manual-preservation/02-生成清库前快照.sql \
@@ -64,6 +67,7 @@ for file in RELEASE-INFO.txt backend/app/cost-server.jar frontend/costree-fronte
   docs/11-三级权限升级与授权操作.md \
   docs/12-成本树三级权限与双库初始化.md \
   docs/13-预警分析与闭环处置.md \
+  docs/14-内网首次部署与帕科每日运行操作手册.md \
   database/platform/costree-access-role-menu-mysql-20260817.sql \
   database/platform/costree-access-role-menu-postgresql-20260817.sql \
   database/platform/costree-access-role-menu-postgresql92-20260817.sql \
@@ -87,17 +91,36 @@ for script in \
   for role in cost_global_viewer cost_research_department cost_project_office cost_unit_user; do
     grep -q "$role" "$script" || { echo "Platform role script is missing role $role: $script" >&2; exit 1; }
   done
+  while IFS= read -r permission; do
+    [[ -z "$permission" ]] && continue
+    grep -q "$permission" "$script" || { echo "Platform role script is missing permission $permission: $script" >&2; exit 1; }
+  done < database/platform/required-permissions.txt
 done
 grep -Eq 'expected_mapping_count|EXPECTED_MAPPING_COUNT' database/platform/check-cost-permissions.sql
-grep -Eq '34' database/platform/check-cost-permissions.sql
+grep -Eq '42' database/platform/check-cost-permissions.sql
 grep -Eq 'EXPECTED_MAPPING_COUNT' database/platform/dm8/03-check-cost-permissions-20260820.sql
-grep -Eq '34' database/platform/dm8/03-check-cost-permissions-20260820.sql
+grep -Eq '42' database/platform/dm8/03-check-cost-permissions-20260820.sql
 ! grep -Eiq '^[[:space:]]*(TRUNCATE|DELETE[[:space:]]+FROM)[[:space:]]+(TABLE[[:space:]]+)?("?costree_mvp"?\.)' database/postgresql92/03-data-integration/snapshot-upsert/*.sql
 ! grep -Eiq '^[[:space:]]*(INSERT[[:space:]]+INTO|UPDATE|DELETE[[:space:]]+FROM|TRUNCATE([[:space:]]+TABLE)?)[[:space:]]+("?costree_mvp"?\.)?cost_project_basic\b' database/postgresql92/03-data-integration/snapshot-upsert/*.sql
 ! grep -Eiq '^[[:space:]]*(INSERT[[:space:]]+INTO|UPDATE|DELETE[[:space:]]+FROM|TRUNCATE([[:space:]]+TABLE)?)[[:space:]]+("?costree_mvp"?\.)?cost_warning_(record|receiver|action_log)\b' database/postgresql92/03-data-integration/snapshot-upsert/*.sql
 grep -qi 'manual_field_digest' database/postgresql92/03-data-integration/snapshot-upsert/04-导入前检查.sql
 grep -qi 'manual_field_baseline' database/postgresql92/03-data-integration/snapshot-upsert/07-同步后验收.sql
 grep -qi '手工字段或流程状态' database/postgresql92/03-data-integration/snapshot-upsert/07-同步后验收.sql
+[[ "$(find database/postgresql92/03-data-integration/pako-daily -maxdepth 1 -type f -name '*.sql' | wc -l | tr -d ' ')" = "2" ]]
+! grep -Eiq '^[[:space:]]*(INSERT[[:space:]]+INTO|UPDATE|DELETE[[:space:]]+FROM|TRUNCATE([[:space:]]+TABLE)?)[[:space:]]+("?costree_mvp"?\.)' database/postgresql92/03-data-integration/pako-daily/*.sql
+! grep -Eiq 'CREATE[[:space:]]+INDEX[[:space:]]+IF[[:space:]]+NOT[[:space:]]+EXISTS|ADD[[:space:]]+COLUMN[[:space:]]+IF[[:space:]]+NOT[[:space:]]+EXISTS|ON[[:space:]]+CONFLICT|WITH[[:space:]]*\([[:space:]]*FORMAT' database/postgresql92/03-data-integration/pako-daily/*.sql
+grep -q 'PAKO_DAILY_MAPPING_TEMPLATE' database/postgresql92/03-data-integration/pako-daily/01-同库全量装载-现场只改此文件.sql
+grep -q '<源系统schema>' database/postgresql92/03-data-integration/pako-daily/01-同库全量装载-现场只改此文件.sql
+[[ "$(grep -Eic 'INSERT[[:space:]]+INTO[[:space:]]+cost_sync_stage\.stg_' database/postgresql92/03-data-integration/pako-daily/01-同库全量装载-现场只改此文件.sql)" = "6" ]]
+for stage in stg_unit_dict stg_model_node stg_project stg_unit_amount stg_work_order stg_ledger_detail; do
+  grep -q "$stage" database/postgresql92/03-data-integration/pako-daily/01-同库全量装载-现场只改此文件.sql
+done
+grep -q "load_status = 'READY'" database/postgresql92/03-data-integration/pako-daily/01-同库全量装载-现场只改此文件.sql
+grep -q 'PAKO_CROSS_DB_READY_MARKER' database/postgresql92/03-data-integration/pako-daily/02-跨库装载完成标记.sql
+grep -q "load_status = 'READY'" database/postgresql92/03-data-integration/pako-daily/02-跨库装载完成标记.sql
+for token in DM8_ONCE PAKO_DAILY STOP_ON_FAILURE 02-只清空中间表.sql 05-业务表幂等同步.sql 07-同步后验收.sql; do
+  grep -q "$token" database/postgresql92/03-data-integration/pako-daily/00-开始这里.md
+done
 SYNC_FILE=database/postgresql92/03-data-integration/snapshot-upsert/05-业务表幂等同步.sql
 ! sed -n '/UPDATE "costree_mvp"\.cost_project /,/FROM tmp_cost_sync_project/p' "$SYNC_FILE" | grep -Eiq '\b(batch_no|stage_codes|unit_id|unit_name|unit_type|project_office_status|unit_fill_status|audit_status|warning_status|owner_user_id)[[:space:]]*='
 ! sed -n '/UPDATE "costree_mvp"\.cost_unit_cost_detail /,/FROM tmp_cost_sync_amount_match/p' "$SYNC_FILE" | grep -Eiq '\b(target_cost_amount|book_cost_amount|approved_amount|salary_amount|material_amount|outsource_amount|manage_amount|fuel_power_amount|other_amount|remark)[[:space:]]*='

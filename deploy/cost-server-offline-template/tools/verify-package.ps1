@@ -59,6 +59,9 @@ foreach ($required in @(
     'database\postgresql92\03-data-integration\snapshot-upsert\08-缺失数据差异清单.sql',
     'database\postgresql92\03-data-integration\snapshot-upsert\09-定时任务最简顺序.md',
     'database\postgresql92\03-data-integration\snapshot-upsert\10-最简过程.ps1',
+    'database\postgresql92\03-data-integration\pako-daily\00-开始这里.md',
+    'database\postgresql92\03-data-integration\pako-daily\01-同库全量装载-现场只改此文件.sql',
+    'database\postgresql92\03-data-integration\pako-daily\02-跨库装载完成标记.sql',
     'database\postgresql92\03-data-integration\manual-preservation\00-开始这里.md',
     'database\postgresql92\03-data-integration\manual-preservation\01-创建手工快照表.sql',
     'database\postgresql92\03-data-integration\manual-preservation\02-生成清库前快照.sql',
@@ -81,6 +84,7 @@ foreach ($required in @(
     'docs\11-三级权限升级与授权操作.md',
     'docs\12-成本树三级权限与双库初始化.md',
     'docs\13-预警分析与闭环处置.md',
+    'docs\14-内网首次部署与帕科每日运行操作手册.md',
     'SHA256SUMS.txt'
 )) {
     if (-not (Test-Path -LiteralPath (Join-Path $root $required))) {
@@ -93,6 +97,8 @@ $requiredRoleCodes = @(
     'cost_project_office',
     'cost_unit_user'
 )
+$requiredPermissions = Get-Content -LiteralPath (Join-Path $root 'database\platform\required-permissions.txt') |
+    Where-Object { -not [String]::IsNullOrWhiteSpace($_) }
 foreach ($platformScript in @(
     'database\platform\costree-access-role-menu-mysql-20260817.sql',
     'database\platform\costree-access-role-menu-postgresql-20260817.sql',
@@ -105,14 +111,19 @@ foreach ($platformScript in @(
             throw "Platform role script is missing role ${roleCode}: $platformScript"
         }
     }
+    foreach ($permission in $requiredPermissions) {
+        if ($scriptText.IndexOf($permission, [StringComparison]::Ordinal) -lt 0) {
+            throw "Platform role script is missing permission ${permission}: $platformScript"
+        }
+    }
 }
 $checkerText = Get-Content -LiteralPath (Join-Path $root 'database\platform\check-cost-permissions.sql') -Raw
-if ($checkerText -notmatch 'expected_mapping_count' -or $checkerText -notmatch '\b34\b') {
-    throw 'PostgreSQL platform checker must validate all 34 expected role-menu mappings.'
+if ($checkerText -notmatch 'expected_mapping_count' -or $checkerText -notmatch '\b42\b') {
+    throw 'PostgreSQL platform checker must validate all 42 expected role-menu mappings.'
 }
 $dmCheckerText = Get-Content -LiteralPath (Join-Path $root 'database\platform\dm8\03-check-cost-permissions-20260820.sql') -Raw
-if ($dmCheckerText -notmatch 'EXPECTED_MAPPING_COUNT' -or $dmCheckerText -notmatch '\b34\b') {
-    throw 'DM8 platform checker must validate all 34 expected role-menu mappings.'
+if ($dmCheckerText -notmatch 'EXPECTED_MAPPING_COUNT' -or $dmCheckerText -notmatch '\b42\b') {
+    throw 'DM8 platform checker must validate all 42 expected role-menu mappings.'
 }
 
 $snapshotRoot = Join-Path $root 'database\postgresql92\03-data-integration\snapshot-upsert'
@@ -158,6 +169,52 @@ if ($syncText -match '(?is)UPDATE\s+"costree_mvp"\.cost_unit_cost_detail\s+\w+\s
 foreach ($token in @('manual_field_digest', 'manual_field_baseline', '手工字段或流程状态', "load_status = 'SUCCESS'")) {
     if ($snapshotSql.IndexOf($token, [StringComparison]::OrdinalIgnoreCase) -lt 0) {
         throw "Snapshot-upsert manual-field protection is missing token: $token"
+    }
+}
+
+$pakoRoot = Join-Path $root 'database\postgresql92\03-data-integration\pako-daily'
+$pakoSqlFiles = Get-ChildItem -LiteralPath $pakoRoot -Filter '*.sql' -File
+if ($pakoSqlFiles.Count -ne 2) {
+    throw "Expected 2 Pako daily SQL files, found $($pakoSqlFiles.Count)"
+}
+$pakoSql = ($pakoSqlFiles | ForEach-Object {
+    Get-Content -LiteralPath $_.FullName -Raw -Encoding UTF8
+}) -join "`n"
+if ($pakoSql -match '(?im)^\s*(?:INSERT\s+INTO|UPDATE|DELETE\s+FROM|TRUNCATE(?:\s+TABLE)?)\s+(?:"?costree_mvp"?\.)') {
+    throw 'Pako loading SQL must write only cost_sync_stage, not costree_mvp business tables.'
+}
+foreach ($rule in @('(?i)CREATE\s+INDEX\s+IF\s+NOT\s+EXISTS',
+                     '(?i)ADD\s+COLUMN\s+IF\s+NOT\s+EXISTS',
+                     '(?i)ON\s+CONFLICT',
+                     '(?i)WITH\s*\(\s*FORMAT')) {
+    if ($pakoSql -match $rule) {
+        throw "Pako SQL contains a PostgreSQL 9.2/DWS incompatible construct: $rule"
+    }
+}
+$pakoMapping = Get-Content -LiteralPath (Join-Path $pakoRoot '01-同库全量装载-现场只改此文件.sql') -Raw -Encoding UTF8
+if ([regex]::Matches($pakoMapping, '(?i)INSERT\s+INTO\s+cost_sync_stage\.stg_').Count -ne 6) {
+    throw 'Pako same-database mapping template must load exactly six standard staging tables.'
+}
+foreach ($token in @('PAKO_DAILY_MAPPING_TEMPLATE', '<源系统schema>',
+                      'stg_unit_dict', 'stg_model_node', 'stg_project',
+                      'stg_unit_amount', 'stg_work_order', 'stg_ledger_detail',
+                      "load_status = 'READY'")) {
+    if ($pakoMapping.IndexOf($token, [StringComparison]::OrdinalIgnoreCase) -lt 0) {
+        throw "Pako same-database mapping template is missing token: $token"
+    }
+}
+$pakoMarker = Get-Content -LiteralPath (Join-Path $pakoRoot '02-跨库装载完成标记.sql') -Raw -Encoding UTF8
+foreach ($token in @('PAKO_CROSS_DB_READY_MARKER', 'sync_control', 'stg_model_node',
+                      'stg_project', "load_status = 'READY'")) {
+    if ($pakoMarker.IndexOf($token, [StringComparison]::OrdinalIgnoreCase) -lt 0) {
+        throw "Pako cross-database completion marker is missing token: $token"
+    }
+}
+$pakoGuide = Get-Content -LiteralPath (Join-Path $pakoRoot '00-开始这里.md') -Raw -Encoding UTF8
+foreach ($token in @('DM8_ONCE', 'PAKO_DAILY', 'STOP_ON_FAILURE',
+                      '02-只清空中间表.sql', '05-业务表幂等同步.sql', '07-同步后验收.sql')) {
+    if ($pakoGuide.IndexOf($token, [StringComparison]::OrdinalIgnoreCase) -lt 0) {
+        throw "Pako daily guide is missing token: $token"
     }
 }
 

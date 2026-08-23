@@ -1,17 +1,14 @@
 version: 1
 project: costree
 created_at: 2026-06-12 00:04:41 +0800
-updated_at: 2026-08-19 03:45:00 +0800
-last_resumed_at: 2026-08-19 02:50:03 +0800
-current_phase: 20260819 数据保护与分系统字典实现完成，等待真实 PostgreSQL 9.2/GaussDB(DWS) 演练
-current_goal: 确保外部全量快照只更新外部拥有字段，成本库填报和流程状态不被覆盖，并为旧清库流程提供独立可验收的恢复保护层。
-next_step: 在真实 PostgreSQL 9.2/GaussDB(DWS) 备份环境先执行 20260819 升级与检查，再用两批相同源快照验证幂等和手工字段不变，最后以专用测试库执行一次
-  cost_manual_snapshot 清库恢复往返；完成前不得宣称内网上线验收通过。
+updated_at: 2026-08-24 02:46:49 +0800
+last_resumed_at: 2026-08-24 02:51:07 +0800
+current_phase: 型号比对实现完成，等待真实内网验收
+current_goal: 上线型号项目级多项目对比，并保持成本权限和内网部署链路一致
+next_step: 部署新的后端 JAR 和前端 dist，在 DM/MQB 一次性执行权限脚本并精确失效权限缓存，再用五类真实账号和真实成本库验收。
 blockers:
-- 本机没有 psql、gsql、mysql 或 disql，尚未执行真实数据库 SQL、两批幂等同步或清库恢复演练。
-- 发布目录 cost-intranet-data-kit 被根仓库 .gitignore 忽略，内容已落盘并通过 SHA256/验包，但不会自动进入普通 Git
-  提交。
-- 当前三个仓库还包含前序已批准但未提交的成本功能和交接状态变更，本轮没有提交或推送。
+- 尚未连接真实 DM/MQB 与 GaussDB/DWS 执行升级
+- 尚未使用管理员、全局查看、科研部、项目办和研制单位真实账号完成端到端验收
 key_files:
 - .agent-handoff/START-HERE.md
 - .agent-handoff/CURRENT.md

@@ -1,0 +1,46 @@
+{
+  "session": {
+    "started_at": "2026-08-24T02:35:00+08:00",
+    "ended_at": "2026-08-24T02:46:49+08:00",
+    "focus": "修复型号比对页缺少纵向滚动"
+  },
+  "current_status": {
+    "phase": "型号比对实现完成，等待真实内网验收",
+    "goal": "上线型号项目级多项目对比，并保持成本权限和内网部署链路一致",
+    "summary": "型号比对页已增加页面内纵向滚动，详细差异矩阵可正常到达；类型、ESLint、Stylelint、差异检查及本地登录态浏览器滚动验证均通过。",
+    "next_step": "部署新的后端 JAR 和前端 dist，在 DM/MQB 一次性执行权限脚本并精确失效权限缓存，再用五类真实账号和真实成本库验收。",
+    "blockers": [
+      "尚未连接真实 DM/MQB 与 GaussDB/DWS 执行升级",
+      "尚未使用管理员、全局查看、科研部、项目办和研制单位真实账号完成端到端验收"
+    ]
+  },
+  "tasks_to_add": [],
+  "tasks_to_update": [],
+  "tasks_to_complete": [],
+  "tasks_to_add_and_complete": [
+    {
+      "title": "修复型号比对页纵向滚动",
+      "details": "为 model-comparison 页面根容器增加固定视口高度和独立纵向滚动，保留详细差异矩阵自身的横向滚动。",
+      "priority": "medium",
+      "notes": "本地实测 clientHeight 720、scrollHeight 2795，滚动至 scrollTop 1700 后详细差异矩阵进入可视区，控制台无报错。"
+    }
+  ],
+  "decisions_to_add": [],
+  "session_log": {
+    "progress": [
+      "对比同类 ledger-composition-detail 与 warning 页面后确认根容器缺少独立纵向滚动",
+      "仅修改 modelComparison/index.vue 根容器的 height、overflow 和 scrollbar-gutter",
+      "通过类型检查、目标 ESLint、Stylelint、diff check 和真实登录态浏览器滚动验证"
+    ],
+    "files_touched": [
+      "H:/light/project/sqlbot_with_bcback/costree-frontend/src/views/cost/modelComparison/index.vue"
+    ],
+    "risks": [
+      "前端工作树包含用户原有未提交修改，本轮未提交或推送",
+      "真实内网浏览器与部署制品仍需上线后复验"
+    ]
+  },
+  "resume_hint": {
+    "text": "继续真实环境验收；型号比对页滚动修复位于 comparison-page 根样式，若内网仍无法滚动，先确认部署的 dist 是否包含本次前端源码。"
+  }
+}

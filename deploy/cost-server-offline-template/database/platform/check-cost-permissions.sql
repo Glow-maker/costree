@@ -13,7 +13,8 @@ WITH required(permission) AS (
         ('cost:work-order:delete'), ('cost:work-order:query'),
         ('cost:work-order:export'), ('cost:work-order:import'),
         ('cost:warning:query'), ('cost:warning:push'),
-        ('cost:warning:feedback'), ('cost:warning:close')
+        ('cost:warning:feedback'), ('cost:warning:close'),
+        ('cost:model-comparison:query'), ('cost:model-comparison:export')
 ), missing AS (
     SELECT r.permission
     FROM required r
@@ -69,6 +70,8 @@ WITH expected(role_code, permission) AS (
         ('cost_global_viewer', 'cost:work-order:query'),
         ('cost_global_viewer', 'cost:work-order:export'),
         ('cost_global_viewer', 'cost:warning:query'),
+        ('cost_global_viewer', 'cost:model-comparison:query'),
+        ('cost_global_viewer', 'cost:model-comparison:export'),
         ('cost_research_department', '__PARENT__'),
         ('cost_research_department', 'cost:project:query'),
         ('cost_research_department', 'cost:project-basic:query'),
@@ -76,6 +79,8 @@ WITH expected(role_code, permission) AS (
         ('cost_research_department', 'cost:work-order:query'),
         ('cost_research_department', 'cost:work-order:export'),
         ('cost_research_department', 'cost:warning:query'),
+        ('cost_research_department', 'cost:model-comparison:query'),
+        ('cost_research_department', 'cost:model-comparison:export'),
         ('cost_project_office', '__PARENT__'),
         ('cost_project_office', 'cost:project:query'),
         ('cost_project_office', 'cost:project-basic:query'),
@@ -87,6 +92,8 @@ WITH expected(role_code, permission) AS (
         ('cost_project_office', 'cost:warning:query'),
         ('cost_project_office', 'cost:warning:push'),
         ('cost_project_office', 'cost:warning:close'),
+        ('cost_project_office', 'cost:model-comparison:query'),
+        ('cost_project_office', 'cost:model-comparison:export'),
         ('cost_unit_user', '__PARENT__'),
         ('cost_unit_user', 'cost:project:query'),
         ('cost_unit_user', 'cost:project-basic:query'),
@@ -95,7 +102,9 @@ WITH expected(role_code, permission) AS (
         ('cost_unit_user', 'cost:work-order:update'),
         ('cost_unit_user', 'cost:work-order:export'),
         ('cost_unit_user', 'cost:warning:query'),
-        ('cost_unit_user', 'cost:warning:feedback')
+        ('cost_unit_user', 'cost:warning:feedback'),
+        ('cost_unit_user', 'cost:model-comparison:query'),
+        ('cost_unit_user', 'cost:model-comparison:export')
 ), missing AS (
     SELECT expected.role_code, expected.permission
     FROM expected
@@ -117,7 +126,7 @@ WITH expected(role_code, permission) AS (
     )
 )
 SELECT CASE WHEN count(*) = 0 THEN 'OK' ELSE 'ERROR' END AS status,
-       34 AS expected_mapping_count,
+       42 AS expected_mapping_count,
        count(*) AS missing_mapping_count,
        string_agg(role_code || ':' || permission, ', ' ORDER BY role_code, permission) AS missing_mappings
 FROM missing;
@@ -132,6 +141,8 @@ WITH expected(role_code, permission) AS (
         ('cost_global_viewer', 'cost:work-order:query'),
         ('cost_global_viewer', 'cost:work-order:export'),
         ('cost_global_viewer', 'cost:warning:query'),
+        ('cost_global_viewer', 'cost:model-comparison:query'),
+        ('cost_global_viewer', 'cost:model-comparison:export'),
         ('cost_research_department', '__PARENT__'),
         ('cost_research_department', 'cost:project:query'),
         ('cost_research_department', 'cost:project-basic:query'),
@@ -139,6 +150,8 @@ WITH expected(role_code, permission) AS (
         ('cost_research_department', 'cost:work-order:query'),
         ('cost_research_department', 'cost:work-order:export'),
         ('cost_research_department', 'cost:warning:query'),
+        ('cost_research_department', 'cost:model-comparison:query'),
+        ('cost_research_department', 'cost:model-comparison:export'),
         ('cost_project_office', '__PARENT__'),
         ('cost_project_office', 'cost:project:query'),
         ('cost_project_office', 'cost:project-basic:query'),
@@ -150,6 +163,8 @@ WITH expected(role_code, permission) AS (
         ('cost_project_office', 'cost:warning:query'),
         ('cost_project_office', 'cost:warning:push'),
         ('cost_project_office', 'cost:warning:close'),
+        ('cost_project_office', 'cost:model-comparison:query'),
+        ('cost_project_office', 'cost:model-comparison:export'),
         ('cost_unit_user', '__PARENT__'),
         ('cost_unit_user', 'cost:project:query'),
         ('cost_unit_user', 'cost:project-basic:query'),
@@ -158,7 +173,9 @@ WITH expected(role_code, permission) AS (
         ('cost_unit_user', 'cost:work-order:update'),
         ('cost_unit_user', 'cost:work-order:export'),
         ('cost_unit_user', 'cost:warning:query'),
-        ('cost_unit_user', 'cost:warning:feedback')
+        ('cost_unit_user', 'cost:warning:feedback'),
+        ('cost_unit_user', 'cost:model-comparison:query'),
+        ('cost_unit_user', 'cost:model-comparison:export')
 ), actual AS (
     SELECT DISTINCT role.code AS role_code,
            CASE WHEN menu.path = '/cost-access-permissions'

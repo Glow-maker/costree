@@ -1,136 +1,6 @@
 # 会话记录
 
 ## 一次会话
-- 开始时间：2026-06-26 08:00:00 +0800
-- 结束时间：2026-06-26 10:25:00 +0800
-- 本次焦点：成本库树页面展示优化、数据采集字段口径调整和前后端提交推送收尾
-
-### 本次进展
-- 完成 /cost/catalog 布局优化，移除工作令明细后右侧项目区仍保持完整白色面板，修复卡片底部项目详情/成本树按钮被裁切问题。
-- 完成 /cost/tree-detail 金额展示调整：型号节点展示合同、到款、目标、账面、审定；院内单位展示目标、账面、审定；院外单位展示目标、已拨付、审定。
-- 完成 /cost/tree-detail 多单位矩阵视图：单位数较多时避免横向拖动底部滚动条，仍保留树图切换。
-- 完成 /cost/tree-unit-detail 工作令卡片简化：隐藏工作令编号、去掉阶段集合，状态位置改为审定金额，工作令层不再黄红预警。
-- 完成 /cost/collect 项目办填报字段调整：新增是否产品附件/发射车等、是否免税、对手字段展示，承研单位改为单位字典下拉。
-- 后端新增 cost_project_basic.product_attachment_type、tax_exempt 字段和 MySQL/PostgreSQL 增量 ALTER 脚本。
-- 已运行后端编译 mvn -pl yudao-module-cost/yudao-module-cost-biz -am -DskipTests compile，通过。
-- 已运行前端类型检查 pnpm run ts:check:cost，通过。
-- 后端提交 18e436c3 feat: extend project basic collection fields 已推送 codeup/feature/costree。
-- 前端提交 6d77dc4 feat: update cost collection project office form 已推送 codeup/feature/costree2。
-
-### 涉及文件
-- baback/sql/mysql/costree-cost.sql
-- baback/sql/mysql/costree-cost-20260626-add-project-basic-extra-fields.sql
-- baback/sql/postgresql/costree-cost.sql
-- baback/sql/postgresql/costree-cost-20260626-add-project-basic-extra-fields.sql
-- baback/yudao-module-cost/yudao-module-cost-biz/src/main/java/cn/iocoder/yudao/module/cost/dal/dataobject/projectbasic/CostProjectBasicDO.java
-- baback/yudao-module-cost/yudao-module-cost-biz/src/main/java/cn/iocoder/yudao/module/cost/controller/admin/projectbasic/vo/CostProjectBasicSaveReqVO.java
-- baback/yudao-module-cost/yudao-module-cost-biz/src/main/java/cn/iocoder/yudao/module/cost/controller/admin/projectbasic/vo/CostProjectBasicRespVO.java
-- baback/yudao-module-cost/yudao-module-cost-biz/src/main/java/cn/iocoder/yudao/module/cost/controller/admin/projectbasic/vo/CostProjectBasicImportExcelVO.java
-- baback/yudao-module-cost/yudao-module-cost-biz/src/main/java/cn/iocoder/yudao/module/cost/controller/admin/projectbasic/CostProjectBasicController.java
-- baback/yudao-module-cost/yudao-module-cost-biz/src/main/java/cn/iocoder/yudao/module/cost/service/projectbasic/CostProjectBasicServiceImpl.java
-- costree-frontend/src/api/cost/projectBasic/index.ts
-- costree-frontend/src/views/cost/collect/index.vue
-- costree-frontend/src/views/cost/treeDetail/index.vue
-
-### 下次恢复点
-- 继续项目时先运行 python .agent-handoff/runtime/agent-handoff/scripts/handoff.py resume .；下一步优先在目标数据库执行 20260626 新增字段 ALTER 脚本，然后启动后端和前端核验 /cost/collect、/cost/tree-detail、/cost/tree-unit-detail。
-
-### 风险与备注
-- 本轮新增字段要求数据库结构同步升级；如果只更新 jar/前端而未跑 ALTER，保存项目基本情况会报缺列。
-- 项目办填报的承研单位现在依赖 cost_unit_dict，如果内网单位字典未导入或状态不可用，下拉会为空，需要先导入单位字典。
-- 树页面账面组成已按八项支出口径改造方向推进，但正式验收仍需用真实账面明细核对二级科目编码 501101-501108 的金额合计。
-
-## 一次会话
-- 开始时间：2026-07-21 18:30:00 +0800
-- 结束时间：2026-07-21 19:34:41 +0800
-- 本次焦点：成本树管理单位分组、管理单位穿透、单位使用率排名和演示数据收尾
-
-### 本次进展
-- 新增 cost_unit_dict.manage_unit_group，支持 OVERALL、ASSEMBLY、PROFESSIONAL、FOUNDATION、OUTER 分类。
-- 完成 /cost/tree-detail 管理单位聚合、五类分组树、响应式单位矩阵和院内管理单位数量统计。
-- 完成 /cost/tree-unit-detail 管理单位穿透，列表和详情展示实际核算单位，组成查询继续使用工作令实际 unitName。
-- 完成 /cost/work-order/page 和 /cost/overview/unit-detail 的 manageUnitName 可选查询。
-- 新增 MySQL/PostgreSQL 20260721 增量迁移脚本及 costree-unit-hierarchy-demo.sql 演示数据。
-- 将 /cost/tree-detail 右侧重复金额替换为院内管理单位使用率排名，按账面/目标降序并保留黄红预警颜色。
-- 更新 /cost/catalog 卡片文案：项目类别/批次、研制阶段、用户。
-- 前端 pnpm run ts:check:cost 和定向 ESLint 通过。
-- 后端 mvn -pl yudao-module-cost/yudao-module-cost-biz -am -DskipTests compile 通过。
-- 后端提交 e70c6eac 已推送 codeup/feature/costree。
-- 前端提交 db0b185 已推送 codeup/feature/costree2。
-- root 下 cost-intranet-data-kit/ 与 zip 保持未跟踪，本轮未加入 Git。
-
-### 涉及文件
-- baback/sql/mysql/costree-cost.sql
-- baback/sql/mysql/costree-cost-20260721-add-manage-unit-group.sql
-- baback/sql/mysql/costree-unit-hierarchy-demo.sql
-- baback/sql/postgresql/costree-cost.sql
-- baback/sql/postgresql/costree-cost-20260721-add-manage-unit-group.sql
-- baback/sql/postgresql/costree-unit-hierarchy-demo.sql
-- baback/yudao-module-cost/yudao-module-cost-biz/src/main/java/cn/iocoder/yudao/module/cost/dal/dataobject/unitdict/CostUnitDictDO.java
-- baback/yudao-module-cost/yudao-module-cost-biz/src/main/java/cn/iocoder/yudao/module/cost/dal/mysql/workorder/CostWorkOrderMapper.java
-- baback/yudao-module-cost/yudao-module-cost-biz/src/main/java/cn/iocoder/yudao/module/cost/service/overview/CostOverviewServiceImpl.java
-- costree-frontend/src/api/cost/overview/index.ts
-- costree-frontend/src/api/cost/unitDict/index.ts
-- costree-frontend/src/api/cost/workOrder/index.ts
-- costree-frontend/src/views/cost/catalog/index.vue
-- costree-frontend/src/views/cost/treeDetail/CostTreeNode.vue
-- costree-frontend/src/views/cost/treeDetail/index.vue
-- costree-frontend/src/views/cost/treeUnitDetail/index.vue
-
-### 下次恢复点
-- 继续项目时先运行 python .agent-handoff/runtime/agent-handoff/scripts/handoff.py resume .；部署最新版本前优先执行 20260721 manage_unit_group 数据库迁移，再用 ZY-2026-DEMO-UNIT-001 验证五类管理单位分组和电子所三核算单位汇总。
-
-### 风险与备注
-- 只更新 jar 而未执行数据库增量脚本会导致 manage_unit_group 缺列。
-- manage_unit_name 为空时会按核算单位名称分别展示，无法形成期望的管理单位汇总。
-- 真实单位名称与 cost_unit_dict.accounting_unit_name 不一致时，管理单位查询和穿透可能遗漏工作令。
-- 使用率排名依赖单位目标成本；目标为 0 或空时仅显示 --，不参与有效比例排序。
-
-## 一次会话
-- 开始时间：2026-07-22 00:25:00 +0800
-- 结束时间：2026-07-22 01:12:12 +0800
-- 本次焦点：项目详情三标签维护、逻辑工作令归一和跨年度借方账面汇总收尾
-
-### 本次进展
-- 完成 /cost/project-detail 三标签页面、汇总卡片和项目上下文重构。
-- 完成项目基本情况新增、编辑、查看弹窗及 DRAFT/REJECTED 可编辑、SUBMITTED/APPROVED 只读规则。
-- 完成单位成本只读列表、查看工作令和账面组成穿透。
-- 完成工作令固定金额、业务字段维护和账面只读展示，提交时校验合同与目标大于 0。
-- 新增 cost_work_order.income_amount，更新 DO、VO、导入模型、前端类型和完整 DDL。
-- 工作令唯一口径调整为租户+项目+实际单位+工作令编号，fiscal_year 保留兼容但统一置空。
-- 新增 MySQL/PostgreSQL 20260722 迁移脚本，支持冲突检查、主记录保留、明细及预警外键重绑、重复行清理和借方账面重算。
-- 更新金额同步模板、两项目演示同步、校验脚本、seed 和单位层级演示脚本。
-- 移除 /cost/tree-unit-detail 年度展开，账面组成详情默认汇总全部年度并保留明细年度列。
-- 后端 Reactor CostMapperAnnotationSqlTest 通过：1 个测试，0 失败，BUILD SUCCESS。
-- 前端 pnpm run ts:check:cost 和定向 ESLint 通过，前后端 git diff --check 通过。
-- 后端提交 747d6e25 已推送 codeup/feature/costree。
-- 前端提交 56acad9 已推送 codeup/feature/costree2。
-- root 下 cost-intranet-data-kit/ 与 zip 作为本地交付制品加入 .gitignore，不提交源码仓库。
-
-### 涉及文件
-- costree-frontend/src/views/cost/projectDetail/index.vue
-- costree-frontend/src/views/cost/collect/index.vue
-- costree-frontend/src/views/cost/treeUnitDetail/index.vue
-- costree-frontend/src/views/cost/ledgerCompositionDetail/index.vue
-- costree-frontend/src/api/cost/workOrder/index.ts
-- baback/yudao-module-cost/yudao-module-cost-biz/src/main/java/cn/iocoder/yudao/module/cost/dal/dataobject/workorder/CostWorkOrderDO.java
-- baback/yudao-module-cost/yudao-module-cost-biz/src/main/java/cn/iocoder/yudao/module/cost/service/workorder/CostWorkOrderServiceImpl.java
-- baback/yudao-module-cost/yudao-module-cost-biz/src/main/java/cn/iocoder/yudao/module/cost/dal/mysql/workorder/CostWorkOrderMapper.java
-- baback/sql/mysql/costree-cost-20260722-logical-work-order.sql
-- baback/sql/postgresql/costree-cost-20260722-logical-work-order.sql
-- baback/sql/postgresql/costree-demo-source/02-sync-to-cost.sql
-- baback/sql/postgresql/costree-demo-source/03-verify.sql
-
-### 下次恢复点
-- 继续项目时先运行 python .agent-handoff/runtime/agent-handoff/scripts/handoff.py resume .；部署 747d6e25/56acad9 前先备份并执行 20260721、20260722 两个增量迁移，再用有登录态环境核验项目详情三标签、逻辑工作令和跨年度借方账面合计。
-
-### 风险与备注
-- 只更新前后端而不执行 20260722 数据库迁移会出现 income_amount 缺列或旧唯一约束冲突。
-- 旧年度工作令固定金额存在不一致时不能自动决定权威值，必须先处理冲突。
-- 迁移会重绑账面明细和历史预警的 work_order_id，执行前必须备份相关表。
-- 项目单位正式金额仍以 cost_unit_cost_detail 同步数据为准，工作令固定金额不得用于正式汇总。
-
-## 一次会话
 - 开始时间：2026-07-22 03:00:00 +0800
 - 结束时间：2026-07-22 04:16:53 +0800
 - 本次焦点：项目展示、阶段筛选、账面组成穿透导出与 PostgreSQL 内网升级包收尾
@@ -449,3 +319,79 @@
 - 清库恢复会按稳定业务键重映射项目、单位和工作令；真实历史数据中的重复键、单位别名或孤立预警必须通过 restore_exception 和现场演练确认。
 - cost_manual_snapshot 表通过当前 20260819 业务表结构创建，必须先完成 20260819 升级；未来新增手工字段时需同步升级保护表和摘要。
 - Maven 构建仍输出仓库既有重复依赖声明警告，本轮聚焦测试成功但未处理这些无关 POM 问题。
+
+## 一次会话
+- 开始时间：2026-08-24 01:30:00 +0800
+- 结束时间：2026-08-24 02:30:43 +0800
+- 本次焦点：实现型号比对模块及内网权限发布更新
+
+### 本次进展
+- 新增 /cost/model-comparison/options、compare、export-excel 接口及权限注解
+- 新增门户型号比对入口、远程选择、基准排序、金额与组成图表、差异矩阵和下钻
+- 四方言及 DM8 发布脚本新增 query/export 权限，当前目标为 21 个权限点和 42 条角色权限映射
+- release-20260729-data-integration 原地更新并通过验包
+
+### 涉及文件
+- H:/light/project/sqlbot_with_bcback/baback/yudao-module-cost/yudao-module-cost-biz/src/main/java/cn/iocoder/yudao/module/cost/controller/admin/modelcomparison
+- H:/light/project/sqlbot_with_bcback/baback/yudao-module-cost/yudao-module-cost-biz/src/main/java/cn/iocoder/yudao/module/cost/service/modelcomparison
+- H:/light/project/sqlbot_with_bcback/costree-frontend/src/views/cost/modelComparison/index.vue
+- H:/light/project/sqlbot_with_bcback/costree-frontend/src/api/cost/modelComparison/index.ts
+- H:/light/project/costree/deploy/cost-server-offline-template/database/platform
+- H:/light/project/costree/cost-intranet-data-kit/release-20260729-data-integration
+
+### 下次恢复点
+- 从真实环境验收开始：先部署前后端，再执行 DM/MQB 权限脚本和检查脚本，精确失效 role、menu_role_ids、permission_menu_ids 缓存，最后逐类账号验证选择范围、直接 API 越权、单位交集、金额对账和导出。
+
+### 风险与备注
+- 三个仓库均有用户原有未提交修改，本轮未提交或推送
+- 静态测试不能替代真实数据库、缓存和账号权限验收
+
+## 一次会话
+- 开始时间：2026-08-24 02:34:00 +0800
+- 结束时间：2026-08-24 02:40:40 +0800
+- 本次焦点：将指定内网数据集成目录原地升级为 20260824 权限首次部署包
+
+### 本次进展
+- 将 PACKAGE_REVISION 和 BUILD_DATE 更新为 20260824，成本业务结构版本保持 20260820
+- 将 DM8 权限初始化和权限检查文件重命名为 20260824，并更新全部执行入口引用
+- 新增 20260824 型号比对与权限首次导入验收文档，明确无需先跑旧 20260817 权限脚本
+- 更新验包器必需文件、版本令牌和 SHA256SUMS，67 个文件中除清单自身外 66 个文件全部纳入哈希
+- 包验收、PowerShell 语法、8 条型号比对角色映射及源/发布权限脚本哈希核对通过
+
+### 涉及文件
+- cost-intranet-data-kit/release-20260729-data-integration/00-开始这里.md
+- cost-intranet-data-kit/release-20260729-data-integration/RELEASE-INFO.txt
+- cost-intranet-data-kit/release-20260729-data-integration/SHA256SUMS.txt
+- cost-intranet-data-kit/release-20260729-data-integration/platform/README.md
+- cost-intranet-data-kit/release-20260729-data-integration/platform/dm8/costree-access-role-menu-20260824.sql
+- cost-intranet-data-kit/release-20260729-data-integration/platform/dm8/check-cost-permissions-20260824.sql
+- cost-intranet-data-kit/release-20260729-data-integration/docs/14-20260824型号比对与权限首次导入验收.md
+- cost-intranet-data-kit/release-20260729-data-integration/tools/verify-package.ps1
+
+### 下次恢复点
+- 下一次从 docs/14-20260824型号比对与权限首次导入验收.md 开始；连接 MQB 后按 platform/README 顺序执行 costree-access-role-menu-20260824.sql、cost-warning-notify-template-20260820.sql、check-cost-permissions-20260824.sql，前六组必须为 OK，再精确清缓存并用五类账号验收。
+
+### 风险与备注
+- 发布目录被 root .gitignore 忽略，交付证据依赖本地目录、RELEASE-INFO 和 SHA256SUMS
+- 静态验包不能替代真实 DM8、Redis、中台登录和权限范围验收
+- 执行权限初始化前必须备份平台表、替换示例租户 124、关闭自动提交并串行执行
+
+## 一次会话
+- 开始时间：2026-08-24 02:35:00 +0800
+- 结束时间：2026-08-24 02:46:49 +0800
+- 本次焦点：修复型号比对页缺少纵向滚动
+
+### 本次进展
+- 对比同类 ledger-composition-detail 与 warning 页面后确认根容器缺少独立纵向滚动
+- 仅修改 modelComparison/index.vue 根容器的 height、overflow 和 scrollbar-gutter
+- 通过类型检查、目标 ESLint、Stylelint、diff check 和真实登录态浏览器滚动验证
+
+### 涉及文件
+- H:/light/project/sqlbot_with_bcback/costree-frontend/src/views/cost/modelComparison/index.vue
+
+### 下次恢复点
+- 继续真实环境验收；型号比对页滚动修复位于 comparison-page 根样式，若内网仍无法滚动，先确认部署的 dist 是否包含本次前端源码。
+
+### 风险与备注
+- 前端工作树包含用户原有未提交修改，本轮未提交或推送
+- 真实内网浏览器与部署制品仍需上线后复验

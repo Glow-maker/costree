@@ -17,3 +17,5 @@ cost:warning:query
 cost:warning:push
 cost:warning:feedback
 cost:warning:close
+cost:model-comparison:query
+cost:model-comparison:export
