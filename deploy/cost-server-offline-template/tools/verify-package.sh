@@ -3,6 +3,13 @@ set -euo pipefail
 PACKAGE_ROOT="${1:-$(cd "$(dirname "$0")/.." && pwd)}"
 REQUIRE_FORMAL="${REQUIRE_FORMAL:-0}"
 cd "$PACKAGE_ROOT"
+if grep -q '^releaseVersion=20260907$' RELEASE-INFO.txt; then
+  for file in '0907内网操作卡.md' '0907验证结果.md' '0907首次导入/部署参数生成器.html' \
+    '0907首次导入/SOURCE-SHA256.json' '0907首次导入/clear-cost-cache.ps1' SOURCE-MANIFEST.json \
+    database/postgresql92/02-upgrade-existing/16-repair-warning-indexes-20260907.sql; do
+    [[ -f "$file" ]] || { echo "Missing 0907 file: $file" >&2; exit 1; }
+  done
+fi
 for file in RELEASE-INFO.txt backend/app/cost-server.jar frontend/costree-frontend-dist-prod.zip frontend/dist/index.html \
   database/postgresql/01-new-database/costree-cost.sql \
   database/postgresql/02-upgrade-existing/00-precheck.sql \

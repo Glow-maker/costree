@@ -4,6 +4,13 @@ param(
 )
 $ErrorActionPreference = 'Stop'
 $root = [IO.Path]::GetFullPath($PackageRoot)
+if (Select-String -LiteralPath (Join-Path $root 'RELEASE-INFO.txt') -Pattern '^releaseVersion=20260907$' -Quiet) {
+    foreach ($required0907 in @('0907内网操作卡.md', '0907验证结果.md', '0907首次导入/部署参数生成器.html',
+        '0907首次导入/SOURCE-SHA256.json', '0907首次导入/clear-cost-cache.ps1', 'SOURCE-MANIFEST.json',
+        'database/postgresql92/02-upgrade-existing/16-repair-warning-indexes-20260907.sql')) {
+        if (-not (Test-Path -LiteralPath (Join-Path $root $required0907))) { throw "Missing 0907 file: $required0907" }
+    }
+}
 $manifest = Join-Path $root 'SHA256SUMS.txt'
 foreach ($required in @(
     'RELEASE-INFO.txt',
