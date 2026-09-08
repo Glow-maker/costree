@@ -47,8 +47,17 @@ for (const file of files) {
  END IF;
 END $gate${version}$;\n`
 }
-const verify = withoutTransactions(source(deploy+'20-verify.sql'))
+const verify = withoutTransactions(source(deploy+'20-verify.sql')) + `
+DO $local_role_verify$ BEGIN
+ IF (SELECT count(*) FROM information_schema.tables WHERE table_schema=current_schema()
+     AND table_name IN ('cost_user_role','cost_user_role_action','cost_auth_user_lock')) <> 3 THEN
+ RAISE EXCEPTION '成本本地角色结构缺失，不能部署新cost'; END IF;
+ IF EXISTS(SELECT 1 FROM cost_user_role GROUP BY tenant_id,user_id HAVING count(*)>1) THEN
+ RAISE EXCEPTION '成本本地角色重复，请停止'; END IF;
+END $local_role_verify$;
+`
 upgrade += '\n' + withoutTransactions(source(deploy+'16-repair-warning-indexes-20260907.sql'))
+upgrade += '\n' + withoutTransactions(source(deploy+'17-cost-local-roles-20260907.sql'))
 upgrade += '\n' + verify + "\nCOMMIT;\n-- 只有没有任何 ERROR 且 COMMIT 成功，本次升级才完成。\n"
 const dmRole = source('sql/dm/costree-access-role-menu-20260817.sql')
 const dmNotify = source('sql/dm/cost-warning-notify-template-20260820.sql')

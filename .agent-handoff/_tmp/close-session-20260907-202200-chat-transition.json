@@ -1,0 +1,45 @@
+{
+  "session": {
+    "started_at": "2026-09-07T20:20:00+08:00",
+    "ended_at": "2026-09-07T20:22:00+08:00",
+    "focus": "聊天分支故障后的项目交接与新任务接续说明"
+  },
+  "current_status": {
+    "phase": "0907本地授权候选包已完成，准备在新任务继续审查和真实验收",
+    "goal": "仅部署cost与前端，业务授权专员管理四类成本角色及数据范围，不部署system、不直接写DM",
+    "summary": "本轮仅核对交接和工作树，没有修改业务代码、提交或重建制品。0907离线ZIP哈希仍为FA8412A3A0A34B055C1BDAD5EC3EEB37885F73402ADC41D80EA32B38758897C6。此前82项后端测试、前端构建/类型/目标ESLint、独立PG9.2升级保护与14文件制品验包通过。新增本地授权源码仍未提交。真实旧中台RPC、DWS及六类账号未验收。",
+    "next_step": "在同一个costree项目直接新建任务，不从异常聊天创建分支。读取交接并resume，先审查三个工作树中的本地角色授权改动和与候选包的一致性，列出问题后按用户指令提交推送；再安排真实中台与六类账号验收。不要自动恢复旧system/DM部署流程或重复打包。",
+    "blockers": [
+      "真实旧中台RPC及管理员、授权专员、四类成本角色全流程未验证",
+      "真实DWS 8.2未执行；独立PG9.2通过不代表内网验收通过",
+      "本轮新增本地角色源码仍未提交推送",
+      "原聊天分支报thread history projection expected ordinal 20669, got 20668；原会话文件存在，但未确认所有历史完整"
+    ]
+  },
+  "tasks_to_add": [],
+  "tasks_to_update": [],
+  "tasks_to_complete": [],
+  "tasks_to_add_and_complete": [],
+  "decisions_to_add": [],
+  "session_log": {
+    "progress": [
+      "核对根仓库jt/cost-server-offline-20260907，HEAD 2cd69dd，上游origin/jt/cost-server-offline-20260907",
+      "核对backend feature/costree，HEAD 7469e960e4b2633e652923a90f0edf1335f1dcfd，上游codeup/feature/costree",
+      "核对frontend本地分支costree，HEAD e95d87e941d116afd3775dff5b5e2d5b72656ead，上游codeup/feature/costree2",
+      "再次核对离线ZIP哈希一致；未重新运行业务构建、数据库升级或真实验收",
+      "用户要求项目交接：仅追加本次状态，不修改业务代码与原Codex会话文件"
+    ],
+    "files_touched": [".agent-handoff/_tmp/close-session-20260907-202200-chat-transition.json", ".agent-handoff/_state及脚本生成视图"],
+    "risks": [
+      "历史DEC-030等平台角色方案已经由DEC-050本地成本角色规则调整；当前现场主入口只读0907精简包操作卡，不执行旧DM写入SQL",
+      "本地cost_user_role无记录才沿用平台角色；有记录且role_code=NULL表示撤销，不允许回退到平台旧成本角色",
+      "管理员原页面保留；授权专员标识cost_role_allocator，只管理成本角色和范围，不获得通用系统管理权限",
+      "用户design-qa.md、test.html/test2.html、本地配置、交接历史及制品备份须保留，不整体git add，不提交JAR/ZIP/敏感配置",
+      "旧成本JAR忽略本地撤销记录，不能直接回退后开放访问",
+      "不要自行删除或修补Codex sessions/state数据库；聊天故障不等于业务仓库或离线包故障"
+    ]
+  },
+  "resume_hint": {
+    "text": "直接在H:/light/project/costree新建任务。按START-HERE读取交接后运行resume。代码实际在H:/light/project/sqlbot_with_bcback/baback和costree-frontend。优先审查本地成本角色授权未提交改动，检查旧system RPC兼容、撤销/租户隔离/并发范围保存和前端接口，不要重做已完成的0907候选包，不恢复旧system新增接口或DM直写方案。源码审查后按用户指令提交，真实六类账号/DWS验收仍需安排。候选包cost-server-offline-package只有00-现场必用，ZIP哈希FA8412A3A0A34B055C1BDAD5EC3EEB37885F73402ADC41D80EA32B38758897C6。"
+  }
+}

@@ -196,3 +196,15 @@ items:
   summary: 数据集成发布目录保留历史路径，包内版本以 RELEASE-INFO 为准
   rationale: 内网工作流已引用 release-20260729-data-integration 路径；原地升级到 20260824 可避免现场路径失效，同时通过版本元数据、文件名、验包器和哈希清单明确实际版本。
   time: '2026-08-24T02:41:20+08:00'
+- decision_id: DEC-049
+  summary: 正式离线包只基于干净且已推送的三仓提交生成
+  rationale: 通过临时保护并按哈希恢复本地 package-lock 和 handoff 改动，确保 RELEASE-INFO 可追溯且不把用户本地机械改动混入正式制品。
+  time: '2026-08-24T03:32:47+08:00'
+- decision_id: DEC-050
+  summary: 本地成本角色只影响成本服务，平台用户与其他角色仍归中台
+  rationale: 用户要求只部署cost、禁止直接写DM。无本地记录兼容旧菜单；保存后使用固定成本能力；NULL覆盖保留撤销，避免旧角色复活。
+  time: '2026-09-07T19:01:34+08:00'
+- decision_id: DEC-051
+  summary: 候选包只含一个成本JAR与一份前端ZIP
+  rationale: 保留旧包备份，交付仅14必要文件；不用system新增接口。实际工作区源码哈希记录版本，真实环境未验证所以不标formal。
+  time: '2026-09-07T19:01:34+08:00'

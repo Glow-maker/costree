@@ -32,6 +32,18 @@ psql(fixture)
 psql(rendered['02-成本库合并升级.sql'])
 psql(rendered['02-成本库合并升级.sql'])
 psql(rendered['03-成本库升级验收.sql'])
+psql(`INSERT INTO cost_user_role(tenant_id,user_id,role_code,username) VALUES(124,9001,NULL,'revoked');
+INSERT INTO cost_user_role_action(tenant_id,user_id,actor_id,old_role_code,new_role_code,revision)
+VALUES(124,9001,1,'cost_unit_user',NULL,1);
+INSERT INTO cost_auth_user_lock(tenant_id,user_id) VALUES(124,9001);`)
+psql(rendered['02-成本库合并升级.sql'])
+psql(`DO $$ BEGIN
+IF (SELECT count(*) FROM cost_user_role WHERE tenant_id=124 AND user_id=9001 AND role_code IS NULL)<>1
+ OR (SELECT count(*) FROM cost_user_role_action WHERE tenant_id=124 AND user_id=9001)<>1 THEN
+ RAISE EXCEPTION 'local role revocation/audit lost'; END IF; END $$;`)
+psql("INSERT INTO cost_user_role(tenant_id,user_id,username) VALUES(124,9001,'duplicate');",false)
+psql("INSERT INTO cost_user_role(tenant_id,user_id,username,role_code) VALUES(124,9002,'invalid','super_admin');",false)
+psql("INSERT INTO cost_user_role(tenant_id,user_id,username,role_code) VALUES(125,9001,'separate tenant','cost_unit_user');")
 psql(`DO $$ BEGIN IF EXISTS(SELECT 1 FROM qa_manual_before WHERE basic IS DISTINCT FROM (SELECT user_name||stage_code||basic_info FROM cost_project_basic WHERE project_id=1)
  OR unit IS DISTINCT FROM (SELECT target_cost_amount||':'||approved_amount||':'||remark FROM cost_unit_cost_detail WHERE project_id=1)
  OR wo IS DISTINCT FROM (SELECT product_target_cost||':'||approved_amount||':'||status||':'||product_short_name FROM cost_work_order WHERE project_id=1)

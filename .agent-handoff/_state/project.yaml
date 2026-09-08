@@ -1,13 +1,14 @@
 version: 1
 project: costree
 created_at: '2026-06-12T00:04:41+08:00'
-updated_at: '2026-08-24T02:55:02+08:00'
-last_resumed_at: '2026-08-24T02:51:07+08:00'
-current_phase: 型号比对与部署更新已提交推送，等待真实内网验收
-current_goal: 上线型号项目级多项目对比，并保持成本权限和内网部署链路一致
-summary: root 4a16981、后端 e76c2369、前端 a6138aea 已分别推送；后端 31 项聚焦测试、前端成本类型检查与 ESLint、型号比对页
-  Stylelint、发布包验包及三个仓库 diff check 通过。
-next_step: 部署新的后端 JAR 和前端 dist，在 DM/MQB 一次性执行 20260824 权限脚本并精确失效权限缓存，再用五类真实账号和真实成本库验收。
+updated_at: '2026-09-08T09:20:20+08:00'
+last_resumed_at: '2026-09-07T20:30:01+08:00'
+current_phase: 本地授权源码已提交推送，授权并发修复及真实验收待完成
+current_goal: 仅部署cost与前端，业务授权专员管理四类成本角色及数据范围，不部署system、不直接写DM
+summary: 按用户指令提交并推送当前本地授权源码：后端9b0476ed至codeup/feature/costree，前端4d5766a8至codeup/feature/costree2。216个候选包源码哈希再次核对一致；三仓diff检查、发布工具CJS/PowerShell语法检查通过。未重跑业务测试、修复并发问题、重打包或操作真实数据库。根仓库发布工具、审查及接管文档和交接状态纳入本次提交。
+next_step: 先复现并修复审查报告R1/R2授权范围并发缺口，再推进真实旧RPC、DWS及六类账号验收。源码已提交推送；0907候选包保持原样，不因提交自动重打包。仅cost和前端，不部署system、不直写DM。
 blockers:
-- 尚未连接真实 DM/MQB 与 GaussDB/DWS 执行升级
-- 尚未使用管理员、全局查看、科研部、项目办和研制单位真实账号完成端到端验收
+- 范围档案快照与roleRevision不同步；范围保存没有版本递增，详见审查报告
+- 真实旧中台RPC及管理员、授权专员、四类成本角色全流程未验证
+- 真实DWS 8.2未执行；独立PG9.2通过不代表内网验收通过
+- 原聊天分支报thread history projection expected ordinal 20669, got 20668；原会话文件存在，但未确认所有历史完整

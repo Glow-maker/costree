@@ -1,0 +1,73 @@
+{
+  "session": {
+    "started_at": "2026-08-24T03:13:00+08:00",
+    "ended_at": "2026-08-24T03:32:06+08:00",
+    "focus": "使用用户重新构建的 dist-prod.zip 生成并验收 20260824 正式内网离线包"
+  },
+  "current_status": {
+    "phase": "20260824 正式离线包完成，等待内网真实部署验收",
+    "goal": "以完整前端制品、干净后端 JAR 和完整双库 SQL 包完成成本树首次内网部署",
+    "summary": "正式目录和 ZIP 已替换为 20260824 构建，旧包按时间戳备份；前端 ZIP、后端 JAR、21 个权限点、42 条角色映射、DWS 兼容与 6918 个交付文件哈希均完成静态和制品验收。",
+    "next_step": "在备份后的真实内网环境按包内 00-开始这里.md 执行成本库升级、DM8 权限与站内信初始化、精确失效 Redis 缓存，并用五类真实账号完成验收。",
+    "blockers": [
+      "尚未在真实 DM8/MQB 执行权限与站内信脚本",
+      "尚未在真实 PostgreSQL 9.2/GaussDB(DWS) 执行升级和两批幂等同步",
+      "尚未精确失效真实 Redis 权限缓存并使用五类账号验权"
+    ]
+  },
+  "tasks_to_add": [],
+  "tasks_to_update": [
+    {
+      "task_id": "TASK-005",
+      "title": "完成三级成本角色与数据范围权限验收",
+      "details": "最新成本功能和权限脚本已推送：后端 c6f115d0、前端 a6138aea；DM8 检查覆盖型号比对后的 21 个权限点和 42 条映射。下一步必须使用五类真实账号验证菜单、默认落地、直接 URL/API、项目与单位交集、型号选择范围、金额对账和导出。",
+      "priority": "P0"
+    },
+    {
+      "task_id": "TASK-006",
+      "title": "完成双库权限初始化和最终内网部署包",
+      "details": "20260824 正式离线目录和 ZIP 已构建并双重验包，旧包已备份；前端 ZIP、后端 JAR、DWS 静态检查、PowerShell/Bash 验包和 ZIP 文件流哈希均通过。仍需真实 DM8/MQB 权限执行、Redis 精确缓存失效、五类账号验收，以及 PostgreSQL 9.2/DWS 两批同步和一次恢复演练。",
+      "priority": "P0"
+    }
+  ],
+  "tasks_to_complete": [],
+  "tasks_to_add_and_complete": [
+    {
+      "title": "构建并验收 20260824 正式内网离线包",
+      "details": "使用用户更新后的 dist-prod.zip、当前后端源码和离线部署模板生成正式包；修复 DM8 型号比对权限检查遗漏，备份旧包后提升为正式路径。",
+      "priority": "P0",
+      "notes": "前端 ZIP SHA256=C021520614950D63E22B731D6311BDFBAD3BE5FA67A2A6AA4D84829BA1103137；后端 JAR SHA256=AC638529BE51D6AECD1C17DE7A9EFC5953166BB10366DAD59311FA60EE74E1F4；正式 ZIP SHA256=3B8AD639ADFB75E43A623015DAD9CE46B6E3BBD1EEF35E46CE27B9BEE07E8355。"
+    }
+  ],
+  "decisions_to_add": [
+    {
+      "summary": "正式离线包只基于干净且已推送的三仓提交生成",
+      "rationale": "通过临时保护并按哈希恢复本地 package-lock 和 handoff 改动，确保 RELEASE-INFO 可追溯且不把用户本地机械改动混入正式制品。"
+    }
+  ],
+  "session_log": {
+    "progress": [
+      "确认更新后的 dist-prod.zip 含 6773 个条目、根 index.html、完整入口资源和型号比对页面资源",
+      "执行后端 24 模块 clean package 和前端成本类型检查，构建成功",
+      "修复并推送 DM8 权限检查脚本，backend commit c6f115d0 覆盖 21 个权限点和 42 条映射",
+      "生成 releaseType=formal 的 staging 目录与 ZIP，PowerShell 和 Bash 验包通过 6918 个文件",
+      "逐项读取 ZIP 文件流对照 SHA256SUMS 校验 6918 个文件，备份旧包后替换正式目录和 ZIP",
+      "按打包前 SHA256 原样恢复 package-lock.json 与 agent-handoff 状态"
+    ],
+    "files_touched": [
+      "sql/dm/check-cost-permissions-20260817.sql",
+      "cost-server-offline-package/",
+      "cost-server-offline-package.zip",
+      "cost-server-offline-package-backup-20260824-032704/",
+      "cost-server-offline-package-backup-20260824-032704.zip"
+    ],
+    "risks": [
+      "本轮验证为源码构建、静态 SQL 和离线制品验证，不能替代真实内网数据库、Redis、站内信和账号验收",
+      "Maven 仍报告原项目 POM 中的重复依赖声明警告，本轮未扩大范围修复",
+      "正式包业务结构版本仍为 20260820，发布构建日期为 20260824"
+    ]
+  },
+  "resume_hint": {
+    "text": "下一次从 cost-server-offline-package/00-开始这里.md 开始，先备份真实成本库和 MQB，再按包内顺序完成数据库升级、DM8 权限和站内信初始化、Redis 精确缓存失效及五类账号验收。"
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "session": {
+    "started_at": "2026-09-08T09:20:20+08:00",
+    "ended_at": "2026-09-08T09:20:20+08:00",
+    "focus": "按用户指令提交推送三仓当前本地授权改动"
+  },
+  "current_status": {
+    "phase": "本地授权源码已提交推送，授权并发修复及真实验收待完成",
+    "goal": "仅部署cost与前端，业务授权专员管理四类成本角色及数据范围，不部署system、不直接写DM",
+    "summary": "按用户指令提交并推送当前本地授权源码：后端9b0476ed至codeup/feature/costree，前端4d5766a8至codeup/feature/costree2。216个候选包源码哈希再次核对一致；三仓diff检查、发布工具CJS/PowerShell语法检查通过。未重跑业务测试、修复并发问题、重打包或操作真实数据库。根仓库发布工具、审查及接管文档和交接状态纳入本次提交。",
+    "next_step": "先复现并修复审查报告R1/R2授权范围并发缺口，再推进真实旧RPC、DWS及六类账号验收。源码已提交推送；0907候选包保持原样，不因提交自动重打包。仅cost和前端，不部署system、不直写DM。",
+    "blockers": [
+      "范围档案快照与roleRevision不同步；范围保存没有版本递增，详见审查报告",
+      "真实旧中台RPC及管理员、授权专员、四类成本角色全流程未验证",
+      "真实DWS 8.2未执行；独立PG9.2通过不代表内网验收通过",
+      "原聊天分支报thread history projection expected ordinal 20669, got 20668；原会话文件存在，但未确认所有历史完整"
+    ]
+  },
+  "tasks_to_add": [],
+  "tasks_to_update": [],
+  "tasks_to_complete": [],
+  "tasks_to_add_and_complete": [],
+  "decisions_to_add": [],
+  "session_log": {
+    "progress": [
+      "按用户指令提交并推送当前本地授权源码：后端9b0476ed至codeup/feature/costree，前端4d5766a8至codeup/feature/costree2。216个候选包源码哈希再次核对一致；三仓diff检查、发布工具CJS/PowerShell语法检查通过。未重跑业务测试、修复并发问题、重打包或操作真实数据库。根仓库发布工具、审查及接管文档和交接状态纳入本次提交。",
+      "后端28文件、前端9文件提交；没有纳入design-qa.md和制品备份"
+    ],
+    "files_touched": [
+      "tools/release-0907",
+      ".agent-handoff",
+      "note/90-logs/20260907-local-authorization-review.md",
+      "note/90-logs/20260908-thread-recovery-takeover.md"
+    ],
+    "risks": [
+      "两项授权范围并发问题未修复；本轮提交不代表修复或生产验收",
+      "0907候选包基线元数据保留构建当时事实；没有修改JAR、ZIP或哈希清单",
+      "真实旧RPC、DWS、六类账号仍待验收；保留本地配置、design-qa.md、test.html/test2.html及制品备份"
+    ]
+  },
+  "resume_hint": {
+    "text": "先复现并修复审查报告R1/R2授权范围并发缺口，再推进真实旧RPC、DWS及六类账号验收。源码已提交推送；0907候选包保持原样，不因提交自动重打包。仅cost和前端，不部署system、不直写DM。"
+  }
+}

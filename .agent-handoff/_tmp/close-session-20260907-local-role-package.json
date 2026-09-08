@@ -1,0 +1,33 @@
+{
+  "session": {
+    "started_at": "2026-09-07T18:15:35+08:00",
+    "ended_at": "2026-09-07T19:01:00+08:00",
+    "focus": "成本库本地角色授权实现与仅cost的0907精简离线候选包"
+  },
+  "current_status": {
+    "phase": "20260907本地授权候选包已交付，真实环境验收待完成",
+    "goal": "仅部署cost与前端，通过业务专员完成四类角色及范围授权，不更新system、不直接写DM",
+    "summary": "本地角色覆盖、显式撤销、审计与并发授权锁已实现。82项后端测试及clean package成功；前端成本类型检查、目标ESLint和新生产构建成功；PG9.2重复升级及数据保护复验通过。精简包14文件，1成本JAR、1前端ZIP，旧包已备份。新增源码仍为工作区改动，不冒充已提交版本。",
+    "next_step": "审查并按用户指令提交当前源码；在测试/内网按现场操作卡验证旧system既有RPC、DWS、管理员/专员/四类成本角色。未经真实验收不要当作生产验收完成。",
+    "blockers": ["真实旧中台RPC与六类账号全流程未验证", "真实DWS 8.2未执行，只有PG9.2执行证据", "本轮新增源码尚未提交推送，制品以SOURCE-SHA256记录实际源码"]
+  },
+  "tasks_to_add": [],
+  "tasks_to_update": [
+    {"task_id":"TASK-005","title":"完成本地成本角色与数据范围真实验收","details":"本地授权PG优先，无记录沿用平台角色与菜单；NULL角色为撤销墓碑，不回退平台角色。专员仅分配四类成本角色及范围。82项定向测试已通过，仍需管理员、专员、全局、科研部、项目办、研制单位六类账号直接API验权及旧systemRPC验收。","priority":"P0"},
+    {"task_id":"TASK-006","title":"完成0907成本本地授权候选包内网验收","details":"cost-server-offline-package已替换为14文件精简候选包，无system JAR。ZIP SHA256 FA8412A3A0A34B055C1BDAD5EC3EEB37885F73402ADC41D80EA32B38758897C6。PG升级合并17本地角色三表；DM仅页面配置。真实DWS和账号流程待验收。旧JAR忽略本地撤销，不可盲目回退后开放访问。","priority":"P0"}
+  ],
+  "tasks_to_complete": [],
+  "tasks_to_add_and_complete": [
+    {"title":"实现成本库本地角色授权并生成0907仅cost候选包","details":"成本PG存四类角色覆盖/撤销、角色审计及授权锁；前端切换成本接口，保留管理员原管理页；新JAR、新前端与最简SQL/操作清单集中00-现场必用。","priority":"P0","notes":"82测试通过；前端新构建退出0、6827资源文件、37176引用检查通过；目录/解压/提升后14文件哈希通过。原用户ZIP哈希FB8DA4C7A96AFA63904CB7FFF1A0E3E82993E5EB214786845BAD781936472FAC保持未变。"}
+  ],
+  "decisions_to_add": [
+    {"summary":"本地成本角色只影响成本服务，平台用户与其他角色仍归中台","rationale":"用户要求只部署cost、禁止直接写DM。无本地记录兼容旧菜单；保存后使用固定成本能力；NULL覆盖保留撤销，避免旧角色复活。"},
+    {"summary":"候选包只含一个成本JAR与一份前端ZIP","rationale":"保留旧包备份，交付仅14必要文件；不用system新增接口。实际工作区源码哈希记录版本，真实环境未验证所以不标formal。"}
+  ],
+  "session_log": {
+    "progress": ["后端clean package与82测试通过", "Windows EMFILE通过构建进程局部IO并发限制解决，未改node_modules，新前端构建退出0", "PG9.2首次/重复升级及填报和角色撤销保护通过，任务专属容器已停止", "精简包目录、压缩解压及提升后完整哈希通过，旧包备份为backup-20260907-190017", "独立数据集成包现场指南、SQL生成器及SHA256同步更新"],
+    "files_touched": ["baback/yudao-module-cost", "baback/sql/postgresql92/costree-deploy/17-cost-local-roles-20260907.sql", "costree-frontend/src/api/cost", "costree-frontend/src/views/cost", "costree-frontend/src/permission.ts", "tools/release-0907", "cost-intranet-data-kit/release-20260729-data-integration", "cost-server-offline-package", "cost-server-offline-package.zip"],
+    "risks": ["真实中台、DWS和账号验收未完成；不得以静态或Mock替代", "旧成本JAR不识别本地撤销，不可直接回退后开放访问", "保留用户已有工作区与design-qa材料，新增源码未提交推送"]
+  },
+  "resume_hint": {"text":"0907仅cost本地授权候选包已在正式路径生成，ZIP FA8412A3A0A34B055C1BDAD5EC3EEB37885F73402ADC41D80EA32B38758897C6。不要重建已完成制品或重复旧system方案。先审查工作区；当前后端基线7469e960、前端e95d87e9，新增本地角色源码未提交。下一步真实旧systemRPC/六类账号/DWS验收及用户要求的提交。"}
+}

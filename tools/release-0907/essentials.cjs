@@ -3,8 +3,7 @@ const {templates, inputs} = require('./generate.cjs')
 const root = path.resolve(__dirname, '../..')
 const read = p => fs.readFileSync(p, 'utf8').replace(/^\uFEFF/, '')
 const write = (p, text) => { fs.mkdirSync(path.dirname(p), {recursive:true}); fs.writeFileSync(p, text) }
-function essentials(packageRoot, withApps = false) {
-  const dest = path.join(packageRoot, '00-现场必用')
+function costSql(dest) {
   const cost = Object.fromEntries(Object.entries(templates).filter(([name]) => /^[0][123]-成本/.test(name)))
   const runtime = read(path.join(__dirname, 'parameter-runtime.js'))
   const html = `<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>成本库最简升级（离线）</title>
@@ -18,6 +17,10 @@ document.getElementById('generate').onclick=()=>{const box=document.getElementBy
   write(path.join(dest,'01-成本库升级/部署参数生成器.html'),html)
   write(path.join(dest,'01-成本库升级/00-识别成本schema.sql'),"SELECT version();\nSELECT table_schema,table_name FROM information_schema.tables WHERE table_name IN ('cost_project','cost_schema_migration') ORDER BY table_schema,table_name;\n")
   write(path.join(dest,'01-成本库升级/SOURCE-SHA256.json'),JSON.stringify(inputs,null,2))
+}
+function essentials(packageRoot, withApps = false) {
+  const dest = path.join(packageRoot, '00-现场必用')
+  costSql(dest)
   write(path.join(dest,'02-页面权限配置/01-权限勾选与专员操作清单.md'),read(path.join(root,'note/80-deployment/0907-成本权限页面勾选清单.md')))
   const notify = read(path.join(root,'../sqlbot_with_bcback/baback/sql/dm/cost-warning-notify-template-20260820.sql'))
   const rows=[...notify.matchAll(/SELECT '([^']+)'(?: AS NAME)?, '(COST_WARNING_[A-Z_]+)'(?: AS CODE)?,\s*'([^']+)'(?: AS CONTENT)? FROM DUAL/g)]
@@ -33,4 +36,4 @@ document.getElementById('generate').onclick=()=>{const box=document.getElementBy
   write(path.join(packageRoot,'00-开始这里.md'),'# Costree 20260907 · 业务部门授权版\n\n**本次只看 [00-现场必用/00-先看这张操作卡.md](00-现场必用/00-先看这张操作卡.md)。**\n\n该目录集中最简成本 SQL 生成器、页面权限清单、四个站内信正文'+(withApps?'以及两个 JAR 和原样前端 ZIP':'；本数据集成子包不含应用 JAR/ZIP')+'。不需要执行 DM 写入 SQL。\n\n其余 database、docs、0907首次导入目录为兼容和排错备用，不要逐个执行，不与主流程混用。日常同步原任务正常运行则保持不变。\n')
 }
 if(require.main===module)essentials(path.resolve(process.argv[2]),process.argv.includes('--apps'))
-module.exports={essentials}
+module.exports={essentials,costSql}
