@@ -1,11 +1,11 @@
 version: 1
 project: costree
 created_at: 2026-06-12 00:04:41 +0800
-updated_at: 2026-09-08 09:20:20 +0800
+updated_at: 2026-09-08 10:45:01 +0800
 last_resumed_at: 2026-09-07 20:30:01 +0800
 current_phase: 本地授权源码已提交推送，授权并发修复及真实验收待完成
 current_goal: 仅部署cost与前端，业务授权专员管理四类成本角色及数据范围，不部署system、不直接写DM
-next_step: 先复现并修复审查报告R1/R2授权范围并发缺口，再推进真实旧RPC、DWS及六类账号验收。源码已提交推送；0907候选包保持原样，不因提交自动重打包。仅cost和前端，不部署system、不直写DM。
+next_step: 审阅本轮SQL入口整理并按用户指令提交；不重建0907候选包。之后继续处理授权范围R1/R2及真实RPC、DWS和六类账号验收。
 blockers:
 - 范围档案快照与roleRevision不同步；范围保存没有版本递增，详见审查报告
 - 真实旧中台RPC及管理员、授权专员、四类成本角色全流程未验证

@@ -1,0 +1,5 @@
+{
+  "01-full-upgrade.sql": "3bfc7b4582fa0b02158f1a8a8d9d46cb08b1fe575fe8208f5e71472a359e3140",
+  "02-backup-create-missing-tables.sql": "78e1e6e62fd9be31fe20fd7a4ad698b1eda07014102d5270b7fea085fc8a9751",
+  "03-verify-structure.sql": "92c2e1c8c393d8b7f574db2b548c7d085dc3728d201f2efdd48a31fc290ae37c"
+}

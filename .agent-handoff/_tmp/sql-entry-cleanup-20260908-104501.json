@@ -1,0 +1,46 @@
+{
+  "session": {
+    "started_at": "2026-09-08T10:45:01+08:00",
+    "ended_at": "2026-09-08T10:45:01+08:00",
+    "focus": "成本SQL统一入口与历史资料分类，修正本地授权迁移遗漏"
+  },
+  "current_status": {
+    "phase": "本地授权源码已提交推送，授权并发修复及真实验收待完成",
+    "goal": "仅部署cost与前端，业务授权专员管理四类成本角色及数据范围，不部署system、不直接写DM",
+    "summary": "完成成本SQL入口整理：后端sql/COSTREE-START-HERE.md统一现场路径，方言/演示/旧同步/清库改为专用或历史索引；保留89份SQL原路径及内容。修正PG9.2/DWS新建与升级入口包含16/17，旧包校验器要求16/17。8项模拟客户端测试、22文档链接、脚本语法和diff检查通过；未连接数据库。0907ZIP哈希不变。此次入口与文档改动尚未提交。",
+    "next_step": "审阅本轮SQL入口整理并按用户指令提交；不重建0907候选包。之后继续处理授权范围R1/R2及真实RPC、DWS和六类账号验收。",
+    "blockers": [
+      "范围档案快照与roleRevision不同步；范围保存没有版本递增，详见审查报告",
+      "真实旧中台RPC及管理员、授权专员、四类成本角色全流程未验证",
+      "真实DWS 8.2未执行；独立PG9.2通过不代表内网验收通过",
+      "原聊天分支报thread history projection expected ordinal 20669, got 20668；原会话文件存在，但未确认所有历史完整"
+    ]
+  },
+  "tasks_to_add": [],
+  "tasks_to_update": [],
+  "tasks_to_complete": [],
+  "tasks_to_add_and_complete": [],
+  "decisions_to_add": [],
+  "session_log": {
+    "progress": [
+      "完成成本SQL入口整理：后端sql/COSTREE-START-HERE.md统一现场路径，方言/演示/旧同步/清库改为专用或历史索引；保留89份SQL原路径及内容。修正PG9.2/DWS新建与升级入口包含16/17，旧包校验器要求16/17。8项模拟客户端测试、22文档链接、脚本语法和diff检查通过；未连接数据库。0907ZIP哈希不变。此次入口与文档改动尚未提交。"
+    ],
+    "files_touched": [
+      "backend/sql/COSTREE-START-HERE.md",
+      "backend/sql/costree-reference/README.md",
+      "backend/sql各入口说明",
+      "backend/sql/postgresql92/costree-deploy/run-upgrade.ps1及.sh",
+      "backend/sql/postgresql92/costree-deploy/run-new-database.ps1及.sh",
+      "backend/sql/postgresql92/costree-deploy/verify-package.ps1",
+      ".agent-handoff"
+    ],
+    "risks": [
+      "逻辑归档而非物理删除；生成器和旧部署引用仍保留",
+      "模拟客户端仅验证入口顺序及失败停止，不证明真实DWS SQL执行通过",
+      "未修复授权范围并发问题，未重打包、提交推送或修改真实数据库"
+    ]
+  },
+  "resume_hint": {
+    "text": "本轮新增入口位于后端sql/COSTREE-START-HERE.md。SQL原文件未删未改；入口整理待提交，0907候选包未更新。"
+  }
+}

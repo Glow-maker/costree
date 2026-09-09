@@ -58,6 +58,7 @@ END $local_role_verify$;
 `
 upgrade += '\n' + withoutTransactions(source(deploy+'16-repair-warning-indexes-20260907.sql'))
 upgrade += '\n' + withoutTransactions(source(deploy+'17-cost-local-roles-20260907.sql'))
+upgrade += '\n' + withoutTransactions(source(deploy+'18-authorization-revision-20260910.sql'))
 upgrade += '\n' + verify + "\nCOMMIT;\n-- 只有没有任何 ERROR 且 COMMIT 成功，本次升级才完成。\n"
 const dmRole = source('sql/dm/costree-access-role-menu-20260817.sql')
 const dmNotify = source('sql/dm/cost-warning-notify-template-20260820.sql')

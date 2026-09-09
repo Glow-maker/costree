@@ -1,0 +1,36 @@
+[
+  {
+    "container": "costree-sql-review-20260910",
+    "version": "PostgreSQL 17.11 on x86_64-pc-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit",
+    "passed": [
+      "empty backup creates 20 tables",
+      "full upgrade and repeat",
+      "future marker with missing tables",
+      "backup leaves existing columns and migration rows untouched",
+      "full repairs missing revision",
+      "existing project preserved",
+      "full failure rolls back schema",
+      "revision rollback",
+      "structure verification",
+      "explicit schema isolation",
+      "all columns commented"
+    ]
+  },
+  {
+    "container": "costree-sql-review92-20260910",
+    "version": "PostgreSQL 9.2.23 on x86_64-unknown-linux-gnu, compiled by gcc (Debian 4.9.2-10) 4.9.2, 64-bit",
+    "passed": [
+      "empty backup creates 20 tables",
+      "full upgrade and repeat",
+      "future marker with missing tables",
+      "backup leaves existing columns and migration rows untouched",
+      "full repairs missing revision",
+      "existing project preserved",
+      "full failure rolls back schema",
+      "revision rollback",
+      "structure verification",
+      "explicit schema isolation",
+      "all columns commented"
+    ]
+  }
+]

@@ -1,45 +1,6 @@
 # 会话记录
 
 ## 一次会话
-- 开始时间：2026-08-19 02:30:00 +0800
-- 结束时间：2026-08-19 03:45:00 +0800
-- 本次焦点：实现内网常规快照同步手工字段保护、旧清库快照恢复、成本分系统字典及 20260819 发布包
-
-### 本次进展
-- 新增 cost_subsystem_dict 的 MySQL、PostgreSQL、PostgreSQL 9.2/DWS 全量和 20260819 增量结构，历史项目办与工作令分系统值去重回填。
-- 新增成本分系统字典后端查询/维护接口、租户内重名校验、管理员权限、服务测试，以及成本后台管理页和菜单可见性。
-- collect 页移除中台通用 cost_subsystem 字典依赖，项目办与工作令均改用成本字典多选；阶段继续以逗号分隔多选保存。
-- snapshot-upsert 新增逐行 manual_field_baseline 和五类摘要；同步后对项目办、项目状态、单位填报、工作令填报和预警状态逐行复验，异常拒绝 SUCCESS。
-- 收紧工作令同步字段所有权，既有行不再被同步清空 fiscal_year，合同、到款、目标、审定、阶段、分系统、简称、配套数、纵向分工和状态均不进入外部 UPDATE SET。
-- 新增 cost_manual_snapshot 建表、生成快照、清库前验收、业务键恢复、异常清单、恢复后验收及显式备份/确认包装器。
-- 指定 release-20260729-data-integration 原地升级 20260819，新增 business-upgrade、manual-preservation、验收文档、RELEASE-INFO、验包规则和 58 项 SHA256。
-- 验证通过：后端 16 测试、前端成本 vue-tsc 与目标 ESLint、DWS 29 SQL PowerShell/Bash 静态检查、三个仓库 diff check、发布包验包，以及三个模板目录与发布副本逐文件 SHA256 一致。
-
-### 涉及文件
-- baback/sql/mysql/costree-cost.sql
-- baback/sql/postgresql/costree-cost.sql
-- baback/sql/postgresql92/costree-cost.sql
-- baback/sql/*/costree-cost-20260819-manual-fields-subsystem.sql
-- baback/sql/postgresql*/costree-deploy/14-upgrade-existing-to-20260819-manual-fields-subsystem.sql
-- baback/yudao-module-cost/.../subsystemdict/
-- costree-frontend/src/api/cost/subsystemDict/
-- costree-frontend/src/views/cost/subsystemDict/
-- costree-frontend/src/views/cost/collect/index.vue
-- deploy/cost-server-offline-template/database/postgresql92/03-data-integration/snapshot-upsert/
-- deploy/cost-server-offline-template/database/postgresql92/03-data-integration/manual-preservation/
-- deploy/cost-server-offline-template/database/postgresql92/03-data-integration/business-upgrade/
-- cost-intranet-data-kit/release-20260729-data-integration/
-
-### 下次恢复点
-- 下次先执行 agent-handoff resume。重点进入 ignored 的 cost-intranet-data-kit/release-20260729-data-integration，按 docs/12 和 postgresql92/business-upgrade 先升级检查，再执行 snapshot-upsert 两批幂等验收，最后仅在完整备份的专用测试库用 manual-preservation 做一次清库恢复往返。要求外部字段更新、手工字段和状态摘要不变、源缺失只出差异、不删除业务行；无真实结果前不要宣称内网上线通过。
-
-### 风险与备注
-- 未在真实 PostgreSQL 9.2 或 GaussDB(DWS) 执行新增 DDL、逐行摘要、恢复 SQL 和动态索引检查，静态兼容通过不能替代现场执行。
-- 清库恢复会按稳定业务键重映射项目、单位和工作令；真实历史数据中的重复键、单位别名或孤立预警必须通过 restore_exception 和现场演练确认。
-- cost_manual_snapshot 表通过当前 20260819 业务表结构创建，必须先完成 20260819 升级；未来新增手工字段时需同步升级保护表和摘要。
-- Maven 构建仍输出仓库既有重复依赖声明警告，本轮聚焦测试成功但未处理这些无关 POM 问题。
-
-## 一次会话
 - 开始时间：2026-08-24 01:30:00 +0800
 - 结束时间：2026-08-24 02:30:43 +0800
 - 本次焦点：实现型号比对模块及内网权限发布更新
@@ -275,3 +236,28 @@
 - 两项授权范围并发问题未修复；本轮提交不代表修复或生产验收
 - 0907候选包基线元数据保留构建当时事实；没有修改JAR、ZIP或哈希清单
 - 真实旧RPC、DWS、六类账号仍待验收；保留本地配置、design-qa.md、test.html/test2.html及制品备份
+
+## 一次会话
+- 开始时间：2026-09-08 10:45:01 +0800
+- 结束时间：2026-09-08 10:45:01 +0800
+- 本次焦点：成本SQL统一入口与历史资料分类，修正本地授权迁移遗漏
+
+### 本次进展
+- 完成成本SQL入口整理：后端sql/COSTREE-START-HERE.md统一现场路径，方言/演示/旧同步/清库改为专用或历史索引；保留89份SQL原路径及内容。修正PG9.2/DWS新建与升级入口包含16/17，旧包校验器要求16/17。8项模拟客户端测试、22文档链接、脚本语法和diff检查通过；未连接数据库。0907ZIP哈希不变。此次入口与文档改动尚未提交。
+
+### 涉及文件
+- backend/sql/COSTREE-START-HERE.md
+- backend/sql/costree-reference/README.md
+- backend/sql各入口说明
+- backend/sql/postgresql92/costree-deploy/run-upgrade.ps1及.sh
+- backend/sql/postgresql92/costree-deploy/run-new-database.ps1及.sh
+- backend/sql/postgresql92/costree-deploy/verify-package.ps1
+- .agent-handoff
+
+### 下次恢复点
+- 本轮新增入口位于后端sql/COSTREE-START-HERE.md。SQL原文件未删未改；入口整理待提交，0907候选包未更新。
+
+### 风险与备注
+- 逻辑归档而非物理删除；生成器和旧部署引用仍保留
+- 模拟客户端仅验证入口顺序及失败停止，不证明真实DWS SQL执行通过
+- 未修复授权范围并发问题，未重打包、提交推送或修改真实数据库
