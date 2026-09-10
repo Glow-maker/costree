@@ -1,0 +1,694 @@
+[
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\accessscope\\CostAccessScopeController.java",
+    "sha256": "d590909e356cfe0efa36f395959100fc99af218ea084cc9fb7289b941743c8f2"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\accessscope\\CostRoleAssignmentController.java",
+    "sha256": "3bfda64e258fc29357330412116952269bf19d1f456699b99d793b216feb0d4f"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\accessscope\\vo\\CostAccessDomainItemRespVO.java",
+    "sha256": "cbf3914f0155eb0cd9b9069c3710db484a620b0fb0c6bfe10853c8d7b14ded4a"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\accessscope\\vo\\CostAccessProjectItemRespVO.java",
+    "sha256": "14e410faa16d69f10db3c9da056b53c82f964dcfaf260099710e18339e11a392"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\accessscope\\vo\\CostAccessScopeProfileRespVO.java",
+    "sha256": "005f59325228f16fc0eb75bc6d36f6ddb666037335d33588e0e4369445036093"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\accessscope\\vo\\CostAccessScopeProfileSaveReqVO.java",
+    "sha256": "6d06eb0151743bc4ec69e0b8e59585e3eed342d9530345e236c04b769b59e324"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\accessscope\\vo\\CostAccessUnitItemRespVO.java",
+    "sha256": "4d0843bb4e59ca329dd854c7eb8285a5b17ed7d66c39bfe5346ae424d4f00cdb"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\importbatch\\vo\\CostImportErrorRespVO.java",
+    "sha256": "744dfa16a874e7427d82f9aa0eefc221fcd6f7bea9d0174da65d31201768336d"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\importbatch\\vo\\CostImportResultRespVO.java",
+    "sha256": "c8c1211fc55731b19a52613b1a2d810ae4322f143a4a9fddbedd00f3fda11ac1"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\modelcomparison\\CostModelComparisonController.java",
+    "sha256": "b95ef1315c20abb493616e3e8f4783a2ba76473ebbb3b4ced245673f4331b5ae"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\modelcomparison\\vo\\CostModelComparisonCompositionItemRespVO.java",
+    "sha256": "e2f5cc7a97e5b3564d808a472a727d264db8191ba72a308c08a98f4672ec9f21"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\modelcomparison\\vo\\CostModelComparisonOptionPageReqVO.java",
+    "sha256": "05e9ddbf712c93bdbc91424aba841b5be92385107e8000b21c48045ad1fce1a4"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\modelcomparison\\vo\\CostModelComparisonOptionRespVO.java",
+    "sha256": "433b39bfb62f267e4c7068134fd6eb431230f926919b4945c2ef210adac72c29"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\modelcomparison\\vo\\CostModelComparisonProjectRespVO.java",
+    "sha256": "d1f75ffabfcdda86ce8757a8fd5e3ffbb7cd350ad24918c06b30aa34c2e72655"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\modelcomparison\\vo\\CostModelComparisonReqVO.java",
+    "sha256": "181fd5cc99d0f2bd085df455a9640bf1f857f508898ea059504df79deb28a092"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\modelcomparison\\vo\\CostModelComparisonRespVO.java",
+    "sha256": "ef7dfdb5a27d4c831a261f92394e607e0a1a7c439140a048d3ab35b3265ffee6"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\modelnode\\CostModelNodeController.java",
+    "sha256": "fe5844b4984d72e7c94a2f40f588a24e466aaf7fc4a5488ba74c7e4621b13991"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\modelnode\\vo\\CostModelNodeListReqVO.java",
+    "sha256": "efc223078dc6499d64cdffa5182c6334475182c9f2dc6e738152988a6413d490"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\modelnode\\vo\\CostModelNodeRespVO.java",
+    "sha256": "d87a9039862dfefef75d872c68ff19b32f14bc4b6bc9268da90757a13d67c0c5"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\overview\\CostOverviewController.java",
+    "sha256": "ccfb206dd775a259e859a91d32900581fc4105bf86a6cff56fe7d6adefa2a835"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\overview\\vo\\CostOverviewCompositionItemRespVO.java",
+    "sha256": "da02d0c660f9574bbd83f3ff5a50ed8a66b4c09a7b8bcd3e0bea216379df8977"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\overview\\vo\\CostOverviewDomainRespVO.java",
+    "sha256": "bc75f09547338c4f58e88d5dea38fb7e5dea6792321f86fed7e28fb7988964bd"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\overview\\vo\\CostOverviewUnitDetailReqVO.java",
+    "sha256": "3672526dc2c919d60d4adc45f242382c26ee97b25da84dbff665b8bb9d8a3a88"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\overview\\vo\\CostOverviewUnitDetailRespVO.java",
+    "sha256": "e423197e3b30092d921d9ddb09a07bbdda7ce7f3fb6de4853e568189e3e94f55"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\project\\CostProjectController.java",
+    "sha256": "c21455e5469b799e67447588728344a3793c87f9ca02ff2ee311db7843de4343"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\project\\vo\\CostProjectFilterOptionsRespVO.java",
+    "sha256": "d82ab7e928b1c81dde4ada738f2a4042688d202983d53873e319630ca8268c36"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\project\\vo\\CostProjectPageReqVO.java",
+    "sha256": "a996f5e3f3a59d7716f7ee2063e6695334ee26d96b3d9ea642e34744db678efe"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\project\\vo\\CostProjectRespVO.java",
+    "sha256": "33cfec8adb3b88d386bdbeb38a2119e6c7091fc98db7556eee277a9efa09930f"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\projectbasic\\CostProjectBasicController.java",
+    "sha256": "d50af4f9b3d35a57ca28b27d44737c3dfecfce93f974be376dc6b762bfee15fa"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\projectbasic\\vo\\CostProjectBasicImportExcelVO.java",
+    "sha256": "6ac3f97a3bdf34596b3856f8c73cb6fd138011435d766c9a76cb4104a5a57f8e"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\projectbasic\\vo\\CostProjectBasicPageReqVO.java",
+    "sha256": "cbc6b40eb9eb61f8b71154578a60ae3150cdcae25edcff484f8a64ac1fbdf492"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\projectbasic\\vo\\CostProjectBasicRespVO.java",
+    "sha256": "5573320f7e408392070f559d14752cb50b9f725b24964d2d86507acf1771d834"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\projectbasic\\vo\\CostProjectBasicSaveReqVO.java",
+    "sha256": "0a7d303b9d83d87f966b5c34be7d34f880a040f4a96cbc519d1384d27ebb7e84"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\projectbasic\\vo\\CostProjectOfficeFormRespVO.java",
+    "sha256": "752b3671d5da23b47f057670594ec9ab9476981deea74525525f247875e08fd6"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\projectbasic\\vo\\CostProjectOfficeFormSaveReqVO.java",
+    "sha256": "9b6624347df4f3a8ad55e742c7dc9afde083eb9d050d36d423f922989292ca43"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\projectbasic\\vo\\CostProjectOfficeUnitAmountRespVO.java",
+    "sha256": "7219bfd262fcd988d8149babcf5cf3f0d904e9b588a503bd4daedc0c22db5357"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\projectbasic\\vo\\CostProjectOfficeUnitAmountSaveReqVO.java",
+    "sha256": "f74ba75868a0a35df37a891b7fc5e41b6ce34a4547d5186d3e6ae337bb541316"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\projectbasic\\vo\\CostResearchFundingSaveReqVO.java",
+    "sha256": "40eea2247e18d8b95f8724e5312d391a79b58928e87abd21941ab6ad0f9ef124"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\subsystemdict\\CostSubsystemDictController.java",
+    "sha256": "b3d54ab68d151adbe0add916fd2d12f128ea728e353b33a8d0051d4a543f770c"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\subsystemdict\\vo\\CostSubsystemDictRespVO.java",
+    "sha256": "978434974311d61e4c3e18aec94717c86f5717b20a1a84c9ec284380fc823904"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\subsystemdict\\vo\\CostSubsystemDictSaveReqVO.java",
+    "sha256": "1d5f0482b069abaa54e8265cd8dc624bdeb8250f2fcfc8e27365cb2b68013977"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\unitdict\\CostUnitDictController.java",
+    "sha256": "ee3934bdb0ac0170235a7a7b8fd95dd3753a3f9a48acedb8af2726a8c6969ed2"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\unitdict\\vo\\CostUnitDictListReqVO.java",
+    "sha256": "4a8a7e16137728d462bfd092fd4c953d7396b2ac90d1ee2c2af4ac159b1c9907"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\unitdict\\vo\\CostUnitDictRespVO.java",
+    "sha256": "57fb850620d18474c274979f0de21cf2f3e525ed4e7088ed3e9b390c2f386661"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\warning\\CostWarningController.java",
+    "sha256": "9652843d230a5243d218b2b7df85365a29d41797ba0d69602ae3f5db5dcef2e5"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\warning\\vo\\CostWarningActionLogRespVO.java",
+    "sha256": "89a66ddb3dc8fa3546131bd7352d157eef38d71824aee7d33e36d61c74782e10"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\warning\\vo\\CostWarningActionReqVO.java",
+    "sha256": "240817cb9cf772457971fb5434b851ac225a98b947971fe920df87aa7e8aa062"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\warning\\vo\\CostWarningAnalysisItemRespVO.java",
+    "sha256": "71c78426aef4ff60c26ef37af1a63a027948ed085e0e92acf9b83848a1bc4d80"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\warning\\vo\\CostWarningAnalysisReqVO.java",
+    "sha256": "3588ce7bece9a86363039e09b39043212670f5d85617e32b5651eb3e40be6823"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\warning\\vo\\CostWarningAnalysisRespVO.java",
+    "sha256": "2557101b24c8db8faaa46a4420739d26b342446d824263c3402903569440ffee"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\warning\\vo\\CostWarningEligibleReceiverReqVO.java",
+    "sha256": "9e067b84addbdeab3857cdbc552331c3b2362c3e63f93770c4fed73307eb1806"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\warning\\vo\\CostWarningFeedbackReqVO.java",
+    "sha256": "f3914a25f49ee895730ffc3418d90fb41e9803271bc4f2fa81eae4ff2777dcd3"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\warning\\vo\\CostWarningPageReqVO.java",
+    "sha256": "4e63037769b42801300147a7cd128f5097d3adae6aa712c541f21eee23cf1956"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\warning\\vo\\CostWarningPushReqVO.java",
+    "sha256": "53d1e081057fc77f343080334aae26f28f236f1d5e866517eb657d12d7f5c7cf"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\warning\\vo\\CostWarningReceiverRespVO.java",
+    "sha256": "ae4e1bb2821a88cfca1f79a7dea1867f01ce816f35b6cf3ad1834916b098019c"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\warning\\vo\\CostWarningRespVO.java",
+    "sha256": "27d631849b3121a99cae0c76327bc4710d53e2da364c068013a0dbde196ba3ab"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\warning\\vo\\CostWarningTaskActionReqVO.java",
+    "sha256": "a74f6705baea224473e2602d56398f30ff75a9f1b5bcd8a6fb087180d0fd8b8c"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\warning\\vo\\CostWarningTaskDetailRespVO.java",
+    "sha256": "ee768374191896a133934c5a39abb574af9f49b1454eed96ed92ac3522eaac9b"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\warning\\vo\\CostWarningTaskPageReqVO.java",
+    "sha256": "67e58a260c71ba72611392fc8920475fdaf03ec47645cb47c64bc4b1dbfef378"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\warning\\vo\\CostWarningTaskRespVO.java",
+    "sha256": "ee61daa1590b72dc3d89e1004a1dd6b246cad25244ea789b33d1c808c6e3a18a"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\warning\\vo\\CostWarningUpdateReceiversReqVO.java",
+    "sha256": "cf00e1c77728758ea367cb952e006e2f76850566b79889d1a887d2fac693dc3a"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\workorder\\CostWorkOrderController.java",
+    "sha256": "ba165ca20e25a7779b375df44121aabede050a67ce0fe81a0318ae6d00c586a1"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\workorder\\vo\\CostWorkOrderImportExcelVO.java",
+    "sha256": "9ac013ce83882ecb19a011f6e30273f9489f56d6f94b759e3c34cc0152e4b92e"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\workorder\\vo\\CostWorkOrderPageReqVO.java",
+    "sha256": "ee0b7dfb086e7b19c67b6ace53f4f2bd79d2cf45333f5ec29237a21a9fcd1c5f"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\workorder\\vo\\CostWorkOrderPendingDetailRespVO.java",
+    "sha256": "f6709d077c6cd8267a7170813dd27bd167099eaa29cd0ee511e18abd3c2dc63a"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\workorder\\vo\\CostWorkOrderPendingSummaryRespVO.java",
+    "sha256": "a2ccc1a09bc9a4dcb0e915d6c0b2b82dba0f34b4f97296130af37d9c92572855"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\workorder\\vo\\CostWorkOrderRespVO.java",
+    "sha256": "5a48e9236a400b85328383ceda4dfb20a0e88a233afeb7010d00402af7e8b45e"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\workorder\\vo\\CostWorkOrderSaveReqVO.java",
+    "sha256": "80da08de9f2adac7ad7495384e6db8cd3c3b8e508095acf022d4fc13b79f544b"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\workorder\\vo\\CostWorkOrderUnitFillSummaryRespVO.java",
+    "sha256": "28eacd62bbeb61fffe826c5c886d80e2c0569cd58afb72164f96b3103fb22308"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\workorder\\vo\\CostWorkOrderYearlyAmountRespVO.java",
+    "sha256": "954f5c9afbd9f7015e67e167330c72191c433aeb0f278d683f806725091939b0"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\workorderledger\\CostWorkOrderLedgerController.java",
+    "sha256": "c6ab8476d1df794c9036cd5d55a81a5b10ac1466dcd2308ff4205fc59afbf780"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\workorderledger\\vo\\CostWorkOrderCompositionExcelVO.java",
+    "sha256": "7737a3a4ef9e382e495e4bc479c95dbc66ef2b5991364b8f6779d78c81463f37"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\workorderledger\\vo\\CostWorkOrderCompositionExportReqVO.java",
+    "sha256": "b82bc7ea9b59f646d9c1c936ea58a3a253277782f255f1056eda627d1c7c729a"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\workorderledger\\vo\\CostWorkOrderLedgerCompositionDetailRespVO.java",
+    "sha256": "1fcd4c75e0916b2147f95d03ad7d44e8a28dbf73aa92f5124e0589d0aa322218"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\workorderledger\\vo\\CostWorkOrderLedgerCompositionRespVO.java",
+    "sha256": "b51092f24b8466dc4131497473c45884207a990671d39bebe23906067ece0140"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\workorderledger\\vo\\CostWorkOrderLedgerContributionRankReqVO.java",
+    "sha256": "da471b6b7ae98fd86123d901c0687fb5d2ec8f7b15a2fc83eb5b3eec3f6b431e"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\workorderledger\\vo\\CostWorkOrderLedgerContributionRankRespVO.java",
+    "sha256": "8f6b2b1edbf0edf18a5e5db17973b3da7a0f60f20900547837b5676dffdbdb9b"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\workorderledger\\vo\\CostWorkOrderLedgerDetailExcelVO.java",
+    "sha256": "e447cf09199950da669201548217ff5f3d06704330f63244edc0a8a438ef8e04"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\workorderledger\\vo\\CostWorkOrderLedgerDetailPageReqVO.java",
+    "sha256": "be61d85bf10c0c52e53eb79f889d98a2491f555c214e226b23a7942cc49a0726"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\workorderledger\\vo\\CostWorkOrderLedgerDetailRespVO.java",
+    "sha256": "a11eebf92d78dfc5493b3328f37a4ed636ef5141008129363f2ca088fe45b71d"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\workorderledger\\vo\\CostWorkOrderLedgerFilterOptionRespVO.java",
+    "sha256": "432fe8420d6b22a675ed66149786d5285ba3419dfeb18c66945c4bea0f58aebe"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\workorderledger\\vo\\CostWorkOrderLedgerFilterOptionsReqVO.java",
+    "sha256": "5645cffd74c534e6069fd10830243955b0a5adb313a125dd2cc5c171ed744ef5"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\workorderledger\\vo\\CostWorkOrderLedgerGroupedCompositionRespVO.java",
+    "sha256": "040da4c7f5675a38e5836095b4e558ddb8127da020f2f62e24dc09af55506b42"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\workorderledger\\vo\\CostWorkOrderLedgerScopeReqVO.java",
+    "sha256": "712fb76f3255f0dcc7e717cd77add6c2483309f017f15fd6b2c739151f542319"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\workorderledger\\vo\\CostWorkOrderLedgerSummaryReqVO.java",
+    "sha256": "1f240423b395cf235b1190e429b843f0d9ced8da78d0b93211d802da9ba2868c"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\workorderledger\\vo\\CostWorkOrderLedgerSummaryRespVO.java",
+    "sha256": "bf2eefa2d15548fbe76171d69bfa339f0b85aadef26c083201aa80c223fd07cb"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\workorderledger\\vo\\CostWorkOrderLedgerWorkOrderSummaryPageReqVO.java",
+    "sha256": "108bb903277bad63c4bffd814229e3f515f91c8d849327d3aa92162f1115f024"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\controller\\admin\\workorderledger\\vo\\CostWorkOrderLedgerWorkOrderSummaryRespVO.java",
+    "sha256": "ea3a05da393451b26251fe70cf462b9969169cb098b3432df48ce0b14040f5d9"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\CostServerApplication.java",
+    "sha256": "6645ad6b515f43019e806a36316d5c80997825e2ddfc44f19670b82e34a20241"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\dal\\dataobject\\accessscope\\CostUserDomainScopeDO.java",
+    "sha256": "16bb8e14d0d47dfb5b72b97d6daea09adea85d38fb098a23295513a779d964f8"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\dal\\dataobject\\accessscope\\CostUserProjectScopeDO.java",
+    "sha256": "dc493f1ebf56c2f58363b8c0185e8b9e96f7555c7a1a8c5f3058935048644617"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\dal\\dataobject\\accessscope\\CostUserRoleDO.java",
+    "sha256": "680204b659ba667281bb9f9e7a067d2db2d2685ff185ee57bae372515c7b1b3e"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\dal\\dataobject\\accessscope\\CostUserUnitScopeDO.java",
+    "sha256": "562feb7071132063434ad456099a4a233f5aee3bd6ab1ff3ea5180fadfd56170"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\dal\\dataobject\\importbatch\\CostImportBatchDO.java",
+    "sha256": "7c36e3a52abf32bf76dbcb7769e6763a496109e8d64db5af1d6b7ed7e6bfaf11"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\dal\\dataobject\\importbatch\\CostImportErrorDO.java",
+    "sha256": "537c93d6156f55069c9d08f78dd7715238051054ccde80a1467ea3b1e0334d86"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\dal\\dataobject\\modelnode\\CostModelNodeDO.java",
+    "sha256": "80c8e1294ed5c5e0e6570475a0bbc92bac341ee947e08d935cd06f6a7d356636"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\dal\\dataobject\\project\\CostProjectDO.java",
+    "sha256": "a7d28e367ef2dcc7eef49c6b7f248806bdb7784a9ecf55f42873fcd17a57c061"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\dal\\dataobject\\projectbasic\\CostProjectBasicDO.java",
+    "sha256": "ff47c4b59cbda3c611ed4f373046bb81d65d1d79708860d8797abb7689cf240c"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\dal\\dataobject\\subsystemdict\\CostSubsystemDictDO.java",
+    "sha256": "664600eb892e3db4f5d1b3ac7a9f8362c73c0df195d69276aa28c166c3dce6cc"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\dal\\dataobject\\unitcostdetail\\CostUnitCostDetailDO.java",
+    "sha256": "7e27731b8c2ec3bfb9718a76bfc8879b9eb59ac303f044f580ceb5f5827fb9b7"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\dal\\dataobject\\unitdict\\CostUnitDictDO.java",
+    "sha256": "eda8ea6994702a376239584b364e6ee7405796184d132e647dee8b87736948f2"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\dal\\dataobject\\warning\\CostWarningActionLogDO.java",
+    "sha256": "483885c6033278acc8decc63ec5c24f18da55ef0e84606f389a376f9dd31283f"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\dal\\dataobject\\warning\\CostWarningReceiverDO.java",
+    "sha256": "127d560c24b70beabe2591f21241661bfef8b2040b9aa702a03816ab751d727a"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\dal\\dataobject\\warning\\CostWarningRecordDO.java",
+    "sha256": "94f028987f962c8f26d07a241789550899043ced82286a76c1e60d6b5cd3367c"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\dal\\dataobject\\workorder\\CostWorkOrderBookSummaryDO.java",
+    "sha256": "1e004257eeba0e1ea2f954a0c5559d22b8ba858372d14ec1a04c9a9bebb75b20"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\dal\\dataobject\\workorder\\CostWorkOrderDO.java",
+    "sha256": "df38b91b394166e8138eef9d1386780cd9ed78bcd71bd1bafe0c193ae708010c"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\dal\\dataobject\\workorderledger\\CostWorkOrderLedgerDetailDO.java",
+    "sha256": "bd16033f68d7d8535c64e14745b82fcf230161df69a04ce0266d07948c1e51b8"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\dal\\mysql\\accessscope\\CostUserDomainScopeMapper.java",
+    "sha256": "56ea1213de6a42634ebf6686fc84af3af48f3dd70ffb82387abc379b52c5ed12"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\dal\\mysql\\accessscope\\CostUserProjectScopeMapper.java",
+    "sha256": "20ef579177ff60e430bc0bab6a7981df529cc88e439a6bd995b7e05224262570"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\dal\\mysql\\accessscope\\CostUserRoleMapper.java",
+    "sha256": "99bb28afe690aaa936e0b025e1298495dc51fffd42750b90aa7ab12db2902bc4"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\dal\\mysql\\accessscope\\CostUserUnitScopeMapper.java",
+    "sha256": "d1db1cc6c54fbc643518c45ead917e2a610980be05466d8bf667eefba6538265"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\dal\\mysql\\importbatch\\CostImportBatchMapper.java",
+    "sha256": "5793d0b33dadff28092fd5a3da34961c89ed5dd3e535d32dd7d2eb5e87341803"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\dal\\mysql\\importbatch\\CostImportErrorMapper.java",
+    "sha256": "10a2518246419652defc249f5eb74b22825cd1cd6aaee6ede26a20df1814652a"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\dal\\mysql\\modelnode\\CostModelNodeMapper.java",
+    "sha256": "852dfbea3c8d51b15c01ad793d025a481314b732a94873e98d0df80c5b874c8a"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\dal\\mysql\\project\\CostProjectMapper.java",
+    "sha256": "4844d11dfd7ed14324d37eb6cfe3c9fbe24a6d4ba9f4c9878e154af962bbc9c4"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\dal\\mysql\\projectbasic\\CostProjectBasicMapper.java",
+    "sha256": "f719df48da3a2c5027f27efce1924c875b9832824a7a58bf8ff1ab8a4cfb4c4e"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\dal\\mysql\\subsystemdict\\CostSubsystemDictMapper.java",
+    "sha256": "430adc6a52f3184a3cc8ff0c208096681e20992805db2a7dd4f63010908f58d0"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\dal\\mysql\\unitcostdetail\\CostUnitCostDetailMapper.java",
+    "sha256": "5366fb0527c4307d28909cf4c293f253ad4e0016b7ddc64fc173f9ca615911f8"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\dal\\mysql\\unitdict\\CostUnitDictMapper.java",
+    "sha256": "f73f682117ad1c417699838905c643dbfbea1fb39e4ec50b3cb2b4942995a316"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\dal\\mysql\\unitdict\\CostUnitDictScopeMapper.java",
+    "sha256": "c7145c34c8fc6592942d230f4d8da96d8c6d1c9480c398de6d12d173f4a02ce8"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\dal\\mysql\\warning\\CostWarningActionLogMapper.java",
+    "sha256": "549f1418945b7263fd057d325639e468183433e04040087dccb6e1fc00f6cc89"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\dal\\mysql\\warning\\CostWarningReceiverMapper.java",
+    "sha256": "26068e33070d6e9f50251f47562bed582ed8556cec9d470e7ab9f710a5bf6f8c"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\dal\\mysql\\warning\\CostWarningRecordMapper.java",
+    "sha256": "cfc7d0beb034e4589bfc6a4cf2e49fb61cbe5188dff3924701703e80392f651d"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\dal\\mysql\\workorder\\CostWorkOrderMapper.java",
+    "sha256": "a554fee97044feffa77510a3bb767e143fc4e0552b5e4b07d758dada9cc4856c"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\dal\\mysql\\workorderledger\\CostWorkOrderLedgerDetailMapper.java",
+    "sha256": "8120dd45b71cd91821ccdc3bed03b0374d2d64a7eedff385ee4635b20e005cb1"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\dal\\mysql\\workorderledger\\CostWorkOrderLedgerQueryParam.java",
+    "sha256": "36ce6851489e27c3705fda2e0dd82953be83ea37792d6021013a00facfbcba7d"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\enums\\CostAccessRoleConstants.java",
+    "sha256": "1a33228a917e3c7a91776c325642d5b4378faaa27e1a719d39f52e774f5c1e60"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\framework\\localtest\\config\\CostLocalTestMockPlatformConfiguration.java",
+    "sha256": "8d1c73002ba90ab331df8093604ee90b39400d162739771cd0bdf5b7bb5bf4f7"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\framework\\rpc\\config\\RpcConfiguration.java",
+    "sha256": "9db257c0f842b66b7c26b65ef45435379ebd44411d13aa8228ccd3cb80cd514a"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\framework\\security\\config\\SecurityConfiguration.java",
+    "sha256": "ba8bfa5c1a8a7a5a941c8e6eb6db66b44bffd8c2bd79da27de8f60f9ba09df19"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\service\\accessscope\\CostAccessScopeContext.java",
+    "sha256": "065438d2754bb618a07725305c9669a98a425f4f1385f0523586d0f973cccf07"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\service\\accessscope\\CostAccessScopeService.java",
+    "sha256": "b257157b92d4937ab73e1554cc742eb5fefd24d5d58fa4e9d76bf9f4ce7e20c7"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\service\\accessscope\\CostAccessScopeServiceImpl.java",
+    "sha256": "8ebd0e0e97de1325d558b44bf7ff26710333b5e1582731ee60c07959177dd6ea"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\service\\accessscope\\CostRoleAssignmentService.java",
+    "sha256": "5650b351924f80af9837ccb2a4e122171ad817ef256bea92746dfa2b2d3a3b56"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\service\\accessscope\\CostRolePolicy.java",
+    "sha256": "3c9bfe4f8da4ba85fda9e34a0e71648279d7c70ff6c7dee09b7e23b9f69aab5f"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\service\\importbatch\\CostImportBatchService.java",
+    "sha256": "1ee607ffb47bb266ed595fcc31e76ba5434d3a111d7eea2f42e252f494b2a6e6"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\service\\importbatch\\CostImportBatchServiceImpl.java",
+    "sha256": "ca09540926f2b0f9c3a867d071c586d74ed37e735f306945b5297cc1dfa5ffc5"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\service\\modelcomparison\\CostModelComparisonService.java",
+    "sha256": "ae4f0e9363a552ba2ab5503d331261552ea49108c93848ce3354ceae5a42550b"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\service\\modelcomparison\\CostModelComparisonServiceImpl.java",
+    "sha256": "185994517c757d91658592d1be2d5f7358b2df4ea72cfe60aeb90bf831526934"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\service\\modelnode\\CostModelNodeService.java",
+    "sha256": "ac0b5710eefdc3c95d90d5b65ccade71e6f3830563167900c3fde4aabd6fdd94"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\service\\modelnode\\CostModelNodeServiceImpl.java",
+    "sha256": "bcb6613fed3066fb02ce4f34fe1bf86951a860221d25fb3a74bc3c86d4a8a24b"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\service\\overview\\CostOverviewService.java",
+    "sha256": "78f7b31da38fab848685c934b2847c4bd2b57722eb382cec5bbdf02b7d316d00"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\service\\overview\\CostOverviewServiceImpl.java",
+    "sha256": "df700e259b88e117221a1a006b3cb65ead409a320578c287bd259a05b4679942"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\service\\project\\CostProjectService.java",
+    "sha256": "0997646cc04526e9f549fa141c913508fca5b6479f21471f73490f574461d940"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\service\\project\\CostProjectServiceImpl.java",
+    "sha256": "59fac3f36caae07ee7f7e9abad16b99ca5cb3a25b9e28db85973b338b1262b31"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\service\\projectbasic\\CostProjectBasicService.java",
+    "sha256": "18f83244b47bc05c852064a03a625003d681e920640ec369dc16ad18da9804ed"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\service\\projectbasic\\CostProjectBasicServiceImpl.java",
+    "sha256": "234a6615b2f7839282128d0faf94587e8f6d7bae08f2744c9a761d03e8421632"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\service\\subsystemdict\\CostSubsystemDictService.java",
+    "sha256": "dd2bb5d11a649c7848f9ea1eb973ef242698c00689b5069f8fccafc782d55cc3"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\service\\subsystemdict\\CostSubsystemDictServiceImpl.java",
+    "sha256": "84beef718bb3efd932a4b681ceabbdd18cf1d602e65dc31f51cc281aec674f6e"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\service\\unitdict\\CostUnitDictService.java",
+    "sha256": "b2d13639ad8e4b59c4861f3b7ed9be212e7cb2ecea1e7fec2bf45ad25b7ecea4"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\service\\unitdict\\CostUnitDictServiceImpl.java",
+    "sha256": "75d4f85d132d01a37c9644112f05c3dbe2919fe5cff398248d65407a23d47856"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\service\\warning\\CostWarningService.java",
+    "sha256": "013aae2111122523f8b140b644efd9f0a0e276490acc4495555d2fc9d0ba407c"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\service\\warning\\CostWarningServiceImpl.java",
+    "sha256": "6a542acfc623299a2929c140f194e132b8c8e0fa6346cfd50bfa51398d3a5051"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\service\\workorder\\CostWorkOrderService.java",
+    "sha256": "49493753f0c03bef24b004f8aa22b1b82d39c10f2d63d0069cc40f69bb6183cd"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\service\\workorder\\CostWorkOrderServiceImpl.java",
+    "sha256": "748cbfbbaa46fe5130e0fed518b2efdf6b5d7cd45a62b72a9fc7af8ae20debf5"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\service\\workorderledger\\CostWorkOrderLedgerService.java",
+    "sha256": "856de618277997d1eb96acc26f6b0da60978b7cc27455c8838d7b7387d87fbe5"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\main\\java\\cn\\iocoder\\yudao\\module\\cost\\service\\workorderledger\\CostWorkOrderLedgerServiceImpl.java",
+    "sha256": "751e6c68a23ae85a1257f32c8c3edc527298903b49248d1069604fcce4c8e398"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\test\\java\\cn\\iocoder\\yudao\\module\\cost\\dal\\mysql\\CostAuthorizationOfficerTest.java",
+    "sha256": "507ffd28edcb158541163b323cee0029a7ebe067154cfffe89b4da357c9b3e5a"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\test\\java\\cn\\iocoder\\yudao\\module\\cost\\dal\\mysql\\CostLocalRoleAssignmentTest.java",
+    "sha256": "2c374635f7096ee8639077311cc58ca4c89d2e75aec8d087df688fa6f4a711ee"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\test\\java\\cn\\iocoder\\yudao\\module\\cost\\dal\\mysql\\CostLocalRolePolicyTest.java",
+    "sha256": "eda2f8e5ec14e16904a72737109e6ca8eab1b1946d2c59a1bef14e3a674a28e7"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\test\\java\\cn\\iocoder\\yudao\\module\\cost\\dal\\mysql\\CostMapperAnnotationSqlTest.java",
+    "sha256": "1ac4fb59be6d89538212821d7d2348b08a6c74b46f24636aaad2851845b8971f"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\test\\java\\cn\\iocoder\\yudao\\module\\cost\\dal\\mysql\\CostPermissionGuardTest.java",
+    "sha256": "227cfa0d79a272036c890d514d0e0cb7bf5d86665bb5480231a0decea97c4e5c"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\test\\java\\cn\\iocoder\\yudao\\module\\cost\\dal\\mysql\\CostPostgresAuthorizationIT.java",
+    "sha256": "76977b0ff7af60c3617d4949e24ed2a127a7005d21bd89c0a6957c1009de1b72"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\test\\java\\cn\\iocoder\\yudao\\module\\cost\\dal\\mysql\\CostResearchDepartmentAccessScopeTest.java",
+    "sha256": "972d6a989f9d9b0ff4cc041b2ebd03969267f508c8078dd816bb1cce9d59fdc2"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\test\\java\\cn\\iocoder\\yudao\\module\\cost\\dal\\mysql\\CostResearchDepartmentReadScopeTest.java",
+    "sha256": "3c53bf7b0fcd7b330f6a6aee11019ee5d9a105bea008dfa383c75566aafd861c"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\test\\java\\cn\\iocoder\\yudao\\module\\cost\\dal\\mysql\\CostResearchDepartmentUnitDictScopeTest.java",
+    "sha256": "779a869c049abc7fd05e605eb471e256ad0893982e72007a2e1df1c48e6c16e5"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\test\\java\\cn\\iocoder\\yudao\\module\\cost\\dal\\mysql\\CostScopeIdGenerationTest.java",
+    "sha256": "5efaca96c970c511ef203b59cadbb59649e6cc7eae9a94d132c0cf17838a513c"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\test\\java\\cn\\iocoder\\yudao\\module\\cost\\dal\\mysql\\CostSubsystemDictServiceTest.java",
+    "sha256": "f6fa34f7682757f472536dd0a56f19f5e7b38a9bafed8d3f1b3a83494973e804"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\test\\java\\cn\\iocoder\\yudao\\module\\cost\\dal\\mysql\\CostUnitOnlyScopeTest.java",
+    "sha256": "6cac6bab13055f2dfba6d37377ff2c50b8900fa29d9a88bf59e6f9fdccb53299"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\test\\java\\cn\\iocoder\\yudao\\module\\cost\\dal\\mysql\\CostWarningWorkflowServiceTest.java",
+    "sha256": "c4700465c5faac109c0847f5c56ea8c4ad258b268dddc81a3bd9e5281d558b04"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\test\\java\\cn\\iocoder\\yudao\\module\\cost\\dal\\mysql\\CostWorkOrderLedgerServiceImplTest.java",
+    "sha256": "f4bc3a0defe0cc17bf278212a2b8319132b9f496159ff2627d21fef41efb352e"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\test\\java\\cn\\iocoder\\yudao\\module\\cost\\service\\modelcomparison\\CostModelComparisonServiceImplTest.java",
+    "sha256": "df84949327a01e384081d381fa2634a27700530dac9c93d64ccb369c157217fc"
+  },
+  {
+    "path": "yudao-module-cost\\yudao-module-cost-biz\\src\\test\\java\\cn\\iocoder\\yudao\\module\\cost\\service\\project\\CostProjectFilledUserTest.java",
+    "sha256": "734a8eed03705ac7131ddf3035bdfc2b366dcab3961f2cb5a496efcda6345dbc"
+  }
+]

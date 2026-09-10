@@ -1,0 +1,104 @@
+[
+  {
+    "entity": "CostUserDomainScopeDO",
+    "assignId": true,
+    "sequence": false,
+    "compiled": true
+  },
+  {
+    "entity": "CostUserProjectScopeDO",
+    "assignId": true,
+    "sequence": false,
+    "compiled": true
+  },
+  {
+    "entity": "CostUserRoleDO",
+    "assignId": true,
+    "sequence": false,
+    "compiled": true
+  },
+  {
+    "entity": "CostUserUnitScopeDO",
+    "assignId": true,
+    "sequence": false,
+    "compiled": true
+  },
+  {
+    "entity": "CostImportBatchDO",
+    "assignId": true,
+    "sequence": false,
+    "compiled": true
+  },
+  {
+    "entity": "CostImportErrorDO",
+    "assignId": true,
+    "sequence": false,
+    "compiled": true
+  },
+  {
+    "entity": "CostModelNodeDO",
+    "assignId": true,
+    "sequence": false,
+    "compiled": true
+  },
+  {
+    "entity": "CostProjectDO",
+    "assignId": true,
+    "sequence": false,
+    "compiled": true
+  },
+  {
+    "entity": "CostProjectBasicDO",
+    "assignId": true,
+    "sequence": false,
+    "compiled": true
+  },
+  {
+    "entity": "CostSubsystemDictDO",
+    "assignId": true,
+    "sequence": false,
+    "compiled": true
+  },
+  {
+    "entity": "CostUnitCostDetailDO",
+    "assignId": true,
+    "sequence": false,
+    "compiled": true
+  },
+  {
+    "entity": "CostUnitDictDO",
+    "assignId": true,
+    "sequence": false,
+    "compiled": true
+  },
+  {
+    "entity": "CostWarningActionLogDO",
+    "assignId": true,
+    "sequence": false,
+    "compiled": true
+  },
+  {
+    "entity": "CostWarningReceiverDO",
+    "assignId": true,
+    "sequence": false,
+    "compiled": true
+  },
+  {
+    "entity": "CostWarningRecordDO",
+    "assignId": true,
+    "sequence": false,
+    "compiled": true
+  },
+  {
+    "entity": "CostWorkOrderDO",
+    "assignId": true,
+    "sequence": false,
+    "compiled": true
+  },
+  {
+    "entity": "CostWorkOrderLedgerDetailDO",
+    "assignId": true,
+    "sequence": false,
+    "compiled": true
+  }
+]

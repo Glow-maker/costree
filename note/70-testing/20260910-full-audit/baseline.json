@@ -1,0 +1,15 @@
+{
+  "root": {
+    "commit": "8e14a7de7f7af117fc110eef48848805156c3148",
+    "status": " M .agent-handoff/COMPLETED.md\n M .agent-handoff/CURRENT.md\n M .agent-handoff/DAILY-LOG.md\n M .agent-handoff/DECISIONS.md\n M .agent-handoff/SESSION-LOG.md\n M .agent-handoff/STATE.yaml\n M .agent-handoff/TASKS.md\n M .agent-handoff/_state/decisions.yaml\n M .agent-handoff/_state/project.yaml\n M .agent-handoff/_state/sessions.jsonl\n M .agent-handoff/_state/tasks.yaml\n D .agent-handoff/_tmp/close-session-20260818-cost-access-release.json\n D .agent-handoff/_tmp/close-session-20260818-dm-permission-data-kit.json\n?? .agent-handoff/_tmp/close-session-20260910-offline-delivery.json\n?? .agent-handoff/_tmp/close-session-20260910-role-id-r1.json\n?? .codex-remote-attachments/\n?? .preview/\n?? cost-server-offline-package-20260910-KNOWN-ISSUE.md\n?? cost-server-offline-package-20260910-r1.zip\n?? cost-server-offline-package-20260910-r1.zip.sha256\n?? cost-server-offline-package-20260910-r1/\n?? cost-server-offline-package-20260910.verification.json\n?? cost-server-offline-package-20260910.zip\n?? cost-server-offline-package-20260910.zip.sha256\n?? cost-server-offline-package-20260910/\n?? note/70-testing/20260910-live-acceptance/\n?? tools/acceptance-20260910/\n?? tools/release-20260910/\n"
+  },
+  "backend": {
+    "commit": "d1adddfa4aae14929b86530e473bbeba77df6c4d",
+    "status": " M yudao-module-cost/yudao-module-cost-biz/src/main/java/cn/iocoder/yudao/module/cost/dal/dataobject/accessscope/CostUserRoleDO.java\n M yudao-module-cost/yudao-module-cost-biz/src/test/java/cn/iocoder/yudao/module/cost/dal/mysql/CostScopeIdGenerationTest.java\n"
+  },
+  "frontend": {
+    "commit": "893c2403887ccb871b2e4e4d475808cf33219829",
+    "status": ""
+  },
+  "time": "2026-09-10T11:24:58.893090+08:00"
+}
