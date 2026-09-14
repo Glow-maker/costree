@@ -1,0 +1,38 @@
+{
+  "result": {
+    "type": "object",
+    "value": [
+      {
+        "count": 1,
+        "overflow": false,
+        "rows": [
+          1
+        ]
+      },
+      {
+        "count": 4,
+        "overflow": false,
+        "rows": [
+          4
+        ]
+      },
+      {
+        "count": 5,
+        "overflow": false,
+        "rows": [
+          4,
+          1
+        ]
+      },
+      {
+        "count": 9,
+        "overflow": false,
+        "rows": [
+          4,
+          4,
+          1
+        ]
+      }
+    ]
+  }
+}
