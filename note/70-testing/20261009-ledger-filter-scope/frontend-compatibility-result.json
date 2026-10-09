@@ -1,0 +1,28 @@
+{
+  "verificationDate": "2026-10-09",
+  "status": "passed",
+  "evidenceType": "Previously executed extracted-page-function check with mocked API responses",
+  "workingDirectory": "H:/light/project/sqlbot_with_bcback/costree-frontend",
+  "sourceFile": "src/views/cost/ledgerCompositionDetail/index.vue",
+  "executionMethod": "PowerShell here-string piped to node - in the frontend working directory",
+  "exitCode": 0,
+  "stdout": "ORPHAN_PROJECT_SELECT_ACCOUNTING_WORK_ORDER_ROUTE_OK 10\n",
+  "mockFilterOptionRequests": 10,
+  "checkedScenario": "Select a ledger project without a cost_project record (domainCode/modelCode null), then select its accounting unit and work order, reload all option types, and synchronize route query.",
+  "assertedResults": [
+    "Project code HISTORY-P remains selected after project change and work-order change",
+    "Accounting unit U and work order W remain in scope",
+    "Missing domainCode and modelCode remain undefined rather than fabricated values",
+    "Selected work-order key remains HISTORY-P|U|W after option reload",
+    "PROJECT options retain the selected ledger project",
+    "Synchronized route query retains projectCode HISTORY-P"
+  ],
+  "boundaries": [
+    "API responses and router replacement are mocks; fixture identifiers are not production data",
+    "Tests execute functions extracted from the actual Vue source, not mounted browser components",
+    "refreshDashboard is replaced by route synchronization; real ledger summary/detail API calls are not executed",
+    "No database access, server startup, deployed browser acceptance, or intranet acceptance was performed",
+    "DOMAIN and MODEL options may legitimately remain empty when the ledger project has no corresponding project metadata",
+    "This file preserves the earlier successful tool result; saving the evidence did not rerun or expand testing"
+  ]
+}

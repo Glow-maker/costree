@@ -1,0 +1,72 @@
+{
+  "status": "PASS",
+  "checks": [
+    {
+      "file": "00-setup.sql",
+      "sql_statements": 21,
+      "plpgsql_blocks": 2,
+      "status": "PASS"
+    },
+    {
+      "file": "10-begin-batch.sql",
+      "sql_statements": 8,
+      "plpgsql_blocks": 1,
+      "status": "PASS"
+    },
+    {
+      "file": "21-load-stg_model_node.template.sql",
+      "sql_statements": 9,
+      "plpgsql_blocks": 3,
+      "status": "PASS"
+    },
+    {
+      "file": "22-load-stg_project.template.sql",
+      "sql_statements": 9,
+      "plpgsql_blocks": 3,
+      "status": "PASS"
+    },
+    {
+      "file": "23-load-stg_unit_dict.template.sql",
+      "sql_statements": 9,
+      "plpgsql_blocks": 3,
+      "status": "PASS"
+    },
+    {
+      "file": "24-load-stg_unit_amount.template.sql",
+      "sql_statements": 9,
+      "plpgsql_blocks": 3,
+      "status": "PASS"
+    },
+    {
+      "file": "25-load-stg_work_order.template.sql",
+      "sql_statements": 9,
+      "plpgsql_blocks": 3,
+      "status": "PASS"
+    },
+    {
+      "file": "26-load-stg_ledger_detail.template.sql",
+      "sql_statements": 9,
+      "plpgsql_blocks": 3,
+      "status": "PASS"
+    },
+    {
+      "file": "90-atomic-sync.template.sql",
+      "sql_statements": 100,
+      "plpgsql_blocks": 19,
+      "status": "PASS"
+    },
+    {
+      "file": "95-missing-report.sql",
+      "sql_statements": 7,
+      "plpgsql_blocks": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "99-manual-abort.template.sql",
+      "sql_statements": 5,
+      "plpgsql_blocks": 1,
+      "status": "PASS"
+    }
+  ],
+  "boundary": "静态SQL和PL/pgSQL语法、禁写与事务结构检查；未连接数据库。现代PostgreSQL解析器不等于PG9.2/GaussDB/云鲸2.2.1运行验收。"
+}

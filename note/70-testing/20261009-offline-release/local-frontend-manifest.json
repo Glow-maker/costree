@@ -1,0 +1,44 @@
+{
+  "status": "PASS",
+  "frontendCommit": "2a6a0d3802a1c032f67888fcd9c3dc868234c55c",
+  "platform": "Windows x64",
+  "buildLocation": "Windows local build explicitly approved by user; no services started",
+  "frontend": {
+    "commit": "2a6a0d3802a1c032f67888fcd9c3dc868234c55c",
+    "apiBase": "/admin-api",
+    "baseUrl": "",
+    "mode": "prod",
+    "indexSha256": "65261d4c9b399abe9834e0e38fc8e34aae0080edf562d98461b56332c88e9aa5",
+    "tests": {
+      "tests": 61,
+      "pass": 61,
+      "fail": 0,
+      "skipped": 0
+    },
+    "typesCheck": "PASS"
+  },
+  "artifact": {
+    "name": "dist-prod.zip",
+    "sha256": "8fccaac651145887a7523877cf9157f98654f4eea04c0166018de250c8664d42",
+    "bytes": 84452622
+  },
+  "versions": {
+    "node": "20.19.0",
+    "pnpm": "10.33.2"
+  },
+  "settings": {
+    "heapMiB": 8000,
+    "minifier": "terser",
+    "maxWorkers": "default",
+    "configUnchanged": true
+  },
+  "command": "node --max_old_space_size=8000 node_modules/vite/bin/vite.js build --mode prod --outDir <isolated>/local-frontend-dist",
+  "startedAt": "2026-10-09T11:51:42.9916058+08:00",
+  "finishedAt": "2026-10-09T12:02:03.0090744+08:00",
+  "sourceVerification": {
+    "head": "2a6a0d3802a1c032f67888fcd9c3dc868234c55c",
+    "workingTreeClean": true,
+    "trackedDiff": ""
+  },
+  "localServicesStarted": false
+}

@@ -10,40 +10,92 @@ active:
   notes: ''
 - task_id: TASK-003
   title: 完成账面明细正式导入与幂等同步落地
-  details: 已形成 PostgreSQL 9.2/GaussDB 全量快照中间表、导入前检查、业务 UPDATE+INSERT、借方账面重算和验收脚本；下一步替换真实源字段映射并在内网试点库重复执行、核对源明细
-    ID、元/万元和借贷口径。
+  details: 20261009快照差异同步已交付，PG17核心15+日常5通过。按05-workflow编辑真实源SELECT/稳定ID/发布完成判定，在内网试点核对元/万元、借贷及填报保存后重复同步；真实DWS/PG9.2未验。
   priority: P0
   status: in_progress
   created_at: '2026-06-12T00:15:17+08:00'
-  updated_at: '2026-08-17T15:01:32+08:00'
+  updated_at: '2026-10-09T12:07:04+08:00'
   completed_at: ''
   notes: ''
 - task_id: TASK-004
   title: 完成主业项目树、单位和工作令源数据映射落地
-  details: 标准中间表和稳定业务键规则已写入 snapshot-upsert 包；下一步确认内网源项目父子关系、型号叶子规则、核算单位与管理单位映射、工作令项目归属，并把真实
-    SELECT 映射写入 03 脚本。
+  details: 按20261009包05-workflow/适配清单.md确认六源字段、型号层级、同名历史异码和项目工作令归属；默认占位不得直接上线，配置不能用恒真完成标记冒充源发布。
   priority: P0
   status: in_progress
   created_at: '2026-06-12T00:15:17+08:00'
-  updated_at: '2026-08-17T15:01:32+08:00'
+  updated_at: '2026-10-09T12:07:04+08:00'
   completed_at: ''
   notes: ''
 - task_id: TASK-005
-  title: 完成本地成本角色与数据范围真实验收
-  details: 本地授权PG优先，无记录沿用平台角色与菜单；NULL角色为撤销墓碑，不回退平台角色。专员仅分配四类成本角色及范围。82项定向测试已通过，仍需管理员、专员、全局、科研部、项目办、研制单位六类账号直接API验权及旧systemRPC验收。
-  priority: P0
+  title: 完成成本角色与数据范围真实内网验收
+  details: 本轮真实PG17/9.2已覆盖四首次授权、12角色切换、撤销重授、三类范围保存、失败回滚、并发与租户边界；中台身份是测试替身，真实六账号和DWS仍待验收。
+  priority: high
   status: in_progress
   created_at: '2026-06-12T00:15:17+08:00'
-  updated_at: '2026-09-07T19:01:34+08:00'
+  updated_at: '2026-09-10T23:07:29+08:00'
   completed_at: ''
   notes: ''
 - task_id: TASK-006
-  title: 完成0907成本本地授权候选包内网验收
-  details: cost-server-offline-package已替换为14文件精简候选包，无system JAR。ZIP SHA256 FA8412A3A0A34B055C1BDAD5EC3EEB37885F73402ADC41D80EA32B38758897C6。PG升级合并17本地角色三表；DM仅页面配置。真实DWS和账号流程待验收。旧JAR忽略本地撤销，不可盲目回退后开放访问。
-  priority: P0
+  title: 完成最终成本离线包联合与内网验收
+  details: 20261009完整包已交付：后端82619751/Linux130测试，前端2a6a0d38/Windows61测试及类型检查，1937文件SHA/ZIP/SQL生成器通过。真实DWS/RPC/六账号/旧浏览器/实际金额与云鲸仍待联合验收。
+  priority: P1
   status: in_progress
   created_at: '2026-06-12T00:15:17+08:00'
-  updated_at: '2026-09-07T19:01:34+08:00'
+  updated_at: '2026-10-09T12:07:04+08:00'
+  completed_at: ''
+  notes: ''
+- task_id: TASK-049
+  title: 完成24项需求的新后端联合验收
+  details: 阅读 note/70-testing/20260914-requirements-24/README.md；在可写验收环境加载新后端，验证类别筛选SQL、四领域保存重开和简称；完成全分类排序、负值及无WebGL2实机回归。
+  priority: P1
+  status: pending
+  created_at: '2026-09-14T11:37:06+08:00'
+  updated_at: '2026-09-14T11:37:06+08:00'
+  completed_at: ''
+  notes: ''
+- task_id: TASK-056
+  title: 稳定SQLBot模型调用延迟并复验性能目标
+  details: 当前功能/权限通过；最终30题召回P95 0.101s、选表10.85s、单表38.001s、最大79.25s。慢请求181/183/190分别在模型选表/图表/SQL阶段等待，执行SQL低于0.1s。按报告重复固定题，不扩大可见表或取消权限检查，不用快的一轮掩盖波动。
+  priority: P1
+  status: pending
+  created_at: '2026-09-21T03:51:19+08:00'
+  updated_at: '2026-09-21T03:51:19+08:00'
+  completed_at: ''
+  notes: ''
+- task_id: TASK-059
+  title: 核实并连通八院剩余原数据源，复验真实取数
+  details: 达梦1000002已按用户授权更新8.130.191.105:14253/MQB并复用base当前账号，连接/EXAMPLE详情成功。其余源仍需分别核对目标，不直接复制同一库地址。
+  priority: P1
+  status: in_progress
+  created_at: '2026-09-21T14:01:15+08:00'
+  updated_at: '2026-09-21T15:52:26+08:00'
+  completed_at: ''
+  notes: ''
+- task_id: TASK-060
+  title: 核实八院7条CUSTOM授权的行列配置来源
+  details: 共享与独立MySQL均缺dmgt_table_field_permission及dmgt_table_row_permission，7条原始绑定按原样保留。查原配置，不将CUSTOM升级READER/OWNER。
+  priority: P1
+  status: pending
+  created_at: '2026-09-21T14:01:15+08:00'
+  updated_at: '2026-09-21T14:01:15+08:00'
+  completed_at: ''
+  notes: ''
+- task_id: TASK-064
+  title: 复验重新配置模型后的SQLBot真实问数
+  details: 用户已在浏览器配置默认qwen模型，基模Qwen/Qwen3-VL-32B-Instruct。当前Data版本漂移，先恢复接口和权限，再验真实单表/关联/越权场景。
+  priority: P1
+  status: in_progress
+  created_at: '2026-09-21T14:32:47+08:00'
+  updated_at: '2026-09-21T14:57:39+08:00'
+  completed_at: ''
+  notes: ''
+- task_id: TASK-070
+  title: 发布账面筛选范围修复并完成内网空下拉验收
+  details: 账面筛选范围修复已提交到82619751并纳入20261009新JAR，130项后端回归通过；未部署新后端，内网仍需更新后核对实际响应、项目领域型号元数据及代表性大表性能。
+  priority: P1
+  status: in_progress
+  created_at: '2026-10-09T10:28:23+08:00'
+  updated_at: '2026-10-09T12:07:04+08:00'
   completed_at: ''
   notes: ''
 completed:
@@ -435,3 +487,176 @@ completed:
   updated_at: '2026-09-07T19:01:34+08:00'
   completed_at: '2026-09-07T19:01:34+08:00'
   notes: 82测试通过；前端新构建退出0、6827资源文件、37176引用检查通过；目录/解压/提升后14文件哈希通过。原用户ZIP哈希FB8DA4C7A96AFA63904CB7FFF1A0E3E82993E5EB214786845BAD781936472FAC保持未变。
+- task_id: TASK-047
+  title: 生成20260910最新后端与用户前端的完整离线交付包
+  details: 独立构建后端d1adddfa，原样前端fdc033af586c5e86bee9d0e47946def6887aba6244f1d656bdd215ea506a5172；升级覆盖20表、备用只补缺表，解压及资源哈希检查通过。
+  priority: high
+  status: completed
+  created_at: '2026-09-10T03:36:01+08:00'
+  updated_at: '2026-09-10T03:36:01+08:00'
+  completed_at: '2026-09-10T03:36:01+08:00'
+  notes: 制品完整不等于真实DWS/内网验收。源码仓库未改，本轮未提交推送。
+- task_id: TASK-048
+  title: 补齐WebGL2失败的自动兼容展示
+  details: 3D与平台共享兼容状态；SVG保留指标、轮转与明细；初始化异常及上下文丢失自动切换，释放场景。
+  priority: high
+  status: completed
+  created_at: '2026-09-10T23:34:13+08:00'
+  updated_at: '2026-09-10T23:34:13+08:00'
+  completed_at: '2026-09-10T23:34:13+08:00'
+  notes: 本地23项测试和浏览器故障模拟通过；内网实机未验，尚未打包。
+- task_id: TASK-050
+  title: 修复字段一致性F01-F08并回归
+  details: 完成字段一致性F01-F08修复：详情基本情况只读，采集为填写入口；导入必填与旧表头兼容、金额提示、平台批次来源及工作令命名统一。后端115项、前端36项和类型检查通过。无DB修改、未打包或提交。
+  priority: P1
+  status: completed
+  created_at: '2026-09-20T00:58:59+08:00'
+  updated_at: '2026-09-20T00:58:59+08:00'
+  completed_at: '2026-09-20T00:58:59+08:00'
+  notes: 详情隐藏字段不是缺陷；修复独立新增造成不完整最新记录及其他来源/模板差异。见20260920-field-consistency/FIXES.md。
+- task_id: TASK-051
+  title: 生成20260920字段一致性完整离线包
+  details: 20260920 离线包生成并通过校验：后端3b3ac419隔离clean package，115项测试；用户前端ZIP原样复制，36项与类型检查通过；SQL与0914一致，48文件哈希、ZIP
+    CRC与参数工具通过。
+  priority: high
+  status: completed
+  created_at: '2026-09-20T01:28:40+08:00'
+  updated_at: '2026-09-20T01:28:40+08:00'
+  completed_at: '2026-09-20T01:28:40+08:00'
+  notes: 188356619 bytes; SHA256 5cca5e86ffc46e78a9fc766c99592a5f3c648f4d98fe02500b5dd5f5dd761305；未写真实数据库或重启服务。
+- task_id: TASK-052
+  title: 完成 host2-dev-1 成本树云端隔离部署
+  details: 部署到/data/code/jt及/data/service/dev-1；base PostgreSQL postgres.costree_dev1独立schema；DM独立租户132；新增虚构测试数据并验证六类账号。
+  priority: P0
+  status: completed
+  created_at: '2026-09-20T23:07:43+08:00'
+  updated_at: '2026-09-20T23:07:43+08:00'
+  completed_at: '2026-09-20T23:07:43+08:00'
+  notes: 入口 http://8.130.92.192:20170/login?redirect=/cost/index；详细证据 note/70-testing/20260920-host2-dev1/README.md。保留原Docker数据目录，另建shared-runtime并仅启动已授权公共服务。
+- task_id: TASK-053
+  title: 创建八院五类测试账号并修复云端登录、补齐Data服务
+  details: 用户确认八院租户124和统一密码，新增353–357用户；复制四领域虚构数据并通过真实API设置范围。dev-1增加Data 20184并关闭本实例全量定时刷新；云端入口不再自动访问本机UKey，十六进制资源哈希规避_ad误拦，SPA入口no-cache。
+  priority: P0
+  status: completed
+  created_at: '2026-09-20T23:45:55+08:00'
+  updated_at: '2026-09-20T23:45:55+08:00'
+  completed_at: '2026-09-20T23:45:55+08:00'
+  notes: 41项前端测试与类型检查通过；新产物7024文件比对一致。浏览器已验证八院cost1登录和四领域成本树；其他数据门户菜单未授权给成本测试角色，不代表Data未运行。证据见note/70-testing/20260920-host2-dev1/bayi-login-data.md。
+- task_id: TASK-055
+  title: 合并成本树与SQLBot并部署jt dev-1独立测试环境
+  details: 保留历史合并并推送三个业务分支，隔离PG/MySQL库、只读虚构源和专用账号，部署Data与SQLBot前后端，统一20170代理。
+  priority: P0
+  status: completed
+  created_at: '2026-09-21T01:26:08+08:00'
+  updated_at: '2026-09-21T01:26:08+08:00'
+  completed_at: '2026-09-21T01:26:08+08:00'
+  notes: 完整与只建缺表备用脚本、版本哈希、测试证据和回退在note/70-testing/20260921-sqlbot-integration。未改变成本业务API/实体/库结构；未重启其他Java及公共数据库RedisNacos。
+- task_id: TASK-054
+  title: 配置模型后完成SQLBot真实问数验收
+  details: 阅读note/70-testing/20260921-sqlbot-integration/README.md；使用八院sqlbot1/2/3验证真实问数、同源关联、跨源拒绝、无权未查询及成功进度收起。仅使用两个虚构源，不登记成本库。
+  priority: P0
+  status: completed
+  created_at: '2026-09-21T01:26:08+08:00'
+  updated_at: '2026-09-21T03:51:19+08:00'
+  completed_at: '2026-09-21T03:51:19+08:00'
+  notes: 已使用真实Qwen/Qwen3-30B-A3B-Instruct-2507完成虚构测试源功能和权限闭环；30/30结果正确，普通续问与撤权拒绝通过。性能未通过，独立待办跟踪；证据在20260921-sqlbot-acceptance。
+- task_id: TASK-057
+  title: 统一jt运维入口并保留其他环境脚本
+  details: /data/scripts/jt提供发布包部署、状态、启停、重启、日志、校验封包、当前版本备份与回退。仅管理dev-1五Java、SQLBot两个容器和中台静态前端；不自动编译/拉代码/迁移数据库。
+  priority: P1
+  status: completed
+  created_at: '2026-09-21T09:30:52+08:00'
+  updated_at: '2026-09-21T09:30:52+08:00'
+  completed_at: '2026-09-21T09:30:52+08:00'
+  notes: 12项Linux隔离测试通过；全组件check通过；真实基线deploy返回NO_CHANGE，MainPID和容器ID未变。用途与限制见scripts/jt/README.md。
+- task_id: TASK-058
+  title: 修复jt默认门户和目录空信息错误
+  details: 仅更新Data；空部门统计返回空分页，缺失审计用户不再转换报错；空人员/部门及无负责人目录跳过无用RPC。
+  priority: P1
+  status: completed
+  created_at: '2026-09-21T13:38:41+08:00'
+  updated_at: '2026-09-21T13:38:41+08:00'
+  completed_at: '2026-09-21T13:38:41+08:00'
+  notes: Data 1b2fa334 已推送部署。默认域8接口、浏览器目录及sqlbot1-3权限冒烟通过；13专项通过。保留全目录类1项既有失败。
+- task_id: TASK-061
+  title: 接入两个八院目录域并默认八院测试
+  details: 从共享dataease按指定租户/域复制元数据、挂载关系及授权到dataease_dev1，保留虚构测试域；共享库只读、调度不变。
+  priority: P1
+  status: completed
+  created_at: '2026-09-21T14:01:15+08:00'
+  updated_at: '2026-09-21T14:01:15+08:00'
+  completed_at: '2026-09-21T14:01:15+08:00'
+  notes: 所有复制字段校验零差异；两域首页和目录浏览器验证成功，sqlbot1-3原查询权限未变。
+- task_id: TASK-063
+  title: 恢复实际共享Nginx中dev-1 SQLBot代理
+  details: 更新真实/data/deploy/nginx/conf.d/default.conf的20170段，自动备份/校验/平滑重载；其他段逐字保持。
+  priority: P1
+  status: completed
+  created_at: '2026-09-21T14:20:02+08:00'
+  updated_at: '2026-09-21T14:20:02+08:00'
+  completed_at: '2026-09-21T14:20:02+08:00'
+  notes: UI与资源恢复，数据库500单独阻塞。
+- task_id: TASK-062
+  title: 按用户确认重建base现有PG中的jt专用库
+  details: 用户放弃等待旧数据恢复，授权空库初始化；完成四专用库、成本授权/Embedding恢复与基础链路复验。
+  priority: P0
+  status: completed
+  created_at: '2026-09-21T14:20:02+08:00'
+  updated_at: '2026-09-21T14:32:47+08:00'
+  completed_at: '2026-09-21T14:32:47+08:00'
+  notes: 不是旧数据恢复。模型/对话未找回，重新配置模型另列待办；base公共容器未重启。
+- task_id: TASK-065
+  title: 恢复Data索引接口并完成SQLBot后台入口联调
+  details: 读取note/70-testing/20260921-sqlbot-index-admin/README.md；等待用户确认14:43 Data发布是否需保留，随后恢复或合并索引功能，复验后台和权限。不要盲目覆盖当前包。
+  priority: P0
+  status: completed
+  created_at: '2026-09-21T14:57:39+08:00'
+  updated_at: '2026-09-21T15:19:32+08:00'
+  completed_at: '2026-09-21T15:19:32+08:00'
+  notes: Data1b2fa334恢复，API权限/浏览器按钮/双源两轮索引通过；未触发全源或开启调度。
+- task_id: TASK-066
+  title: 统一成本树与SQLBot业务分支并同步服务器常用源码
+  details: 后端87b8bd2f、中台前端e495dbda、SQLBot a998c058均与远端和服务器三目录一致；原修改已备份。
+  priority: P1
+  status: completed
+  created_at: '2026-09-21T15:25:55+08:00'
+  updated_at: '2026-09-21T15:25:55+08:00'
+  completed_at: '2026-09-21T15:25:55+08:00'
+  notes: 不合master、不强推、不重启应用；本机开发配置和assistant-site未提交。
+- task_id: TASK-067
+  title: 部署SQLBot经营分析虚构六表并验证复杂同源关联
+  details: 在隔离sqlbot_demo_dev1新增事业部、客户、产品、订单、明细、回款六表；登记八院测试目录、权限、字段和关系，完成Embedding和三表真实问数。
+  priority: P1
+  status: completed
+  created_at: '2026-09-21T16:35:35+08:00'
+  updated_at: '2026-09-21T16:35:35+08:00'
+  completed_at: '2026-09-21T16:35:35+08:00'
+  notes: 请求记录7与只读SQL逐值一致；sqlbot2和受限账号未扩权；脚本及回退备份已交付。
+- task_id: TASK-068
+  title: 成本树首发经典首页统计与条形图部署服务器预览
+  details: 项目去重计数、金额条形图、仅保留经典模式；只部署jt/dev-1成本服务及前端。
+  priority: P1
+  status: completed
+  created_at: '2026-10-08T16:52:12+08:00'
+  updated_at: '2026-10-08T16:52:12+08:00'
+  completed_at: '2026-10-08T16:52:12+08:00'
+  notes: 124后端/60前端测试、成本类型检查及服务器数据/穿透/布局验证通过；详见note/70-testing/20261008-classic-preview/README.md。
+- task_id: TASK-069
+  title: 保留四六角图并优化经典首页周边条形图布局
+  details: 紧凑布局、响应式检查、仅前端服务器预览发布及待验清单。
+  priority: P1
+  status: completed
+  created_at: '2026-10-09T08:51:48+08:00'
+  updated_at: '2026-10-09T08:51:48+08:00'
+  completed_at: '2026-10-09T08:51:48+08:00'
+  notes: 61项前端测试、类型检查、数据不变/穿透/布局检查通过；详见note/70-testing/20261009-classic-layout/README.md。
+- task_id: TASK-071
+  title: 交付20261009完整离线包及保留人工填报的快照差异工作流
+  details: 20261009 当前成本前后端修改已提交推送：后端82619751、前端2a6a0d38。后端在base Linux固定归档构建，130测试通过；Linux前端3次尝试失败/资源中止后，用户明确批准本机纯构建，Windows前端新构建、61测试及类型检查通过，未启动本地服务。新完整离线包cost-server-offline-package-20261009.zip已生成，1937文件哈希、ZIP及5份SQL参数生成器通过，SHA256
+    51d368b2e699c2e133b938e4fa67ca3fa11fa3331f23d160a5612ab239af5838。完整/仅建缺表/核验SQL沿用已验证结构版本；新增云鲸2.2.1全量快照差异更新模块和操作步骤，项目基本填报表整行保留，混合表白名单更新，ID/人工字段/状态保护。工作流最终PG17合成隔离验证15+5通过，13审计schema已清理；源缺失只报告不自动删除。服务器临时swap/zswap已恢复，现有服务未重启；未改真实业务数据库或部署应用。真实DWS/PG9.2、源稳定ID/同批完成标记、云鲸现场参数与容量保留、六账号和真实金额仍待现场验收。
+  priority: P1
+  status: completed
+  created_at: '2026-10-09T12:07:04+08:00'
+  updated_at: '2026-10-09T12:07:04+08:00'
+  completed_at: '2026-10-09T12:07:04+08:00'
+  notes: 源码前后端已推送；后端Linux/前端经批准Windows新构建。构建、离线包和PG17隔离验证不等于真实内网验收。

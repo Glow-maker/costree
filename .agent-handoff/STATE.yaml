@@ -1,16 +1,17 @@
 version: 1
 project: costree
 created_at: 2026-06-12 00:04:41 +0800
-updated_at: 2026-09-08 10:45:01 +0800
-last_resumed_at: 2026-09-07 20:30:01 +0800
-current_phase: 本地授权源码已提交推送，授权并发修复及真实验收待完成
-current_goal: 仅部署cost与前端，业务授权专员管理四类成本角色及数据范围，不部署system、不直接写DM
-next_step: 审阅本轮SQL入口整理并按用户指令提交；不重建0907候选包。之后继续处理授权范围R1/R2及真实RPC、DWS和六类账号验收。
+updated_at: 2026-10-09 12:06:47 +0800
+last_resumed_at: 2026-10-09 10:46:05 +0800
+current_phase: 20261009完整成本离线包及快照差异同步已交付，待内网适配验收
+current_goal: 保持数据准确性和人工填报，完成新版部署及云鲸现场验证
+next_step: 使用20261009完整离线包开展现场验证；先核结构再更新应用，云鲸副本按05-workflow适配源字段/完成标记并隔离试跑两次。保持业务数据和既有服务，不能恢复旧全量清空任务；并行SQLBot状态不变。
 blockers:
-- 范围档案快照与roleRevision不同步；范围保存没有版本递增，详见审查报告
-- 真实旧中台RPC及管理员、授权专员、四类成本角色全流程未验证
-- 真实DWS 8.2未执行；独立PG9.2通过不代表内网验收通过
-- 原聊天分支报thread history projection expected ordinal 20669, got 20668；原会话文件存在，但未确认所有历史完整
+- SQLBot性能目标未通过，上游模型调用延迟有波动，尚未区分排队、推理与网络耗时。
+- 成本真实DWS、旧中台RPC与内网六类账号/旧浏览器仍需现场验收。
+- 八院其他原数据源尚未在本轮迁移连接；达梦1000002已按base master修复并验证。
+- 共享源存在7条CUSTOM用户授权，但缺少对应行列配置表，不能声称完整行列权限可用。
+- 云鲸2.2.1源字段、稳定ID、上游发布完成协议及中间快照容量保留需要现场适配和试点，真实DWS/PG9.2未验。
 key_files:
 - .agent-handoff/START-HERE.md
 - .agent-handoff/CURRENT.md

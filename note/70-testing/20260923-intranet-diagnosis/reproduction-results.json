@@ -1,0 +1,14 @@
+{
+  "routeRace": {
+    "reproduced": true,
+    "condition": "unresolved legacy management-unit name + delayed filter load + drawer closed event",
+    "openedAfterReload": 0,
+    "itemCodeCleared": true
+  },
+  "missingDictionaryClassification": {
+    "reproduced": true,
+    "insideInstitute": true,
+    "manageUnitName": "OUTSIDE_NAME_NOT_MATCHED",
+    "manageUnitGroup": "UNCLASSIFIED"
+  }
+}

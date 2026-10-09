@@ -1,0 +1,46 @@
+diff --git a/yudao-module-cost/yudao-module-cost-biz/src/main/java/cn/iocoder/yudao/module/cost/dal/mysql/workorderledger/CostWorkOrderLedgerDetailMapper.java b/yudao-module-cost/yudao-module-cost-biz/src/main/java/cn/iocoder/yudao/module/cost/dal/mysql/workorderledger/CostWorkOrderLedgerDetailMapper.java
+index 7a82116a..a86f5505 100644
+--- a/yudao-module-cost/yudao-module-cost-biz/src/main/java/cn/iocoder/yudao/module/cost/dal/mysql/workorderledger/CostWorkOrderLedgerDetailMapper.java
++++ b/yudao-module-cost/yudao-module-cost-biz/src/main/java/cn/iocoder/yudao/module/cost/dal/mysql/workorderledger/CostWorkOrderLedgerDetailMapper.java
+@@ -480,9 +480,9 @@ public interface CostWorkOrderLedgerDetailMapper extends BaseMapperX<CostWorkOrd
+             + "<when test='query.optionType == \"MODEL\"'>p.model_code AS value, "
+             + "COALESCE(MAX(p.model_name), p.model_code) AS label, p.domain_code AS domain_code, "
+             + "p.model_code AS model_code</when>"
+-            + "<when test='query.optionType == \"PROJECT\"'>p.project_code AS value, "
+-            + "COALESCE(MAX(p.project_name), p.project_code) AS label, p.domain_code AS domain_code, "
+-            + "p.model_code AS model_code, p.project_code AS project_code</when>"
++            + "<when test='query.optionType == \"PROJECT\"'>d.project_code AS value, "
++            + "COALESCE(MAX(p.project_name), d.project_code) AS label, p.domain_code AS domain_code, "
++            + "p.model_code AS model_code, d.project_code AS project_code</when>"
+             + "<when test='query.optionType == \"MANAGE_UNIT\"'>ud.manage_unit_code AS value, "
+             + "COALESCE(MAX(ud.manage_unit_name), ud.manage_unit_code) AS label, "
+             + "ud.manage_unit_code AS manage_unit_code</when>"
+@@ -492,7 +492,7 @@ public interface CostWorkOrderLedgerDetailMapper extends BaseMapperX<CostWorkOrd
+             + "<otherwise>d.work_order_no AS value, COALESCE(MAX(d.work_order_name), d.work_order_no) AS label, "
+             + "d.project_code AS project_code, d.accounting_unit_code AS accounting_unit_code, "
+             + "d.work_order_no AS work_order_no</otherwise></choose> "
+-            + "FROM cost_work_order_ledger_detail d JOIN cost_project p ON p.deleted = 0 "
++            + "FROM cost_work_order_ledger_detail d LEFT JOIN cost_project p ON p.deleted = 0 "
+             + "AND p.tenant_id = d.tenant_id AND p.project_code = d.project_code "
+             + UNIT_DICTIONARY_JOIN + "WHERE 1 = 1 " + LEDGER_FILTERS
+             + "<choose>"
+@@ -502,8 +502,8 @@ public interface CostWorkOrderLedgerDetailMapper extends BaseMapperX<CostWorkOrd
+             + "<when test='query.optionType == \"MODEL\"'>AND p.model_code IS NOT NULL AND TRIM(p.model_code) != '' "
+             + "<if test='query.keyword != null'>AND (p.model_code LIKE CONCAT('%', #{query.keyword}, '%') "
+             + "OR p.model_name LIKE CONCAT('%', #{query.keyword}, '%'))</if></when>"
+-            + "<when test='query.optionType == \"PROJECT\"'>AND p.project_code IS NOT NULL AND TRIM(p.project_code) != '' "
+-            + "<if test='query.keyword != null'>AND (p.project_code LIKE CONCAT('%', #{query.keyword}, '%') "
++            + "<when test='query.optionType == \"PROJECT\"'>AND d.project_code IS NOT NULL AND TRIM(d.project_code) != '' "
++            + "<if test='query.keyword != null'>AND (d.project_code LIKE CONCAT('%', #{query.keyword}, '%') "
+             + "OR p.project_name LIKE CONCAT('%', #{query.keyword}, '%'))</if></when>"
+             + "<when test='query.optionType == \"MANAGE_UNIT\"'>AND ud.manage_unit_code IS NOT NULL "
+             + "AND TRIM(ud.manage_unit_code) != '' <if test='query.keyword != null'>"
+@@ -519,7 +519,7 @@ public interface CostWorkOrderLedgerDetailMapper extends BaseMapperX<CostWorkOrd
+             + "GROUP BY <choose>"
+             + "<when test='query.optionType == \"DOMAIN\"'>p.domain_code</when>"
+             + "<when test='query.optionType == \"MODEL\"'>p.domain_code, p.model_code</when>"
+-            + "<when test='query.optionType == \"PROJECT\"'>p.domain_code, p.model_code, p.project_code</when>"
++            + "<when test='query.optionType == \"PROJECT\"'>p.domain_code, p.model_code, d.project_code</when>"
+             + "<when test='query.optionType == \"MANAGE_UNIT\"'>ud.manage_unit_code</when>"
+             + "<when test='query.optionType == \"ACCOUNTING_UNIT\"'>ud.manage_unit_code, d.accounting_unit_code</when>"
+             + "<otherwise>d.project_code, d.accounting_unit_code, d.work_order_no</otherwise></choose> "

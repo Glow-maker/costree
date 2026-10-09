@@ -1,0 +1,47 @@
+{
+  "business_schema": "costree_workflow_audit_20261009_030826_57080_biz",
+  "stage_schema": "costree_workflow_audit_20261009_030826_57080_stage",
+  "tenant": 981009,
+  "real_dws_verified": false,
+  "tests": [
+    {
+      "name": "actual-daily-generated-sql-first-import",
+      "passed": true
+    },
+    {
+      "name": "daily-unique-batch-and-protected-fields-id-preserved",
+      "passed": true
+    },
+    {
+      "name": "real-upstream-tag-recorded-in-batch-register",
+      "passed": true
+    },
+    {
+      "name": "daily-original-yuan-before-conversion-precision",
+      "passed": true
+    },
+    {
+      "name": "upstream-not-ready-rejects-and-rolls-back-daily-transaction",
+      "passed": true
+    }
+  ],
+  "template_sha256": {
+    "00-setup.sql": "f05961d6b700accce457bbcdbf0ec2f092652a3981b4fbb9bd480b2f0a06a1f8",
+    "10-begin-batch.sql": "32a4beb446171c2d0f343a47d149b2e11574a4033e493a15a09731d35d971df1",
+    "21-load-stg_model_node.template.sql": "0c678129f491556185dad3be0ebd63850041a8cafd69326f2d36d1a96bc38cf7",
+    "22-load-stg_project.template.sql": "91b1b85168dc227a86fc4dae490d79a26ab640c23b4c5a850b31ed4f62620661",
+    "23-load-stg_unit_dict.template.sql": "9c1a373f99d7f9f8a83248b6c100b25fd2b3495065a6774980ef0996879ca908",
+    "24-load-stg_unit_amount.template.sql": "df4fb031cfed82edd2075003e3ccb45c5b7402b013d77c6827d02908526644fa",
+    "25-load-stg_work_order.template.sql": "a128bdeb40b55f0abd55638be7e41565fe185feb5c18787514dc229a8016bcf4",
+    "26-load-stg_ledger_detail.template.sql": "2fd4434e96953f7c7516fe31c73c8638ab2a50a3ef5fdfb587ec65181bdebe59",
+    "90-atomic-sync.template.sql": "d158a671a81adb5e1535c39b167ff768e2f53bb0a4297c6e252c27a13a8e257d",
+    "95-missing-report.sql": "246b21badb2fbcaf31e1064b56a7ceb3db9e60af2c86bc83a82e594510f8fdb0",
+    "99-manual-abort.template.sql": "17f0cc577a67f4ddb3f3d5caca52e751865d06eb26113401ac6584342843d4ef"
+  },
+  "kind": "actual-generated-daily-runner",
+  "source_schema": "costree_workflow_audit_20261009_030826_57080_src",
+  "daily_runner_sha256": "4f6f75e0e9a9a198f068cfa470219ca3f8073b17f55fea87d18c3229f786afb4",
+  "server": "PostgreSQL 17.11 (Debian 17.11-1.pgdg12+2) on x86_64-pc-linux-gnu, compiled by gcc (Debian 12.2.0-14+deb12u1) 12.2.0, 64-bit|postgres|root",
+  "passed": true,
+  "templates_unchanged_on_disk": true
+}
