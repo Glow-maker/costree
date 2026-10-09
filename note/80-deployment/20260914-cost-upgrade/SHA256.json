@@ -1,6 +1,0 @@
-{
-  "01-full-upgrade.sql": "537720bf3d01e007fd9bed52ff3c7c4c48e46b605758d83e0af66faf4298ee16",
-  "02-backup-create-missing-tables.sql": "0e7564d523e88ded0c0342fa1b6f3773c7236760f4bf64b7d8d772f187bdc51c",
-  "03-verify-structure.sql": "f9a2a29d1d9bd1edfce269edecacc8e57711e05940f1cfd26daf1fbdccd0fd4b",
-  "05-reporting-name-width.sql": "b30b06cbb5c31257d1e6b3353177d232034fd7df78dd58ca54518d4faf57a037"
-}

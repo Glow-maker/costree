@@ -1,4 +1,0 @@
-# Preserve bytes of checksum-verified offline release inputs across Windows/Linux.
-/tools/release-20261009/** -text whitespace=cr-at-eol
-/note/80-deployment/20260914-cost-upgrade/** -text whitespace=cr-at-eol
-/note/70-testing/20261009-offline-release/workflow-isolated/** -text whitespace=cr-at-eol

@@ -21,8 +21,18 @@ build/
 Thumbs.db
 .idea/
 .vscode/
-cost-server-offline-package/
-cost-server-offline-package.zip
-cost-intranet-data-kit/
-cost-intranet-data-kit.zip
+# Offline deliveries are maintained locally, including dated releases.
+/cost-server-offline-package*/
+/cost-server-offline-package*.zip*
+/cost-intranet-data-kit*/
+/cost-intranet-data-kit*.zip*
+/.preview/
+/deploy/cost-server-offline-template/
+/tools/build-cost-server-offline-package.ps1
+/tools/release-*/
+/tools/sql-delivery-*/
+/note/80-deployment/*-cost-upgrade/
+/note/80-deployment/*-warning-direct-ddl-preview.sql
+/note/80-deployment/*-warning-schema-diagnostic.sql
+/note/70-testing/*-release/
 dist-prod-*.zip
