@@ -1,0 +1,483 @@
+{
+  "date": "2026-10-13",
+  "backendBaseCommit": "b02e99f1a2021e70d605ff8ca03e3d04bd4eaa40",
+  "purpose": "Historical SQL and retired package tools; not an execution entry",
+  "files": [
+    {
+      "repository": "backend",
+      "source": "sql/jt/mysql/costree-amount-sync-template.sql",
+      "destination": "backend/sql/jt/mysql/costree-amount-sync-template.sql",
+      "size": 18688,
+      "sha256": "98fbd96256fdd841974ac534e0ec98ea5144aa15b9a024b26a0febb31196397f"
+    },
+    {
+      "repository": "backend",
+      "source": "sql/jt/mysql/costree-cost-seed.sql",
+      "destination": "backend/sql/jt/mysql/costree-cost-seed.sql",
+      "size": 148557,
+      "sha256": "eeb1ae458edd9936385e74d8af4bda522efd0b2bbfa9f0330241dece9ff53bcc"
+    },
+    {
+      "repository": "backend",
+      "source": "sql/jt/mysql/costree-unit-hierarchy-demo.sql",
+      "destination": "backend/sql/jt/mysql/costree-unit-hierarchy-demo.sql",
+      "size": 16241,
+      "sha256": "4d1d80369f33fd41a0b3d6c0cfcf1ac5037b9773411a9f8599a749a9c4df90be"
+    },
+    {
+      "repository": "backend",
+      "source": "sql/jt/postgresql/costree-amount-sync-template.sql",
+      "destination": "backend/sql/jt/postgresql/costree-amount-sync-template.sql",
+      "size": 17121,
+      "sha256": "d39a13ded89feace3f42b823e6d03164064864cc80b69e7a396a59a05047805a"
+    },
+    {
+      "repository": "backend",
+      "source": "sql/jt/postgresql/costree-cost-20260820-warning-workflow.sql",
+      "destination": "backend/sql/jt/postgresql/costree-cost-20260820-warning-workflow.sql",
+      "size": 3951,
+      "sha256": "440899ef0b2fb4a7fe61484970fec194ca42308b7e6b6e5000f91b483ebc7b2d"
+    },
+    {
+      "repository": "backend",
+      "source": "sql/jt/postgresql/costree-cost-seed.sql",
+      "destination": "backend/sql/jt/postgresql/costree-cost-seed.sql",
+      "size": 147686,
+      "sha256": "de613aeb631f0fdd423792a1439c2b6d5c575830ff03e557b59c1b3c424c77c3"
+    },
+    {
+      "repository": "backend",
+      "source": "sql/jt/postgresql/costree-demo-source/00-create-source-schema.sql",
+      "destination": "backend/sql/jt/postgresql/costree-demo-source/00-create-source-schema.sql",
+      "size": 10177,
+      "sha256": "ee1a599f827ed96c569644b873ab335360388b7f74c0ddf870f8fbb08230d78f"
+    },
+    {
+      "repository": "backend",
+      "source": "sql/jt/postgresql/costree-demo-source/01-seed-two-projects.sql",
+      "destination": "backend/sql/jt/postgresql/costree-demo-source/01-seed-two-projects.sql",
+      "size": 29193,
+      "sha256": "ac1dfd2c642ca7c17331dc62e3ca8fec06350bf4c1fa5fd20f4c6733591b2f3a"
+    },
+    {
+      "repository": "backend",
+      "source": "sql/jt/postgresql/costree-demo-source/02-sync-to-cost.sql",
+      "destination": "backend/sql/jt/postgresql/costree-demo-source/02-sync-to-cost.sql",
+      "size": 41913,
+      "sha256": "107a8cfd09520ef582db165bd4e0fcc7d0b278498e9753ca7963f6b2579ea359"
+    },
+    {
+      "repository": "backend",
+      "source": "sql/jt/postgresql/costree-demo-source/03-verify.sql",
+      "destination": "backend/sql/jt/postgresql/costree-demo-source/03-verify.sql",
+      "size": 13423,
+      "sha256": "fbe0cc10c1329fc87beb39da6fc954bf742cb1ef83d432d2eb00d718d90c1df4"
+    },
+    {
+      "repository": "backend",
+      "source": "sql/jt/postgresql/costree-demo-source/99-cleanup.sql",
+      "destination": "backend/sql/jt/postgresql/costree-demo-source/99-cleanup.sql",
+      "size": 4750,
+      "sha256": "c572a79eccf23ce4bc8163518d473f754f5e9b1f87221f925ab404a065032d60"
+    },
+    {
+      "repository": "backend",
+      "source": "sql/jt/postgresql/costree-demo-source/README.md",
+      "destination": "backend/sql/jt/postgresql/costree-demo-source/README.md",
+      "size": 3439,
+      "sha256": "c784528376783388aecf81938ff91c5409ff430cef16d41529f002935fb2ccf8"
+    },
+    {
+      "repository": "backend",
+      "source": "sql/jt/postgresql/costree-deploy/build-package.ps1",
+      "destination": "backend/sql/jt/postgresql/costree-deploy/build-package.ps1",
+      "size": 4254,
+      "sha256": "7097bf8f0ba152588914f6fd127e06133f30bf0c9caaf1ca20e278948ae67b5c"
+    },
+    {
+      "repository": "backend",
+      "source": "sql/jt/postgresql/costree-deploy/verify-package.ps1",
+      "destination": "backend/sql/jt/postgresql/costree-deploy/verify-package.ps1",
+      "size": 2396,
+      "sha256": "1e040aea235bc6167b0f42d42c7114a98e17885f4f3021744c5f3559c0dd6e2b"
+    },
+    {
+      "repository": "backend",
+      "source": "sql/jt/postgresql/costree-integration/00-create-staging.sql",
+      "destination": "backend/sql/jt/postgresql/costree-integration/00-create-staging.sql",
+      "size": 10334,
+      "sha256": "4262e39b97947c2ab82f61712c1b453a386110b45f7004771f15ebe82497e4a5"
+    },
+    {
+      "repository": "backend",
+      "source": "sql/jt/postgresql/costree-integration/10-sync-to-cost.sql",
+      "destination": "backend/sql/jt/postgresql/costree-integration/10-sync-to-cost.sql",
+      "size": 40976,
+      "sha256": "8ad8001146b9591acd45bcf4fb966931eeefb6261cf437d0bd32399f111c16aa"
+    },
+    {
+      "repository": "backend",
+      "source": "sql/jt/postgresql/costree-integration/20-verify-sync.sql",
+      "destination": "backend/sql/jt/postgresql/costree-integration/20-verify-sync.sql",
+      "size": 6730,
+      "sha256": "63dd6b2e6043e47c3875704eecb5da2f2aa592aed0d44a82338d897ae0333cfe"
+    },
+    {
+      "repository": "backend",
+      "source": "sql/jt/postgresql/costree-integration/30-diagnose-book-zero.sql",
+      "destination": "backend/sql/jt/postgresql/costree-integration/30-diagnose-book-zero.sql",
+      "size": 5139,
+      "sha256": "74ac9d40213db945fe151fcb124e4a253956e1b9203bf02b219a61cce84bfcb5"
+    },
+    {
+      "repository": "backend",
+      "source": "sql/jt/postgresql/costree-integration/csv/ads_lc_lshsxm2022.csv",
+      "destination": "backend/sql/jt/postgresql/costree-integration/csv/ads_lc_lshsxm2022.csv",
+      "size": 224,
+      "sha256": "9bc719c12463e967aca218dc531e09ba688848f70a4f63097e91fcb2f2104e85"
+    },
+    {
+      "repository": "backend",
+      "source": "sql/jt/postgresql/costree-integration/csv/dwd_bd_bfcustomitem_gzl.csv",
+      "destination": "backend/sql/jt/postgresql/costree-integration/csv/dwd_bd_bfcustomitem_gzl.csv",
+      "size": 375,
+      "sha256": "55be871ebdbc7b6015b56a9db4537e50d58a666f798da7b3bd8e4d664c8adfac"
+    },
+    {
+      "repository": "backend",
+      "source": "sql/jt/postgresql/costree-integration/csv/dws_bu_pz_pzmx_gzl.csv",
+      "destination": "backend/sql/jt/postgresql/costree-integration/csv/dws_bu_pz_pzmx_gzl.csv",
+      "size": 251,
+      "sha256": "3abd532c725e02814554f46eeb12199c5680c41d102df8b57a61e0b6f1b18516"
+    },
+    {
+      "repository": "backend",
+      "source": "sql/jt/postgresql/costree-integration/csv/precontrol_project_unit_amount.csv",
+      "destination": "backend/sql/jt/postgresql/costree-integration/csv/precontrol_project_unit_amount.csv",
+      "size": 172,
+      "sha256": "c0084e35f8620d67c57dad4471d57d04f78e833831bcbb1b5162109670309d92"
+    },
+    {
+      "repository": "backend",
+      "source": "sql/jt/postgresql/costree-integration/csv/project_office_fill.csv",
+      "destination": "backend/sql/jt/postgresql/costree-integration/csv/project_office_fill.csv",
+      "size": 287,
+      "sha256": "7ccf66225f4cbdea5f25ec7d7c5f36326cb1c77b12a5a031c3ac6bb8c69af502"
+    },
+    {
+      "repository": "backend",
+      "source": "sql/jt/postgresql/costree-integration/csv/unit_dict.csv",
+      "destination": "backend/sql/jt/postgresql/costree-integration/csv/unit_dict.csv",
+      "size": 240,
+      "sha256": "1fafa2959f68eab6a3daf59c235db74de981cf4e3786ae2ccab6b27c05517610"
+    },
+    {
+      "repository": "backend",
+      "source": "sql/jt/postgresql/costree-integration/csv/work_order_fill.csv",
+      "destination": "backend/sql/jt/postgresql/costree-integration/csv/work_order_fill.csv",
+      "size": 144,
+      "sha256": "d217b4aa95da8a15f2c87870235a249d763fad1a26e33c4a957ca9aca95d405c"
+    },
+    {
+      "repository": "backend",
+      "source": "sql/jt/postgresql/costree-integration/load-and-sync.ps1",
+      "destination": "backend/sql/jt/postgresql/costree-integration/load-and-sync.ps1",
+      "size": 2676,
+      "sha256": "5e74f7349f72bc3c17955a5c8c724e689ebe32f06d729f6b592cbd16695ce2ef"
+    },
+    {
+      "repository": "backend",
+      "source": "sql/jt/postgresql/costree-integration/load-and-sync.sh",
+      "destination": "backend/sql/jt/postgresql/costree-integration/load-and-sync.sh",
+      "size": 2178,
+      "sha256": "eeb00bb635330b48d778206814194f3361ae2f7e2066ae69e307147962cc32ab"
+    },
+    {
+      "repository": "backend",
+      "source": "sql/jt/postgresql/costree-integration/README.md",
+      "destination": "backend/sql/jt/postgresql/costree-integration/README.md",
+      "size": 3819,
+      "sha256": "1f8909ac542c8752d271747b17db31b655ad1391bde668c46af990445665fca7"
+    },
+    {
+      "repository": "backend",
+      "source": "sql/jt/postgresql/costree-two-model-pilot-import.sql",
+      "destination": "backend/sql/jt/postgresql/costree-two-model-pilot-import.sql",
+      "size": 29737,
+      "sha256": "7e5bc67dc701da06bfba598ed7a26176154117acdd63bc14ab738b9a02bc80de"
+    },
+    {
+      "repository": "backend",
+      "source": "sql/jt/postgresql/costree-unit-hierarchy-demo.sql",
+      "destination": "backend/sql/jt/postgresql/costree-unit-hierarchy-demo.sql",
+      "size": 15197,
+      "sha256": "7ab4e172ec1ab72311c05d7bdca3a673e980ba81ffca6f9c332d272d365bd010"
+    },
+    {
+      "repository": "backend",
+      "source": "sql/jt/postgresql92/costree-demo-source/00-create-source-schema.sql",
+      "destination": "backend/sql/jt/postgresql92/costree-demo-source/00-create-source-schema.sql",
+      "size": 13775,
+      "sha256": "5559a5ed62bcb0b77f22187e5cf6e512f530227cf08c9f8aca960afd54b807ef"
+    },
+    {
+      "repository": "backend",
+      "source": "sql/jt/postgresql92/costree-demo-source/01-seed-two-projects.sql",
+      "destination": "backend/sql/jt/postgresql92/costree-demo-source/01-seed-two-projects.sql",
+      "size": 29193,
+      "sha256": "ac1dfd2c642ca7c17331dc62e3ca8fec06350bf4c1fa5fd20f4c6733591b2f3a"
+    },
+    {
+      "repository": "backend",
+      "source": "sql/jt/postgresql92/costree-demo-source/02-sync-to-cost.sql",
+      "destination": "backend/sql/jt/postgresql92/costree-demo-source/02-sync-to-cost.sql",
+      "size": 47160,
+      "sha256": "9056518b37f7205094382d5d7f96c46c544c03f155b7e047dc43dc9ec50428a2"
+    },
+    {
+      "repository": "backend",
+      "source": "sql/jt/postgresql92/costree-demo-source/03-verify.sql",
+      "destination": "backend/sql/jt/postgresql92/costree-demo-source/03-verify.sql",
+      "size": 13423,
+      "sha256": "fbe0cc10c1329fc87beb39da6fc954bf742cb1ef83d432d2eb00d718d90c1df4"
+    },
+    {
+      "repository": "backend",
+      "source": "sql/jt/postgresql92/costree-demo-source/99-cleanup.sql",
+      "destination": "backend/sql/jt/postgresql92/costree-demo-source/99-cleanup.sql",
+      "size": 4971,
+      "sha256": "d5ae1e708664cacea877f2335c25e2c4cda7c5cfe2458022a2d902c93fbd752d"
+    },
+    {
+      "repository": "backend",
+      "source": "sql/jt/postgresql92/costree-demo-source/README.md",
+      "destination": "backend/sql/jt/postgresql92/costree-demo-source/README.md",
+      "size": 3377,
+      "sha256": "5fdeb99ec3f28d4985066edf5cff2f946dc7f35cbf48dd187f8cb70c91468319"
+    },
+    {
+      "repository": "backend",
+      "source": "sql/jt/postgresql92/costree-deploy/build-package.ps1",
+      "destination": "backend/sql/jt/postgresql92/costree-deploy/build-package.ps1",
+      "size": 4508,
+      "sha256": "467f2952203bd68835070b0e5d99b9783f5768b9bd5a46b5ef0b7af163050f18"
+    },
+    {
+      "repository": "backend",
+      "source": "sql/jt/postgresql92/costree-deploy/verify-dws82-compatibility.ps1",
+      "destination": "backend/sql/jt/postgresql92/costree-deploy/verify-dws82-compatibility.ps1",
+      "size": 6185,
+      "sha256": "b5196e178ca2965b5f941657e324bb6f775aa4400e86607cb1c38f6712a46b1e"
+    },
+    {
+      "repository": "backend",
+      "source": "sql/jt/postgresql92/costree-deploy/verify-dws82-compatibility.sh",
+      "destination": "backend/sql/jt/postgresql92/costree-deploy/verify-dws82-compatibility.sh",
+      "size": 2829,
+      "sha256": "5294236ade3cf217a78d7142aa753cff4ba6a85c844fbf55b83d9eff4dd0b0e3"
+    },
+    {
+      "repository": "backend",
+      "source": "sql/jt/postgresql92/costree-deploy/verify-package.ps1",
+      "destination": "backend/sql/jt/postgresql92/costree-deploy/verify-package.ps1",
+      "size": 3103,
+      "sha256": "c226ce13d573e879fa54dd81339e080bbea836e3816aaeec58a3dbbb65b2eb3d"
+    },
+    {
+      "repository": "backend",
+      "source": "sql/jt/postgresql92/costree-integration/00-create-staging.sql",
+      "destination": "backend/sql/jt/postgresql92/costree-integration/00-create-staging.sql",
+      "size": 14017,
+      "sha256": "fca948aba5ca2c8681a3d3d95e984da7503908ede709e91e1eeb66e4e4597b14"
+    },
+    {
+      "repository": "backend",
+      "source": "sql/jt/postgresql92/costree-integration/10-sync-to-cost.sql",
+      "destination": "backend/sql/jt/postgresql92/costree-integration/10-sync-to-cost.sql",
+      "size": 47212,
+      "sha256": "25f3f5bbcb1369d8151fb95f9b90fafc8ad71f9f9aaa9dfe071a6b54bc4e70e6"
+    },
+    {
+      "repository": "backend",
+      "source": "sql/jt/postgresql92/costree-integration/20-verify-sync.sql",
+      "destination": "backend/sql/jt/postgresql92/costree-integration/20-verify-sync.sql",
+      "size": 7484,
+      "sha256": "5d93b577a9cce54111c0e16b9a6a8634fe0d7b092dc1a0865057ea254b17c5e7"
+    },
+    {
+      "repository": "backend",
+      "source": "sql/jt/postgresql92/costree-integration/30-diagnose-book-zero.sql",
+      "destination": "backend/sql/jt/postgresql92/costree-integration/30-diagnose-book-zero.sql",
+      "size": 5143,
+      "sha256": "613daac2d9bc43a1d45fc7ae479fdb089d71ee7ab7ec394239f6ff1b885d815b"
+    },
+    {
+      "repository": "backend",
+      "source": "sql/jt/postgresql92/costree-integration/csv/ads_lc_lshsxm2022.csv",
+      "destination": "backend/sql/jt/postgresql92/costree-integration/csv/ads_lc_lshsxm2022.csv",
+      "size": 224,
+      "sha256": "9bc719c12463e967aca218dc531e09ba688848f70a4f63097e91fcb2f2104e85"
+    },
+    {
+      "repository": "backend",
+      "source": "sql/jt/postgresql92/costree-integration/csv/dwd_bd_bfcustomitem_gzl.csv",
+      "destination": "backend/sql/jt/postgresql92/costree-integration/csv/dwd_bd_bfcustomitem_gzl.csv",
+      "size": 375,
+      "sha256": "55be871ebdbc7b6015b56a9db4537e50d58a666f798da7b3bd8e4d664c8adfac"
+    },
+    {
+      "repository": "backend",
+      "source": "sql/jt/postgresql92/costree-integration/csv/dws_bu_pz_pzmx_gzl.csv",
+      "destination": "backend/sql/jt/postgresql92/costree-integration/csv/dws_bu_pz_pzmx_gzl.csv",
+      "size": 251,
+      "sha256": "3abd532c725e02814554f46eeb12199c5680c41d102df8b57a61e0b6f1b18516"
+    },
+    {
+      "repository": "backend",
+      "source": "sql/jt/postgresql92/costree-integration/csv/precontrol_project_unit_amount.csv",
+      "destination": "backend/sql/jt/postgresql92/costree-integration/csv/precontrol_project_unit_amount.csv",
+      "size": 172,
+      "sha256": "c0084e35f8620d67c57dad4471d57d04f78e833831bcbb1b5162109670309d92"
+    },
+    {
+      "repository": "backend",
+      "source": "sql/jt/postgresql92/costree-integration/csv/project_office_fill.csv",
+      "destination": "backend/sql/jt/postgresql92/costree-integration/csv/project_office_fill.csv",
+      "size": 287,
+      "sha256": "7ccf66225f4cbdea5f25ec7d7c5f36326cb1c77b12a5a031c3ac6bb8c69af502"
+    },
+    {
+      "repository": "backend",
+      "source": "sql/jt/postgresql92/costree-integration/csv/unit_dict.csv",
+      "destination": "backend/sql/jt/postgresql92/costree-integration/csv/unit_dict.csv",
+      "size": 240,
+      "sha256": "1fafa2959f68eab6a3daf59c235db74de981cf4e3786ae2ccab6b27c05517610"
+    },
+    {
+      "repository": "backend",
+      "source": "sql/jt/postgresql92/costree-integration/csv/work_order_fill.csv",
+      "destination": "backend/sql/jt/postgresql92/costree-integration/csv/work_order_fill.csv",
+      "size": 144,
+      "sha256": "d217b4aa95da8a15f2c87870235a249d763fad1a26e33c4a957ca9aca95d405c"
+    },
+    {
+      "repository": "backend",
+      "source": "sql/jt/postgresql92/costree-integration/load-and-sync.ps1",
+      "destination": "backend/sql/jt/postgresql92/costree-integration/load-and-sync.ps1",
+      "size": 3030,
+      "sha256": "63d07dfb82702b150711c2c35556c58c96d09211bbdd526954ca4f8d2290a7bf"
+    },
+    {
+      "repository": "backend",
+      "source": "sql/jt/postgresql92/costree-integration/load-and-sync.sh",
+      "destination": "backend/sql/jt/postgresql92/costree-integration/load-and-sync.sh",
+      "size": 2510,
+      "sha256": "789d0e0a9746c24ef8154e81bf70609720b63fc57a2980960c2ae3b6f0bf92e0"
+    },
+    {
+      "repository": "backend",
+      "source": "sql/jt/postgresql92/costree-integration/manual/00-使用前总检查.sql",
+      "destination": "backend/sql/jt/postgresql92/costree-integration/manual/00-使用前总检查.sql",
+      "size": 6099,
+      "sha256": "70412e4ea0088ba83a50f79e7edbd20aff468d3f9317b81465054acc01b8c614"
+    },
+    {
+      "repository": "backend",
+      "source": "sql/jt/postgresql92/costree-integration/manual/01-同步型号树-cost_model_node.sql",
+      "destination": "backend/sql/jt/postgresql92/costree-integration/manual/01-同步型号树-cost_model_node.sql",
+      "size": 5751,
+      "sha256": "9c1920cc0d256731ac9790f0e813bc4a11c6217622f27520953ebb1e9cea51e7"
+    },
+    {
+      "repository": "backend",
+      "source": "sql/jt/postgresql92/costree-integration/manual/02-同步项目-cost_project.sql",
+      "destination": "backend/sql/jt/postgresql92/costree-integration/manual/02-同步项目-cost_project.sql",
+      "size": 6109,
+      "sha256": "ec45264a0366bc2c175387f62bbc3f3a0048024c77bee9ebada93dbec9775ef3"
+    },
+    {
+      "repository": "backend",
+      "source": "sql/jt/postgresql92/costree-integration/manual/03-同步单位字典-cost_unit_dict.sql",
+      "destination": "backend/sql/jt/postgresql92/costree-integration/manual/03-同步单位字典-cost_unit_dict.sql",
+      "size": 7219,
+      "sha256": "b1bcbc0f3abb6426700851e8406e15cfcd8498546b031b70a45703cd6603d90a"
+    },
+    {
+      "repository": "backend",
+      "source": "sql/jt/postgresql92/costree-integration/manual/04-同步单位金额-cost_unit_cost_detail.sql",
+      "destination": "backend/sql/jt/postgresql92/costree-integration/manual/04-同步单位金额-cost_unit_cost_detail.sql",
+      "size": 7746,
+      "sha256": "97b93087026d713701a411df96375fd101d0b0bac945e2a1d20edaf4c92e4229"
+    },
+    {
+      "repository": "backend",
+      "source": "sql/jt/postgresql92/costree-integration/manual/05-同步工作令-cost_work_order.sql",
+      "destination": "backend/sql/jt/postgresql92/costree-integration/manual/05-同步工作令-cost_work_order.sql",
+      "size": 8619,
+      "sha256": "fa83d140b5e54b9d40118ee9d4653da185b5b05a13d5313ae15c6655b222c7d8"
+    },
+    {
+      "repository": "backend",
+      "source": "sql/jt/postgresql92/costree-integration/manual/06-同步账面明细-cost_work_order_ledger_detail.sql",
+      "destination": "backend/sql/jt/postgresql92/costree-integration/manual/06-同步账面明细-cost_work_order_ledger_detail.sql",
+      "size": 14127,
+      "sha256": "a4152b7605366f7d0662bbc526722d03a3c52ee1d15aded0812a9fc222c594c1"
+    },
+    {
+      "repository": "backend",
+      "source": "sql/jt/postgresql92/costree-integration/manual/07-重算工作令账面成本.sql",
+      "destination": "backend/sql/jt/postgresql92/costree-integration/manual/07-重算工作令账面成本.sql",
+      "size": 6036,
+      "sha256": "cacf76e4580f784d85002df79bdab7dc0e31c11873045fdb6718b4ac111d6c34"
+    },
+    {
+      "repository": "backend",
+      "source": "sql/jt/postgresql92/costree-integration/manual/08-全链路验收.sql",
+      "destination": "backend/sql/jt/postgresql92/costree-integration/manual/08-全链路验收.sql",
+      "size": 10721,
+      "sha256": "34a3d08342f6f319142034e78296796faf9c364dde192ca4f43784ca065536ae"
+    },
+    {
+      "repository": "backend",
+      "source": "sql/jt/postgresql92/costree-integration/manual/09-定时任务执行顺序.md",
+      "destination": "backend/sql/jt/postgresql92/costree-integration/manual/09-定时任务执行顺序.md",
+      "size": 2797,
+      "sha256": "b3002e221b5b14972603cc989140b29bc9cf1bb616be0b0a22f2054c6554f32b"
+    },
+    {
+      "repository": "backend",
+      "source": "sql/jt/postgresql92/costree-integration/manual/README-内网字段映射说明.md",
+      "destination": "backend/sql/jt/postgresql92/costree-integration/manual/README-内网字段映射说明.md",
+      "size": 4653,
+      "sha256": "bcfb7eec426b646a0aba1d19d31a495a5507750d4d5fc4fe80e4aa786fe65036"
+    },
+    {
+      "repository": "backend",
+      "source": "sql/jt/postgresql92/costree-integration/README.md",
+      "destination": "backend/sql/jt/postgresql92/costree-integration/README.md",
+      "size": 4536,
+      "sha256": "3d2881079f34905395ee91edbc2e5ecf3ab7359007b7bf2532c3f708164c17a4"
+    },
+    {
+      "repository": "backend",
+      "source": "sql/jt/postgresql92/costree-reset/00-clear-cost-business-data.sql",
+      "destination": "backend/sql/jt/postgresql92/costree-reset/00-clear-cost-business-data.sql",
+      "size": 6694,
+      "sha256": "176e4b3ae884c53e575cb2e33175f4d35991c8e603982261cd3d911b2504f9c8"
+    },
+    {
+      "repository": "backend",
+      "source": "sql/jt/postgresql92/costree-reset/README.md",
+      "destination": "backend/sql/jt/postgresql92/costree-reset/README.md",
+      "size": 260,
+      "sha256": "b18560872b2846ae4903a72aa507f59663f5ef967fb6fc0969e1f01f4d9552a7"
+    },
+    {
+      "repository": "maintenance",
+      "source": "tools/build-cost-server-offline-package.ps1",
+      "destination": "maintenance/tools/build-cost-server-offline-package.ps1",
+      "size": 17165,
+      "sha256": "b315485cc21f5d0f7a2e3241abdda6b8d841b394d4dbe3867ef3465ccf737b76"
+    }
+  ]
+}

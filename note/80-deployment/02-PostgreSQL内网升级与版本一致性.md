@@ -1,6 +1,6 @@
-# PostgreSQL 内网升级与版本一致性
+# PostgreSQL 升级记录（20260722）
 
-> 当前成本库数据库结构版本：`20260722`。本文件是 PostgreSQL 内网迁移的当前入口。
+历史参考，记录 `20260722` 版本的结构和迁移方案。当前 SQL 入口为后端仓库 `sql/jt/README.md`；现场升级使用同批离线包说明。
 
 ## 1. 上线时必须同时对齐三项
 
@@ -12,27 +12,18 @@
 
 不能只替换 JAR。近期出现的 `product_attachment_type does not exist`、`income_amount does not exist`，都属于“代码已更新、数据库未升级”。
 
-## 2. 正式脚本位置
+## 2. 历史脚本
 
-以后只从后端仓库以下位置生成数据库交付包：
-
-```text
-sql/postgresql/costree-cost.sql
-sql/postgresql/costree-amount-sync-template.sql
-sql/postgresql/costree-deploy/
-```
-
-其中：
+以下为该版本使用的脚本，现有保留范围及位置见后端仓库 `sql/jt/README.md`：
 
 - `costree-cost.sql`：新建空库使用。
 - `costree-deploy/00-precheck.sql`：旧库升级前检查，不改数据。
-- `costree-deploy/10-upgrade-existing-to-20260722.sql`：旧库一次升级到当前版本。
+- `costree-deploy/10-upgrade-existing-to-20260722.sql`：旧库升级到 `20260722`。
 - `costree-deploy/20-verify.sql`：升级后自动对账，发现问题会报错。
-- `costree-deploy/build-package.ps1`：生成正式交付目录、zip 和 SHA-256 清单。
 
-历史 `20260626`、`20260713`、`20260721`、`20260722` 增量脚本仍保留追溯，但内网旧库不再逐个挑选执行。
+历史增量用于追溯，不作为当前现场的独立执行清单。
 
-## 3. 空库和旧库的执行路径
+## 3. 当时的迁移流程
 
 ### 新建空库
 
@@ -86,22 +77,9 @@ amount_wan = amount / 10000（万元）
 
 预分预控金额使用 `cost_unit_cost_detail`；账面明细使用 `cost_work_order_ledger_detail`。工作流重复执行时，记录数和金额不得增加。
 
-## 6. 交付包生成
+## 6. 交付记录
 
-后端仓库执行：
-
-```powershell
-.\sql\postgresql\costree-deploy\build-package.ps1 `
-  -OutputDirectory 'H:\delivery\costree-postgresql-20260722'
-```
-
-正式包要求 Git 工作区干净。包内 `RELEASE-INFO.txt` 记录后端提交号，`SHA256SUMS.txt` 用于检查文件是否遗漏或损坏。内网解压后先运行：
-
-```powershell
-.\upgrade-existing\verify-package.ps1
-```
-
-seed 和演示数据默认不打入正式包，防止误写真实库。
+旧 `build-package.ps1`、`verify-package` 已归档，不再作为发布入口。发布包内的提交号、结构版本和文件校验清单用于确认前后端与数据库版本一致。
 
 ## 7. 上线验收
 
